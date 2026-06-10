@@ -785,58 +785,146 @@ feature:          C---D---</pre>
 
             <section id="m2-pom" class="mb-16">
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">4.1</span> pom.xml</h3>
+
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#128300;</span> Por que estamos creando este archivo?</div>
+                    <div class="alert-body">
+                        <p class="mb-3"><strong class="text-white">Que es pom.xml?</strong> POM significa <strong>Project Object Model</strong> (Modelo de Objeto del Proyecto). Es el archivo de configuracion central de cualquier proyecto Maven. Piensa en ello como el "DNI" de tu aplicacion Java: le dice a Maven que proyecto es, que dependencias necesita, como compilarlo y como empaquetarlo.</p>
+
+                        <p class="mb-3"><strong class="text-white">Por que es critico?</strong> Sin pom.xml, Maven no sabe:</p>
+                        <ul class="list-disc list-inside ml-4 space-y-1 mb-3">
+                            <li>Que version de Java usar</li>
+                            <li>Que librerias descargar (Spring Boot, PostgreSQL, etc.)</li>
+                            <li>Como compilar el codigo fuente</li>
+                            <li>Como empaquetar la aplicacion en un archivo .jar ejecutable</li>
+                        </ul>
+
+                        <p class="mb-3"><strong class="text-white">Que pasaria sin este archivo?</strong> Sin pom.xml, no puedes compilar tu microservicio. Maven no tendria idea de que librerias descargar ni como construir tu proyecto. Es tan esencial como el motor de un auto.</p>
+
+                        <p><strong class="text-white">Analogia:</strong> Si tu microservicio fuera un recipe de cocina, el pom.xml seria la lista de ingredientes + las instrucciones de preparacion. Sin la lista, no sabes que comprar; sin las instrucciones, no sabes como cocinar.</p>
+                    </div>
+                </div>
+
                 <p class="text-slate-300 leading-relaxed mb-4">Crea <code class="text-accent">item-service/pom.xml</code>:</p>
-                <div class="code-block" data-lang="item-service/pom.xml"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="tag">&lt;?xml</span> <span class="attr">version</span>=<span class="value">"1.0"</span> <span class="attr">encoding</span>=<span class="value">"UTF-8"</span><span class="tag">?&gt;</span>
+                <div class="code-block" data-lang="item-service/pom.xml"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment">&lt;!-- Declaracion XML: version y codificacion de caracteres --&gt;</span>
+<span class="tag">&lt;?xml</span> <span class="attr">version</span>=<span class="value">"1.0"</span> <span class="attr">encoding</span>=<span class="value">"UTF-8"</span><span class="tag">?&gt;</span>
+
+<span class="comment">&lt;!-- Elemento raiz del POM. Define el namespace XML estandar de Maven --&gt;</span>
 <span class="tag">&lt;project</span> <span class="attr">xmlns</span>=<span class="value">"http://maven.apache.org/POM/4.0.0"</span><span class="tag">&gt;</span>
+
+    <span class="comment">&lt;!-- Version del modelo POM (siempre 4.0.0 para Maven 2/3) --&gt;</span>
     <span class="tag">&lt;modelVersion&gt;</span>4.0.0<span class="tag">&lt;/modelVersion&gt;</span>
+
+    <span class="comment">&lt;!-- ═══════════════════════════════════════════════════════════ --&gt;</span>
+    <span class="comment">&lt;!-- PARENT: Hereda configuracion de Spring Boot                --&gt;</span>
+    <span class="comment">&lt;!-- Spring Boot "starter-parent" incluye:                      --&gt;</span>
+    <span class="comment">&lt;!--   - Versiones compatibles de todas las dependencias        --&gt;</span>
+    <span class="comment">&lt;!--   - Configuracion de plugins de compilacion                --&gt;</span>
+    <span class="comment">&lt;!--   - Valores por defecto sensatos                           --&gt;</span>
+    <span class="comment">&lt;!-- Sin esto, tendrias que definir CADA version manualmente    --&gt;</span>
+    <span class="comment">&lt;!-- ═══════════════════════════════════════════════════════════ --&gt;</span>
     <span class="tag">&lt;parent&gt;</span>
         <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
         <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-parent<span class="tag">&lt;/artifactId&gt;</span>
         <span class="tag">&lt;version&gt;</span>3.3.4<span class="tag">&lt;/version&gt;</span>
     <span class="tag">&lt;/parent&gt;</span>
+
+    <span class="comment">&lt;!-- ═══════════════════════════════════════════════════════════ --&gt;</span>
+    <span class="comment">&lt;!-- COORDENADAS DEL PROYECTO (identificacion unica)           --&gt;</span>
+    <span class="comment">&lt;!-- Estas 3 etiquetas forman el "DNI" del proyecto en Maven    --&gt;</span>
+    <span class="comment">&lt;!-- ═══════════════════════════════════════════════════════════ --&gt;</span>
+
+    <span class="comment">&lt;!-- groupId: Organizacion o paquete base (como un "apellido") --&gt;</span>
     <span class="tag">&lt;groupId&gt;</span>com.singleinput<span class="tag">&lt;/groupId&gt;</span>
+
+    <span class="comment">&lt;!-- artifactId: Nombre del proyecto (como un "nombre") --&gt;</span>
     <span class="tag">&lt;artifactId&gt;</span>item-service<span class="tag">&lt;/artifactId&gt;</span>
+
+    <span class="comment">&lt;!-- version: Version actual. SNAPSHOT = en desarrollo --&gt;</span>
     <span class="tag">&lt;version&gt;</span>0.0.1-SNAPSHOT<span class="tag">&lt;/version&gt;</span>
+
+    <span class="comment">&lt;!-- ═══════════════════════════════════════════════════════════ --&gt;</span>
+    <span class="comment">&lt;!-- PROPERTIES: Variables de configuracion reutilizables      --&gt;</span>
+    <span class="comment">&lt;!-- Aqui defines valores que se usan en todo el POM            --&gt;</span>
+    <span class="comment">&lt;!-- ═══════════════════════════════════════════════════════════ --&gt;</span>
     <span class="tag">&lt;properties&gt;</span>
+        <span class="comment">&lt;!-- Version de Java que usara el compilador --&gt;</span>
         <span class="tag">&lt;java.version&gt;</span>21<span class="tag">&lt;/java.version&gt;</span>
     <span class="tag">&lt;/properties&gt;</span>
+
+    <span class="comment">&lt;!-- ═══════════════════════════════════════════════════════════ --&gt;</span>
+    <span class="comment">&lt;!-- DEPENDENCIES: Librerias externas que el proyecto necesita --&gt;</span>
+    <span class="comment">&lt;!-- Maven las descarga automaticamente de Maven Central        --&gt;</span>
+    <span class="comment">&lt;!-- Cada dependency tiene groupId + artifactId + version       --&gt;</span>
+    <span class="comment">&lt;!-- (la version se hereda del parent si no se especifica)      --&gt;</span>
+    <span class="comment">&lt;!-- ═══════════════════════════════════════════════════════════ --&gt;</span>
     <span class="tag">&lt;dependencies&gt;</span>
+
+        <span class="comment">&lt;!-- WEB: Incluye Spring MVC, Tomcat embebido, Jackson JSON --&gt;</span>
+        <span class="comment">&lt;!-- Es lo minimo para crear endpoints REST (@RestController) --&gt;</span>
         <span class="tag">&lt;dependency&gt;</span>
             <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
             <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-web<span class="tag">&lt;/artifactId&gt;</span>
         <span class="tag">&lt;/dependency&gt;</span>
+
+        <span class="comment">&lt;!-- JPA: Hibernate + Spring Data JPA para acceso a BD --&gt;</span>
+        <span class="comment">&lt;!-- Permite mapear clases Java a tablas con @Entity --&gt;</span>
         <span class="tag">&lt;dependency&gt;</span>
             <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
             <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-data-jpa<span class="tag">&lt;/artifactId&gt;</span>
         <span class="tag">&lt;/dependency&gt;</span>
+
+        <span class="comment">&lt;!-- VALIDATION: @NotBlank, @Size, @Email, etc. --&gt;</span>
+        <span class="comment">&lt;!-- Valida datos de entrada automaticamente con @Valid --&gt;</span>
         <span class="tag">&lt;dependency&gt;</span>
             <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
             <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-validation<span class="tag">&lt;/artifactId&gt;</span>
         <span class="tag">&lt;/dependency&gt;</span>
+
+        <span class="comment">&lt;!-- POSTGRESQL: Driver JDBC para conectar con PostgreSQL --&gt;</span>
+        <span class="comment">&lt;!-- scope=runtime: solo se necesita al ejecutar, no al compilar --&gt;</span>
         <span class="tag">&lt;dependency&gt;</span>
             <span class="tag">&lt;groupId&gt;</span>org.postgresql<span class="tag">&lt;/groupId&gt;</span>
             <span class="tag">&lt;artifactId&gt;</span>postgresql<span class="tag">&lt;/artifactId&gt;</span>
             <span class="tag">&lt;scope&gt;</span>runtime<span class="tag">&lt;/scope&gt;</span>
         <span class="tag">&lt;/dependency&gt;</span>
+
+        <span class="comment">&lt;!-- DEVTOOLS: Recarga automatica al cambiar codigo --&gt;</span>
+        <span class="comment">&lt;!-- optional=true: no se incluye en el JAR de produccion --&gt;</span>
         <span class="tag">&lt;dependency&gt;</span>
             <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
             <span class="tag">&lt;artifactId&gt;</span>spring-boot-devtools<span class="tag">&lt;/artifactId&gt;</span>
             <span class="tag">&lt;scope&gt;</span>runtime<span class="tag">&lt;/scope&gt;</span>
             <span class="tag">&lt;optional&gt;</span>true<span class="tag">&lt;/optional&gt;</span>
         <span class="tag">&lt;/dependency&gt;</span>
+
+        <span class="comment">&lt;!-- LOMBOK: Genera getters, setters, constructors automaticamente --&gt;</span>
+        <span class="comment">&lt;!-- Con @Data no necesitas escribir 50 lineas de boilerplate --&gt;</span>
         <span class="tag">&lt;dependency&gt;</span>
             <span class="tag">&lt;groupId&gt;</span>org.projectlombok<span class="tag">&lt;/groupId&gt;</span>
             <span class="tag">&lt;artifactId&gt;</span>lombok<span class="tag">&lt;/artifactId&gt;</span>
             <span class="tag">&lt;optional&gt;</span>true<span class="tag">&lt;/optional&gt;</span>
         <span class="tag">&lt;/dependency&gt;</span>
+
+        <span class="comment">&lt;!-- TEST: JUnit 5, Mockito, AssertJ para pruebas unitarias --&gt;</span>
+        <span class="comment">&lt;!-- scope=test: solo disponible en src/test, no en produccion --&gt;</span>
         <span class="tag">&lt;dependency&gt;</span>
             <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
             <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-test<span class="tag">&lt;/artifactId&gt;</span>
             <span class="tag">&lt;scope&gt;</span>test<span class="tag">&lt;/scope&gt;</span>
         <span class="tag">&lt;/dependency&gt;</span>
+
     <span class="tag">&lt;/dependencies&gt;</span>
+
+    <span class="comment">&lt;!-- ═══════════════════════════════════════════════════════════ --&gt;</span>
+    <span class="comment">&lt;!-- BUILD: Configuracion de como compilar y empaquetar        --&gt;</span>
+    <span class="comment">&lt;!-- ═══════════════════════════════════════════════════════════ --&gt;</span>
     <span class="tag">&lt;build&gt;</span>
         <span class="tag">&lt;plugins&gt;</span>
+            <span class="comment">&lt;!-- SPRING BOOT MAVEN PLUGIN:                         --&gt;</span>
+            <span class="comment">&lt;!-- Permite ejecutar "mvn spring-boot:run"             --&gt;</span>
+            <span class="comment">&lt;!-- Crea un JAR ejecutable con "mvn package"           --&gt;</span>
+            <span class="comment">&lt;!-- Incluye TODAS las dependencias dentro del JAR      --&gt;</span>
             <span class="tag">&lt;plugin&gt;</span>
                 <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
                 <span class="tag">&lt;artifactId&gt;</span>spring-boot-maven-plugin<span class="tag">&lt;/artifactId&gt;</span>
@@ -848,81 +936,235 @@ feature:          C---D---</pre>
 
             <section id="m2-yml" class="mb-16">
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">4.2</span> application.yml</h3>
+
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#128300;</span> Por que estamos creando este archivo?</div>
+                    <div class="alert-body">
+                        <p class="mb-3"><strong class="text-white">Que es application.yml?</strong> Es el archivo de configuracion principal de Spring Boot. Aqui defines como tu aplicacion se conecta a la base de datos, en que puerto escucha, que nivel de logging usar, etc. Es el "panel de control" de tu microservicio.</p>
+
+                        <p class="mb-3"><strong class="text-white">Por que YAML y no properties?</strong> YAML usa indentacion (como Python) en vez de <code>clave=valor</code>. Es mas legible para configuraciones anidadas. Spring Boot acepta ambos formatos, pero YAML es el estandar en proyectos profesionales.</p>
+
+                        <p class="mb-3"><strong class="text-white">Que pasaria sin este archivo?</strong> Spring Boot usaria valores por defecto: puerto 8080, H2 en memoria (no PostgreSQL), sin mostrar SQL. Tu microservicio arrancaria pero no se conectaria a la base de datos correcta.</p>
+                    </div>
+                </div>
+
                 <p class="text-slate-300 leading-relaxed mb-4">Crea <code class="text-accent">item-service/src/main/resources/application.yml</code>:</p>
-                <div class="code-block" data-lang="application.yml"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="property">spring</span>:
+                <div class="code-block" data-lang="application.yml"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment"># ═══════════════════════════════════════════════════════════</span>
+<span class="comment"># CONFIGURACION DE SPRING BOOT</span>
+<span class="comment"># ═══════════════════════════════════════════════════════════</span>
+<span class="property">spring</span>:
+  <span class="comment"># Nombre del microservicio (aparece en logs y actuator)</span>
   <span class="property">application</span>:
     <span class="property">name</span>: <span class="string">item-service</span>
+
+  <span class="comment"># ═══════════════════════════════════════════════════════</span>
+  <span class="comment"># CONEXION A POSTGRESQL (datasource)</span>
+  <span class="comment"># Define COMO Spring Boot se conecta a la base de datos</span>
+  <span class="comment"># ═══════════════════════════════════════════════════════</span>
   <span class="property">datasource</span>:
+    <span class="comment"># URL JDBC: protocolo://host:puerto/nombre_bd</span>
+    <span class="comment"># "crud-postgres" es el container_name del servicio PostgreSQL</span>
+    <span class="comment"># NO es localhost porque estamos DENTRO de Docker</span>
     <span class="property">url</span>: <span class="string">jdbc:postgresql://crud-postgres:5432/crud_db</span>
+    <span class="comment"># Usuario de la BD (debe coincidir con POSTGRES_USER del .env)</span>
     <span class="property">username</span>: <span class="string">admin</span>
+    <span class="comment"># Contrasena de la BD (debe coincidir con POSTGRES_PASSWORD del .env)</span>
     <span class="property">password</span>: <span class="string">secret123</span>
+    <span class="comment"># Driver JDBC: le dice a Java como hablar con PostgreSQL</span>
     <span class="property">driver-class-name</span>: <span class="string">org.postgresql.Driver</span>
+
+  <span class="comment"># ═══════════════════════════════════════════════════════</span>
+  <span class="comment"># JPA / HIBERNATE (mapeo objeto-relacional)</span>
+  <span class="comment"># Define COMO Java interactua con las tablas</span>
+  <span class="comment"># ═══════════════════════════════════════════════════════</span>
   <span class="property">jpa</span>:
     <span class="property">hibernate</span>:
+      <span class="comment"># "update": Hibernate crea/modifica tablas automaticamente</span>
+      <span class="comment"># Si agregas un campo a @Entity, Hibernate agrega la columna</span>
+      <span class="comment"># En produccion se usa "validate" o "none" (con migraciones)</span>
       <span class="property">ddl-auto</span>: <span class="string">update</span>
+    <span class="comment"># Muestra las consultas SQL en la consola (util para debug)</span>
     <span class="property">show-sql</span>: <span class="string">true</span>
     <span class="property">properties</span>:
       <span class="property">hibernate</span>:
+        <span class="comment"># "Dialecto": le dice a Hibernate que sabor de SQL usar</span>
+        <span class="comment"># Cada BD tiene su dialecto (PostgreSQL, MySQL, Oracle...)</span>
         <span class="property">dialect</span>: <span class="string">org.hibernate.dialect.PostgreSQLDialect</span>
+
+<span class="comment"># ═══════════════════════════════════════════════════════════</span>
+<span class="comment"># CONFIGURACION DEL SERVIDOR WEB (Tomcat embebido)</span>
+<span class="comment"># ═══════════════════════════════════════════════════════════</span>
 <span class="property">server</span>:
+  <span class="comment"># Puerto donde escucha el microservicio</span>
+  <span class="comment"># Debe coincidir con el puerto mapeado en docker-compose.yml</span>
   <span class="property">port</span>: <span class="number">8081</span></code></div>
             </section>
             <section id="m2-entity" class="mb-16">
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">4.3</span> Entity + DTO</h3>
+
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#128300;</span> Por que estamos creando estos archivos?</div>
+                    <div class="alert-body">
+                        <p class="mb-3"><strong class="text-white">Item.java (Entity - CAPA 1):</strong> Es la representacion Java de la tabla <code>items</code> en PostgreSQL. Cada campo de la clase se mapea a una columna de la tabla. Sin Entity, JPA/Hibernate no sabe como guardar objetos Java en la base de datos.</p>
+
+                        <p class="mb-3"><strong class="text-white">ItemDTO.java (Data Transfer Object):</strong> Es el "mensajero" que transporta datos entre capas. Por que no usar Entity directamente? Porque el DTO permite:</p>
+                        <ul class="list-disc list-inside ml-4 space-y-1 mb-3">
+                            <li><strong>Validacion:</strong> @NotBlank, @Size verifican que los datos sean correctos ANTES de llegar a la BD</li>
+                            <li><strong>Seguridad:</strong> Puedes ocultar campos sensibles (como contraseñas) que no deberian exponerse al cliente</li>
+                            <li><strong>Desacoplamiento:</strong> Si cambias la estructura de la tabla, el DTO puede permanecer igual</li>
+                        </ul>
+
+                        <p><strong class="text-white">Que pasarian sin estos archivos?</strong> Sin Entity, no hay tabla en la BD. Sin DTO, no hay forma de validar datos de entrada ni controlar que campos se exponen al cliente.</p>
+                    </div>
+                </div>
+
                 <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">item-service/src/main/java/com/singleinput/domain/Item.java</code>:</p>
-                <div class="code-block" data-lang="Item.java"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="keyword">package</span> com.singleinput.domain;
+                <div class="code-block" data-lang="Item.java"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment">// Paquete: organiza la clase en la carpeta "domain" (CAPA 1)</span>
+<span class="keyword">package</span> com.singleinput.domain;
+
+<span class="comment">// Importaciones de Jakarta Persistence (JPA) para mapeo a BD</span>
 <span class="keyword">import</span> jakarta.persistence.*;
+<span class="comment">// Importaciones de Lombok para generar codigo automaticamente</span>
 <span class="keyword">import</span> lombok.*;
 
+<span class="comment">// @Entity: Le dice a JPA "esta clase representa una tabla en la BD"</span>
+<span class="comment">// Sin esta anotacion, Hibernate ignora completamente la clase</span>
 <span class="annotation">@Entity</span>
+<span class="comment">// @Table: Define el nombre exacto de la tabla en PostgreSQL</span>
+<span class="comment">// Sin name, la tabla se llamaria "item" (nombre de la clase en minuscula)</span>
 <span class="annotation">@Table</span>(name = <span class="string">"items"</span>)
-<span class="annotation">@Data</span> <span class="annotation">@NoArgsConstructor</span> <span class="annotation">@AllArgsConstructor</span>
+<span class="comment">// @Data: Lombok genera getters, setters, toString, equals, hashCode</span>
+<span class="comment">// Sin esto, necesitarianos escribir ~30 lineas de boilerplate</span>
+<span class="annotation">@Data</span>
+<span class="comment">// @NoArgsConstructor: Genera constructor sin parametros (requerido por JPA)</span>
+<span class="annotation">@NoArgsConstructor</span>
+<span class="comment">// @AllArgsConstructor: Genera constructor con TODOS los campos</span>
+<span class="annotation">@AllArgsConstructor</span>
 <span class="keyword">public class</span> <span class="type">Item</span> {
+
+    <span class="comment">// @Id: Marca este campo como PRIMARY KEY de la tabla</span>
+    <span class="comment">// Toda tabla necesita una clave primaria unica</span>
     <span class="annotation">@Id</span>
+    <span class="comment">// @GeneratedValue: El ID se genera automaticamente</span>
+    <span class="comment">// IDENTITY = usa la secuencia AUTO_INCREMENT de PostgreSQL</span>
     <span class="annotation">@GeneratedValue</span>(strategy = <span class="type">GenerationType</span>.IDENTITY)
     <span class="keyword">private</span> <span class="type">Long</span> id;
+
+    <span class="comment">// @Column: Configuracion detallada de la columna en la BD</span>
+    <span class="comment">// name = nombre de la columna en PostgreSQL</span>
+    <span class="comment">// nullable = false = la columna NO acepta NULL (NOT NULL constraint)</span>
+    <span class="comment">// length = 255 = VARCHAR(255) en la BD</span>
     <span class="annotation">@Column</span>(name = <span class="string">"texto"</span>, nullable = <span class="keyword">false</span>, length = <span class="number">255</span>)
     <span class="keyword">private</span> <span class="type">String</span> texto;
+
+    <span class="comment">// Constructor personalizado: permite crear un Item con solo el texto</span>
+    <span class="comment">// Util cuando creas un nuevo item: new Item("Hola mundo")</span>
     <span class="keyword">public</span> <span class="type">Item</span>(<span class="type">String</span> texto) { <span class="keyword">this</span>.texto = texto; }
 }</code></div>
                 <p class="text-slate-300 leading-relaxed mb-4 mt-6"><code class="text-accent">item-service/src/main/java/com/singleinput/dto/ItemDTO.java</code>:</p>
-                <div class="code-block" data-lang="ItemDTO.java"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="keyword">package</span> com.singleinput.dto;
+                <div class="code-block" data-lang="ItemDTO.java"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment">// Paquete "dto": capa separada de "domain" para transferencia de datos</span>
+<span class="keyword">package</span> com.singleinput.dto;
+
+<span class="comment">// Importaciones de Jakarta Validation para validacion de datos</span>
 <span class="keyword">import</span> jakarta.validation.constraints.*;
 <span class="keyword">import</span> lombok.*;
 
+<span class="comment">// Mismo patron que Entity: @Data + constructores de Lombok</span>
 <span class="annotation">@Data</span> <span class="annotation">@NoArgsConstructor</span> <span class="annotation">@AllArgsConstructor</span>
 <span class="keyword">public class</span> <span class="type">ItemDTO</span> {
+    <span class="comment">// El ID se incluye para operaciones de UPDATE y DELETE</span>
+    <span class="comment">// En CREATE, el ID es null (lo genera la BD)</span>
     <span class="keyword">private</span> <span class="type">Long</span> id;
+
+    <span class="comment">// @NotBlank: El campo no puede ser null, vacio ni solo espacios</span>
+    <span class="comment">// Si el cliente envia {"texto": ""}, Spring rechaza con error 400</span>
     <span class="annotation">@NotBlank</span>(message = <span class="string">"El texto no puede estar vacio"</span>)
+    <span class="comment">// @Size: Limita la longitud maxima del string</span>
+    <span class="comment">// Debe coincidir con length=255 del @Column en Entity</span>
     <span class="annotation">@Size</span>(max = <span class="number">255</span>, message = <span class="string">"Maximo 255 caracteres"</span>)
     <span class="keyword">private</span> <span class="type">String</span> texto;
 }</code></div>
             </section>
             <section id="m2-repository" class="mb-16">
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">4.4</span> Repository</h3>
+
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#128300;</span> Por que estamos creando este archivo?</div>
+                    <div class="alert-body">
+                        <p class="mb-3"><strong class="text-white">Que es ItemRepository?</strong> Es una interfaz que Spring Data JPA implementa automaticamente. Tu solo declaras QUE operaciones necesitas (find, save, delete), y Spring genera el codigo SQL por ti.</p>
+
+                        <p class="mb-3"><strong class="text-white">La magia de los nombres de metodos:</strong> Spring Data JPA "lee" el nombre del metodo y genera el SQL automaticamente. <code>findByTextoContainingIgnoreCase</code> se traduce a: <code>SELECT * FROM items WHERE LOWER(texto) LIKE LOWER('%texto%')</code>. No necesitas escribir SQL.</p>
+
+                        <p><strong class="text-white">Que pasaria sin este archivo?</strong> Tendrias que escribir SQL manualmente con JDBC (Connection, PreparedStatement, ResultSet). Son cientos de lineas propensas a errores. El Repository elimina todo ese boilerplate.</p>
+                    </div>
+                </div>
+
                 <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">item-service/src/main/java/com/singleinput/persistence/ItemRepository.java</code>:</p>
-                <div class="code-block" data-lang="ItemRepository.java"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="keyword">package</span> com.singleinput.persistence;
+                <div class="code-block" data-lang="ItemRepository.java"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment">// Paquete "persistence": capa de acceso a datos (CAPA 2)</span>
+<span class="keyword">package</span> com.singleinput.persistence;
+
+<span class="comment">// Importamos la Entity que este repository maneja</span>
 <span class="keyword">import</span> com.singleinput.domain.Item;
+<span class="comment">// JpaRepository: interfaz generica de Spring Data que incluye</span>
+<span class="comment">// metodos CRUD estandar: save(), findAll(), findById(), delete(), etc.</span>
 <span class="keyword">import</span> org.springframework.data.jpa.repository.JpaRepository;
 <span class="keyword">import</span> java.util.List;
 
+<span class="comment">// Interfaz (no clase) que extiende JpaRepository</span>
+<span class="comment">// &lt;Item, Long&gt; = maneja Entity "Item" con clave primaria tipo Long</span>
+<span class="comment">// Spring crea automaticamente una implementacion de esta interfaz</span>
+<span class="comment">// en tiempo de ejecucion (un "proxy" que ejecuta el SQL real)</span>
 <span class="keyword">public interface</span> <span class="type">ItemRepository</span> <span class="keyword">extends</span> <span class="type">JpaRepository</span>&lt;<span class="type">Item</span>, <span class="type">Long</span>&gt; {
+
+    <span class="comment">// Metodo personalizado: Spring Data JPA "lee" el nombre</span>
+    <span class="comment">// findBy = SELECT ... WHERE</span>
+    <span class="comment">// Texto = campo de la Entity</span>
+    <span class="comment">// Containing = LIKE '%valor%' (busqueda parcial)</span>
+    <span class="comment">// IgnoreCase = sin distinguir mayusculas/minusculas</span>
+    <span class="comment">// SQL generado: SELECT * FROM items WHERE LOWER(texto) LIKE LOWER('%valor%')</span>
     <span class="type">List</span>&lt;<span class="type">Item</span>&gt; findByTextoContainingIgnoreCase(<span class="type">String</span> texto);
 }</code></div>
             </section>
             <section id="m2-service" class="mb-16">
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">4.5</span> Service</h3>
+
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#128300;</span> Por que estamos creando estos archivos?</div>
+                    <div class="alert-body">
+                        <p class="mb-3"><strong class="text-white">Que es ItemService?</strong> Es la CAPA 3 (logica de negocio). Aqui vive toda la inteligencia de la aplicacion: validaciones, transformaciones entre Entity y DTO, y reglas de negocio. El Controller delega todo al Service.</p>
+
+                        <p class="mb-3"><strong class="text-white">Por que una interface + implementacion?</strong> El patron Interface + Impl permite:</p>
+                        <ul class="list-disc list-inside ml-4 space-y-1 mb-3">
+                            <li><strong>Testeabilidad:</strong> En tests unitarios, puedes "mockear" (simular) el Service sin necesidad de base de datos</li>
+                            <li><strong>Flexibilidad:</strong> Puedes cambiar la implementacion (ej: de JPA a MongoDB) sin tocar el Controller</li>
+                            <li><strong>Contrato claro:</strong> La interface define QUE hace el service; la implementacion define COMO</li>
+                        </ul>
+
+                        <p><strong class="text-white">Que pasaria sin esta capa?</strong> El Controller tendria que hacer TODO: recibir HTTP, validar datos, convertir DTOs, hablar con la BD. Seria un "Dios objeto" imposible de mantener y testear.</p>
+                    </div>
+                </div>
+
                 <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">service/ItemService.java</code> (interface):</p>
-                <div class="code-block" data-lang="ItemService.java"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="keyword">package</span> com.singleinput.service;
+                <div class="code-block" data-lang="ItemService.java"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment">// Paquete "service": capa de logica de negocio (CAPA 3)</span>
+<span class="keyword">package</span> com.singleinput.service;
 <span class="keyword">import</span> com.singleinput.dto.ItemDTO;
 <span class="keyword">import</span> java.util.List;
 
+<span class="comment">// Interface: define el CONTRATO que debe cumplir la implementacion</span>
+<span class="comment">// El Controller solo conoce esta interface, no la implementacion</span>
+<span class="comment">// Esto se llama "Inversion de Dependencia" (principio SOLID)</span>
 <span class="keyword">public interface</span> <span class="type">ItemService</span> {
+    <span class="comment">// Retorna todos los items como DTOs (no como Entities)</span>
     <span class="type">List</span>&lt;<span class="type">ItemDTO</span>&gt; findAll();
+    <span class="comment">// Busca un item por su ID. Lanza excepcion si no existe</span>
     <span class="type">ItemDTO</span> findById(<span class="type">Long</span> id);
+    <span class="comment">// Crea un nuevo item a partir de un DTO. Retorna el DTO con ID generado</span>
     <span class="type">ItemDTO</span> create(<span class="type">ItemDTO</span> dto);
+    <span class="comment">// Actualiza un item existente. Lanza excepcion si no existe</span>
     <span class="type">ItemDTO</span> update(<span class="type">Long</span> id, <span class="type">ItemDTO</span> dto);
+    <span class="comment">// Elimina un item por ID. Lanza excepcion si no existe</span>
     <span class="keyword">void</span> delete(<span class="type">Long</span> id);
+    <span class="comment">// Busca items cuyo texto contenga la cadena indicada (case-insensitive)</span>
     <span class="type">List</span>&lt;<span class="type">ItemDTO</span>&gt; search(<span class="type">String</span> texto);
 }</code></div>
                 <p class="text-slate-300 leading-relaxed mb-4 mt-6"><code class="text-accent">service/ItemServiceImpl.java</code> (implementacion):</p>
@@ -931,44 +1173,90 @@ feature:          C---D---</pre>
 <span class="keyword">import</span> com.singleinput.dto.ItemDTO;
 <span class="keyword">import</span> com.singleinput.exception.ItemNotFoundException;
 <span class="keyword">import</span> com.singleinput.persistence.ItemRepository;
+<span class="comment">// @Service: Le dice a Spring "esta clase es un bean de servicio"</span>
+<span class="comment">// Spring la detecta automaticamente (component scanning) y la</span>
+<span class="comment">// registra en su contenedor de Inversion de Control (IoC)</span>
 <span class="keyword">import</span> org.springframework.stereotype.Service;
+<span class="comment">// @Transactional: Controla transacciones de base de datos</span>
+<span class="comment">// Si un metodo falla a mitad, se hace rollback automatico</span>
 <span class="keyword">import</span> org.springframework.transaction.annotation.Transactional;
 <span class="keyword">import</span> java.util.List;
 <span class="keyword">import</span> java.util.stream.Collectors;
 
+<span class="comment">// @Service: Marca esta clase como componente de servicio de Spring</span>
+<span class="comment">// Sin esta anotacion, Spring NO la detecta ni la inyecta</span>
 <span class="annotation">@Service</span>
 <span class="keyword">public class</span> <span class="type">ItemServiceImpl</span> <span class="keyword">implements</span> <span class="type">ItemService</span> {
+    <span class="comment">// Dependencia del Repository. Es "final" porque se inyecta</span>
+    <span class="comment">// una sola vez en el constructor (inmutabilidad)</span>
     <span class="keyword">private final</span> <span class="type">ItemRepository</span> repo;
+
+    <span class="comment">// Constructor: Spring inyecta automaticamente el ItemRepository</span>
+    <span class="comment">// Esto se llama "Inyeccion por Constructor" (mejor practica)</span>
+    <span class="comment">// Spring busca un bean de tipo ItemRepository y lo pasa aqui</span>
     <span class="keyword">public</span> <span class="type">ItemServiceImpl</span>(<span class="type">ItemRepository</span> repo) { <span class="keyword">this</span>.repo = repo; }
 
+    <span class="comment">// @Override: Indica que estamos implementando un metodo de la interface</span>
+    <span class="comment">// @Transactional(readOnly = true): Optimizacion de rendimiento</span>
+    <span class="comment">//   Indica a Hibernate que NO necesita preparar rollback</span>
+    <span class="comment">//   Solo lectura = mas rapido que lectura+escritura</span>
     <span class="annotation">@Override</span> <span class="annotation">@Transactional</span>(readOnly = <span class="keyword">true</span>)
     <span class="keyword">public</span> <span class="type">List</span>&lt;<span class="type">ItemDTO</span>&gt; findAll() {
+        <span class="comment">// repo.findAll() retorna List&lt;Item&gt; (entities)</span>
+        <span class="comment">// .stream().map(this::toDTO) convierte cada Entity a DTO</span>
+        <span class="comment">// .collect() convierte el stream de vuelta a List&lt;ItemDTO&gt;</span>
         <span class="keyword">return</span> repo.findAll().stream().map(<span class="keyword">this</span>::toDTO).collect(Collectors.toList());
     }
+
     <span class="annotation">@Override</span> <span class="annotation">@Transactional</span>(readOnly = <span class="keyword">true</span>)
     <span class="keyword">public</span> <span class="type">ItemDTO</span> findById(<span class="type">Long</span> id) {
+        <span class="comment">// repo.findById() retorna Optional&lt;Item&gt;</span>
+        <span class="comment">// .orElseThrow() lanza excepcion si el Optional esta vacio</span>
+        <span class="comment">// Esto reemplaza el clasico "if (item == null) throw..."</span>
         <span class="keyword">return</span> toDTO(repo.findById(id).orElseThrow(() -> <span class="keyword">new</span> <span class="type">ItemNotFoundException</span>(id)));
     }
+
+    <span class="comment">// @Transactional (sin readOnly): Este metodo MODIFICA datos</span>
+    <span class="comment">// Si algo falla despues de save(), se hace rollback</span>
     <span class="annotation">@Override</span> <span class="annotation">@Transactional</span>
     <span class="keyword">public</span> <span class="type">ItemDTO</span> create(<span class="type">ItemDTO</span> dto) {
+        <span class="comment">// 1. Crear Entity vacia</span>
+        <span class="comment">// 2. Copiar datos del DTO al Entity</span>
+        <span class="comment">// 3. repo.save() INSERTA en la BD y retorna el Entity con ID generado</span>
+        <span class="comment">// 4. Convertir el Entity resultante de vuelta a DTO</span>
         <span class="type">Item</span> e = <span class="keyword">new</span> <span class="type">Item</span>(); e.setTexto(dto.getTexto());
         <span class="keyword">return</span> toDTO(repo.save(e));
     }
+
     <span class="annotation">@Override</span> <span class="annotation">@Transactional</span>
     <span class="keyword">public</span> <span class="type">ItemDTO</span> update(<span class="type">Long</span> id, <span class="type">ItemDTO</span> dto) {
+        <span class="comment">// 1. Buscar el item existente (o lanzar excepcion si no existe)</span>
         <span class="type">Item</span> ex = repo.findById(id).orElseThrow(() -> <span class="keyword">new</span> <span class="type">ItemNotFoundException</span>(id));
+        <span class="comment">// 2. Modificar los campos del entity existente</span>
         ex.setTexto(dto.getTexto());
+        <span class="comment">// 3. repo.save() hace UPDATE porque el entity ya tiene ID</span>
         <span class="keyword">return</span> toDTO(repo.save(ex));
     }
+
     <span class="annotation">@Override</span> <span class="annotation">@Transactional</span>
     <span class="keyword">public void</span> delete(<span class="type">Long</span> id) {
+        <span class="comment">// Verificar que el item existe antes de intentar borrarlo</span>
+        <span class="comment">// repo.existsById() genera: SELECT COUNT(*) > 0 FROM items WHERE id = ?</span>
         <span class="keyword">if</span> (!repo.existsById(id)) <span class="keyword">throw new</span> <span class="type">ItemNotFoundException</span>(id);
+        <span class="comment">// Eliminar el item. Genera: DELETE FROM items WHERE id = ?</span>
         repo.deleteById(id);
     }
+
     <span class="annotation">@Override</span> <span class="annotation">@Transactional</span>(readOnly = <span class="keyword">true</span>)
     <span class="keyword">public</span> <span class="type">List</span>&lt;<span class="type">ItemDTO</span>&gt; search(<span class="type">String</span> texto) {
+        <span class="comment">// Usamos el metodo personalizado del Repository</span>
+        <span class="comment">// findByTextoContainingIgnoreCase genera el LIKE automaticamente</span>
         <span class="keyword">return</span> repo.findByTextoContainingIgnoreCase(texto).stream().map(<span class="keyword">this</span>::toDTO).collect(Collectors.toList());
     }
+
+    <span class="comment">// Metodo PRIVADO: convierte Entity a DTO</span>
+    <span class="comment">// No esta en la interface porque es un detalle interno</span>
+    <span class="comment">// El Controller NUNCA debe ver un Entity, solo DTOs</span>
     <span class="keyword">private</span> <span class="type">ItemDTO</span> toDTO(<span class="type">Item</span> i) {
         <span class="type">ItemDTO</span> d = <span class="keyword">new</span> <span class="type">ItemDTO</span>(); d.setId(i.getId()); d.setTexto(i.getTexto()); <span class="keyword">return</span> d;
     }
@@ -976,53 +1264,141 @@ feature:          C---D---</pre>
             </section>
             <section id="m2-controller" class="mb-16">
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">4.6</span> Controller</h3>
+
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#128300;</span> Por que estamos creando este archivo?</div>
+                    <div class="alert-body">
+                        <p class="mb-3"><strong class="text-white">Que es ItemController?</strong> Es la CAPA 4 (la mas externa). Es el "recepcionista" de tu microservicio: recibe peticiones HTTP del mundo exterior, las delega al Service, y devuelve respuestas HTTP con datos en formato JSON.</p>
+
+                        <p class="mb-3"><strong class="text-white">Que pasaria sin este archivo?</strong> No habria forma de que el frontend, Postman o el API Gateway se comuniquen con tu microservicio. Los endpoints REST no existirian. Es la unica capa que "habla HTTP".</p>
+
+                        <p><strong class="text-white">Regla de oro:</strong> El Controller es "tonto". No tiene logica de negocio. Solo recibe, delega y responde. Toda la inteligencia esta en el Service.</p>
+                    </div>
+                </div>
+
                 <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">controller/ItemController.java</code>:</p>
                 <div class="code-block" data-lang="ItemController.java"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="keyword">package</span> com.singleinput.controller;
 <span class="keyword">import</span> com.singleinput.dto.ItemDTO;
 <span class="keyword">import</span> com.singleinput.service.ItemService;
+<span class="comment">// @Valid: Activa la validacion de anotaciones (@NotBlank, @Size) en el DTO</span>
 <span class="keyword">import</span> jakarta.validation.Valid;
+<span class="comment">// ResponseEntity: Permite controlar el status code HTTP (200, 201, 204, 404...)</span>
 <span class="keyword">import</span> org.springframework.http.ResponseEntity;
+<span class="comment">// Anotaciones de Spring MVC para mapear URLs a metodos Java</span>
 <span class="keyword">import</span> org.springframework.web.bind.annotation.*;
 <span class="keyword">import</span> java.util.List;
 
+<span class="comment">// @RestController: Combina @Controller + @ResponseBody</span>
+<span class="comment">//   @Controller = "esta clase maneja peticiones HTTP"</span>
+<span class="comment">//   @ResponseBody = "retorna JSON directamente (no una vista HTML)"</span>
+<span class="comment">// Sin esta anotacion, Spring no sabe que esta clase es un endpoint</span>
 <span class="annotation">@RestController</span>
+<span class="comment">// @RequestMapping: Define el prefijo de URL para TODOS los metodos</span>
+<span class="comment">// Todos los endpoints de este controller empiezan con /api/items</span>
 <span class="annotation">@RequestMapping</span>(<span class="string">"/api/items"</span>)
 <span class="keyword">public class</span> <span class="type">ItemController</span> {
+    <span class="comment">// Dependencia del Service. Se inyecta por constructor (mejor practica)</span>
+    <span class="comment">// El Controller NUNCA habla directamente con el Repository</span>
     <span class="keyword">private final</span> <span class="type">ItemService</span> service;
+    <span class="comment">// Constructor: Spring inyecta automaticamente el bean ItemService</span>
     <span class="keyword">public</span> <span class="type">ItemController</span>(<span class="type">ItemService</span> service) { <span class="keyword">this</span>.service = service; }
 
+    <span class="comment">// ═══════════════════════════════════════════════════════</span>
+    <span class="comment">// ENDPOINT: GET /api/items</span>
+    <span class="comment">// Retorna todos los items</span>
+    <span class="comment">// ═══════════════════════════════════════════════════════</span>
+    <span class="comment">// @GetMapping: Mapea peticiones HTTP GET a este metodo</span>
+    <span class="comment">// Sin path adicional, usa el @RequestMapping de la clase: /api/items</span>
     <span class="annotation">@GetMapping</span>
+    <span class="comment">// ResponseEntity: Envoltorio que incluye body + status code + headers</span>
+    <span class="comment">// ResponseEntity.ok() = HTTP 200 + body con la lista de items</span>
     <span class="keyword">public</span> <span class="type">ResponseEntity</span>&lt;<span class="type">List</span>&lt;<span class="type">ItemDTO</span>&gt;&gt; findAll() {
         <span class="keyword">return</span> ResponseEntity.ok(service.findAll());
     }
+
+    <span class="comment">// ═══════════════════════════════════════════════════════</span>
+    <span class="comment">// ENDPOINT: GET /api/items/{id}</span>
+    <span class="comment">// Retorna un item especifico por su ID</span>
+    <span class="comment">// ═══════════════════════════════════════════════════════</span>
+    <span class="comment">// @GetMapping("/{id}"): Se combina con @RequestMapping</span>
+    <span class="comment">//   URL completa: GET /api/items/5 (donde 5 es el {id})</span>
     <span class="annotation">@GetMapping</span>(<span class="string">"/{id}"</span>)
+    <span class="comment">// @PathVariable: Extrae el valor de la URL</span>
+    <span class="comment">//   En /api/items/5, @PathVariable Long id = 5</span>
     <span class="keyword">public</span> <span class="type">ResponseEntity</span>&lt;<span class="type">ItemDTO</span>&gt; findById(<span class="annotation">@PathVariable</span> <span class="type">Long</span> id) {
         <span class="keyword">return</span> ResponseEntity.ok(service.findById(id));
     }
+
+    <span class="comment">// ═══════════════════════════════════════════════════════</span>
+    <span class="comment">// ENDPOINT: GET /api/items/search?texto=Hola</span>
+    <span class="comment">// Busca items que contengan el texto indicado</span>
+    <span class="comment">// ═══════════════════════════════════════════════════════</span>
     <span class="annotation">@GetMapping</span>(<span class="string">"/search"</span>)
+    <span class="comment">// @RequestParam: Extrae un parametro de la query string</span>
+    <span class="comment">//   En /api/items/search?texto=Hola, @RequestParam String texto = "Hola"</span>
     <span class="keyword">public</span> <span class="type">ResponseEntity</span>&lt;<span class="type">List</span>&lt;<span class="type">ItemDTO</span>&gt;&gt; search(<span class="annotation">@RequestParam</span> <span class="type">String</span> texto) {
         <span class="keyword">return</span> ResponseEntity.ok(service.search(texto));
     }
+
+    <span class="comment">// ═══════════════════════════════════════════════════════</span>
+    <span class="comment">// ENDPOINT: POST /api/items</span>
+    <span class="comment">// Crea un nuevo item</span>
+    <span class="comment">// ═══════════════════════════════════════════════════════</span>
     <span class="annotation">@PostMapping</span>
+    <span class="comment">// @Valid: Activa validacion del DTO (@NotBlank, @Size)</span>
+    <span class="comment">//   Si el JSON no cumple las reglas, Spring retorna 400 automaticamente</span>
+    <span class="comment">// @RequestBody: Convierte el JSON del body HTTP a objeto Java (ItemDTO)</span>
+    <span class="comment">//   {"texto": "Hola"} se convierte en ItemDTO con texto="Hola"</span>
     <span class="keyword">public</span> <span class="type">ResponseEntity</span>&lt;<span class="type">ItemDTO</span>&gt; create(<span class="annotation">@Valid</span> <span class="annotation">@RequestBody</span> <span class="type">ItemDTO</span> dto) {
         <span class="keyword">return</span> ResponseEntity.ok(service.create(dto));
     }
+
+    <span class="comment">// ═══════════════════════════════════════════════════════</span>
+    <span class="comment">// ENDPOINT: PUT /api/items/{id}</span>
+    <span class="comment">// Actualiza un item existente</span>
+    <span class="comment">// ═══════════════════════════════════════════════════════</span>
     <span class="annotation">@PutMapping</span>(<span class="string">"/{id}"</span>)
+    <span class="comment">// Combina @PathVariable (de la URL) con @RequestBody (del JSON)</span>
     <span class="keyword">public</span> <span class="type">ResponseEntity</span>&lt;<span class="type">ItemDTO</span>&gt; update(<span class="annotation">@PathVariable</span> <span class="type">Long</span> id, <span class="annotation">@Valid</span> <span class="annotation">@RequestBody</span> <span class="type">ItemDTO</span> dto) {
         <span class="keyword">return</span> ResponseEntity.ok(service.update(id, dto));
     }
+
+    <span class="comment">// ═══════════════════════════════════════════════════════</span>
+    <span class="comment">// ENDPOINT: DELETE /api/items/{id}</span>
+    <span class="comment">// Elimina un item por su ID</span>
+    <span class="comment">// ═══════════════════════════════════════════════════════</span>
     <span class="annotation">@DeleteMapping</span>(<span class="string">"/{id}"</span>)
+    <span class="comment">// Retorna Void porque no hay body en la respuesta</span>
     <span class="keyword">public</span> <span class="type">ResponseEntity</span>&lt;<span class="type">Void</span>&gt; delete(<span class="annotation">@PathVariable</span> <span class="type">Long</span> id) {
         service.delete(id);
+        <span class="comment">// .noContent() = HTTP 204 (eliminacion exitosa, sin contenido)</span>
         <span class="keyword">return</span> ResponseEntity.noContent().build();
     }
 }</code></div>
             </section>
             <section id="m2-exception" class="mb-16">
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">4.7</span> Exception Handler</h3>
+
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#128300;</span> Por que estamos creando estos archivos?</div>
+                    <div class="alert-body">
+                        <p class="mb-3"><strong class="text-white">ItemNotFoundException:</strong> Es una excepcion personalizada que se lanza cuando un item no existe. Extiende RuntimeException (excepcion no verificada). Sin ella, tendrias que retornar nulls o codigos de error genericos.</p>
+
+                        <p class="mb-3"><strong class="text-white">GlobalExceptionHandler:</strong> Es un "paracaidas de seguridad" global. Cuando cualquier excepcion ocurre en cualquier Controller, este handler la captura y retorna un JSON de error estructurado (en vez de un stack trace feo de 500 lineas).</p>
+
+                        <p><strong class="text-white">Que pasarian sin estos archivos?</strong> Cuando un item no existe, Spring retornaria un error 500 con un mensaje generico tipo "Internal Server Error". El frontend no sabria distinguir entre "item no encontrado" (404) y "error del servidor" (500). Con el handler global, cada error tiene su propio status code y mensaje claro.</p>
+                    </div>
+                </div>
+
                 <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">exception/ItemNotFoundException.java</code>:</p>
                 <div class="code-block" data-lang="ItemNotFoundException.java"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="keyword">package</span> com.singleinput.exception;
+
+<span class="comment">// Excepcion personalizada para cuando un item no se encuentra</span>
+<span class="comment">// Extiende RuntimeException = excepcion "no verificada"</span>
+<span class="comment">// (no necesitas declararla con "throws" en cada metodo)</span>
 <span class="keyword">public class</span> <span class="type">ItemNotFoundException</span> <span class="keyword">extends</span> <span class="type">RuntimeException</span> {
+    <span class="comment">// Constructor que recibe el ID que no se encontro</span>
+    <span class="comment">// super() pasa el mensaje a RuntimeException (se vera en los logs)</span>
     <span class="keyword">public</span> <span class="type">ItemNotFoundException</span>(<span class="type">Long</span> id) {
         <span class="keyword">super</span>(<span class="string">"Item no encontrado con id: "</span> + id);
     }
@@ -1035,39 +1411,92 @@ feature:          C---D---</pre>
 <span class="keyword">import</span> java.time.LocalDateTime;
 <span class="keyword">import</span> java.util.*;
 
+<span class="comment">// @RestControllerAdvice: "Intercepta" excepciones de TODOS los controllers</span>
+<span class="comment">// Es como un try-catch global. Sin esto, cada controller tendria que</span>
+<span class="comment">// manejar sus propias excepciones con try-catch repetitivo</span>
+<span class="comment">// Combina @ControllerAdvice + @ResponseBody (retorna JSON)</span>
 <span class="annotation">@RestControllerAdvice</span>
 <span class="keyword">public class</span> <span class="type">GlobalExceptionHandler</span> {
+
+    <span class="comment">// ═══════════════════════════════════════════════════════</span>
+    <span class="comment">// HANDLER 1: Cuando se lanza ItemNotFoundException</span>
+    <span class="comment">// Retorna HTTP 404 Not Found con JSON detallado</span>
+    <span class="comment">// ═══════════════════════════════════════════════════════</span>
+    <span class="comment">// @ExceptionHandler: "Escucha" solo este tipo de excepcion</span>
+    <span class="comment">// Cuando CUALQUIER controller lance ItemNotFoundException,</span>
+    <span class="comment">// este metodo se ejecuta automaticamente</span>
     <span class="annotation">@ExceptionHandler</span>(<span class="type">ItemNotFoundException</span>.class)
     <span class="keyword">public</span> <span class="type">ResponseEntity</span>&lt;<span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">Object</span>&gt;&gt; handleNotFound(<span class="type">ItemNotFoundException</span> ex) {
+        <span class="comment">// LinkedHashMap mantiene el orden de insercion de las claves</span>
+        <span class="comment">// (a diferencia de HashMap que no garantiza orden)</span>
         <span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">Object</span>&gt; body = <span class="keyword">new</span> <span class="type">LinkedHashMap</span>&lt;&gt;();
         body.put(<span class="string">"timestamp"</span>, LocalDateTime.now().toString());
         body.put(<span class="string">"status"</span>, <span class="number">404</span>);
         body.put(<span class="string">"error"</span>, <span class="string">"Not Found"</span>);
         body.put(<span class="string">"message"</span>, ex.getMessage());
+        <span class="comment">// Retorna HTTP 404 + el JSON con detalles del error</span>
         <span class="keyword">return</span> ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
     }
+
+    <span class="comment">// ═══════════════════════════════════════════════════════</span>
+    <span class="comment">// HANDLER 2: Cuando falla la validacion (@Valid)</span>
+    <span class="comment">// Retorna HTTP 400 Bad Request con errores de validacion</span>
+    <span class="comment">// ═══════════════════════════════════════════════════════</span>
+    <span class="comment">// Se lanza automaticamente cuando @Valid detecta que un DTO</span>
+    <span class="comment">// no cumple las reglas (@NotBlank, @Size, etc.)</span>
     <span class="annotation">@ExceptionHandler</span>(<span class="type">MethodArgumentNotValidException</span>.class)
     <span class="keyword">public</span> <span class="type">ResponseEntity</span>&lt;<span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">Object</span>&gt;&gt; handleValidation(<span class="type">MethodArgumentNotValidException</span> ex) {
         <span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">Object</span>&gt; body = <span class="keyword">new</span> <span class="type">LinkedHashMap</span>&lt;&gt;();
         body.put(<span class="string">"timestamp"</span>, LocalDateTime.now().toString());
         body.put(<span class="string">"status"</span>, <span class="number">400</span>);
         body.put(<span class="string">"error"</span>, <span class="string">"Bad Request"</span>);
+        <span class="comment">// Extrae TODOS los errores de validacion (puede haber varios)</span>
+        <span class="comment">// getFieldErrors() retorna una lista de FieldError</span>
+        <span class="comment">// Cada FieldError tiene: campo, valor rechazado, mensaje</span>
         <span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">String</span>&gt; errors = <span class="keyword">new</span> <span class="type">LinkedHashMap</span>&lt;&gt;();
         ex.getBindingResult().getFieldErrors().forEach(e -> errors.put(e.getField(), e.getDefaultMessage()));
         body.put(<span class="string">"messages"</span>, errors);
+        <span class="comment">// Retorna HTTP 400 + JSON con los mensajes de validacion</span>
         <span class="keyword">return</span> ResponseEntity.badRequest().body(body);
     }
 }</code></div>
             </section>
             <section class="mb-16">
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">4.8</span> Application</h3>
+
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#128300;</span> Por que estamos creando este archivo?</div>
+                    <div class="alert-body">
+                        <p class="mb-3"><strong class="text-white">Que es ItemServiceApplication?</strong> Es el punto de entrada de tu microservicio (el "main" de Java). Cuando ejecutas <code>mvn spring-boot:run</code>, Java busca este metodo <code>main()</code> para arrancar todo.</p>
+
+                        <p class="mb-3"><strong class="text-white">La magia de @SpringBootApplication:</strong> Esta unica anotacion combina tres cosas:</p>
+                        <ul class="list-disc list-inside ml-4 space-y-1 mb-3">
+                            <li><strong>@Configuration:</strong> "Esta clase puede definir beans"</li>
+                            <li><strong>@EnableAutoConfiguration:</strong> "Spring, configura automaticamente todo lo que encuentres en el classpath" (si ve PostgreSQL en pom.xml, configura la conexion; si ve spring-boot-starter-web, arranca Tomcat)</li>
+                            <li><strong>@ComponentScan:</strong> "Busca todas las clases con @Service, @Repository, @Controller en este paquete y subpaquetes, y registralas como beans"</li>
+                        </ul>
+
+                        <p><strong class="text-white">Que pasaria sin este archivo?</strong> Tu microservicio no arrancaria. No habria un punto de entrada para Spring Boot. Es tan esencial como el interruptor de encendido de un auto.</p>
+                    </div>
+                </div>
+
                 <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">ItemServiceApplication.java</code>:</p>
                 <div class="code-block" data-lang="ItemServiceApplication.java"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="keyword">package</span> com.singleinput;
 <span class="keyword">import</span> org.springframework.boot.SpringApplication;
 <span class="keyword">import</span> org.springframework.boot.autoconfigure.SpringBootApplication;
 
+<span class="comment">// @SpringBootApplication = @Configuration + @EnableAutoConfiguration + @ComponentScan</span>
+<span class="comment">// Es la anotacion que "enciende" todo Spring Boot</span>
+<span class="comment">// Sin ella, Spring no sabe que debe arrancar automaticamente</span>
 <span class="annotation">@SpringBootApplication</span>
 <span class="keyword">public class</span> <span class="type">ItemServiceApplication</span> {
+    <span class="comment">// Metodo main: punto de entrada estandar de Java</span>
+    <span class="comment">// SpringApplication.run() hace TODO:</span>
+    <span class="comment">//   1. Crea el ApplicationContext (contenedor de beans)</span>
+    <span class="comment">//   2. Escanea paquetes buscando @Component, @Service, @Repository, @Controller</span>
+    <span class="comment">//   3. Configura auto-configuracion (Tomcat, DataSource, JPA, etc.)</span>
+    <span class="comment">//   4. Arranca el servidor web embebido (Tomcat en puerto 8081)</span>
+    <span class="comment">//   5. Tu microservicio queda listo para recibir peticiones HTTP</span>
     <span class="keyword">public static void</span> main(<span class="type">String</span>[] args) {
         SpringApplication.run(<span class="type">ItemServiceApplication</span>.class, args);
     }
@@ -1127,15 +1556,30 @@ feature:          C---D---</pre>
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
                     <span class="text-accent">2.2</span> Docker Compose: Los 3 Servicios
                 </h3>
-                <p class="text-slate-300 leading-relaxed mb-4">En vez de usar comandos <code class="text-accent">docker run</code> con muchas banderas, usaremos <strong class="text-white">Docker Compose</strong> para definir todos los servicios en un archivo YAML legible y versionable.</p>
+
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#128300;</span> Por que estamos creando estos archivos?</div>
+                    <div class="alert-body">
+                        <p class="mb-3"><strong class="text-white">.env (Variables de Entorno):</strong> Es un archivo de "llaves" que contiene credenciales y configuraciones sensibles. Docker Compose lo lee automaticamente y reemplaza las variables <code>${VARIABLE}</code> en el docker-compose.yml. Su proposito es mantener las credenciales FUERA del YAML (que si se sube a Git).</p>
+
+                        <p class="mb-3"><strong class="text-white">docker-compose.yml:</strong> Es el "director de orquesta" de toda tu aplicacion. Define los 3 servicios (PostgreSQL, Item Service, API Gateway), como se conectan entre si, que puertos usan, que volumenes comparten, y en que orden arrancan. Sin este archivo, tendrias que ejecutar 3 comandos <code>docker run</code> separados con decenas de banderas cada uno.</p>
+
+                        <p><strong class="text-white">Que pasarian sin estos archivos?</strong> Sin .env, las credenciales estarian hardcodeadas en el YAML (inseguro, no se puede subir a Git). Sin docker-compose.yml, tendrias que arrancar cada contenedor manualmente con comandos largos y propensos a errores.</p>
+                    </div>
+                </div>
+
                 <p class="text-slate-300 leading-relaxed mb-4">Primero, crea el archivo <code class="text-accent">.env</code> en la raiz del proyecto. Este archivo contiene las credenciales y NO se sube a Git:</p>
                 <div class="code-block" data-lang=".env">
                     <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
                     <code><span class="comment"># ═══════════════════════════════════════════════════════════════</span>
 <span class="comment"># VARIABLES DE ENTORNO (NO subir a Git - esta en .gitignore)</span>
+<span class="comment"># Docker Compose lee este archivo automaticamente</span>
+<span class="comment"># y reemplaza ${VARIABLE} en docker-compose.yml</span>
 <span class="comment"># ═══════════════════════════════════════════════════════════════</span>
 
-<span class="comment"># PostgreSQL</span>
+<span class="comment"># Credenciales de PostgreSQL</span>
+<span class="comment"># Estas variables se usan en docker-compose.yml con ${POSTGRES_USER}</span>
+<span class="comment"># La imagen oficial de PostgreSQL las lee automaticamente al arrancar</span>
 POSTGRES_USER=admin
 POSTGRES_PASSWORD=secret123
 POSTGRES_DB=crud_db</code>
@@ -1144,87 +1588,204 @@ POSTGRES_DB=crud_db</code>
                 <p class="text-slate-300 leading-relaxed mb-4 mt-6">Ahora crea <code class="text-accent">docker-compose.yml</code> en la raiz:</p>
                 <div class="code-block" data-lang="docker-compose.yml">
                     <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
-                    <code><span class="property">services</span>:
+                    <code><span class="comment"># ═══════════════════════════════════════════════════════════════════</span>
+<span class="comment"># services: Define los contenedores que formaran tu aplicacion</span>
+<span class="comment"># Cada servicio = un contenedor Docker independiente y aislado</span>
+<span class="comment"># Docker Compose los arranca, conecta y gestiona como un grupo</span>
+<span class="comment"># ═══════════════════════════════════════════════════════════════════</span>
+<span class="property">services</span>:
 
-  <span class="comment"># ═══════════════════════════════════════════════════════</span>
+  <span class="comment"># ═══════════════════════════════════════════════════════════════</span>
   <span class="comment"># SERVICIO 1: Base de Datos PostgreSQL 16 (Alpine)</span>
-  <span class="comment"># ═══════════════════════════════════════════════════════</span>
+  <span class="comment"># "postgres" es el nombre interno del servicio</span>
+  <span class="comment"># Otros servicios se refieren a el por este nombre</span>
+  <span class="comment"># ═══════════════════════════════════════════════════════════════</span>
   <span class="property">postgres</span>:
+    <span class="comment"># image: Que imagen Docker usar (se descarga de Docker Hub)</span>
+    <span class="comment"># postgres:16-alpine = PostgreSQL version 16 en Alpine Linux</span>
+    <span class="comment"># "Alpine" = distribucion minimalista (~80MB vs ~400MB de Debian)</span>
     <span class="property">image</span>: <span class="string">postgres:16-alpine</span>
+
+    <span class="comment"># container_name: Nombre del contenedor cuando aparece en "docker ps"</span>
+    <span class="comment"># Tambien es el nombre que otros contenedores usan para conectarse</span>
+    <span class="comment"># Ejemplo: jdbc:postgresql://crud-postgres:5432/crud_db</span>
     <span class="property">container_name</span>: <span class="string">crud-postgres</span>
+
+    <span class="comment"># restart: Politica de reinicio automatico</span>
+    <span class="comment"># "unless-stopped" = reiniciar siempre, excepto si lo detuviste manualmente</span>
+    <span class="comment"># Si Docker Desktop se reinicia, este contenedor arranca solo</span>
     <span class="property">restart</span>: <span class="string">unless-stopped</span>
+
+    <span class="comment"># environment: Variables de entorno DENTRO del contenedor</span>
+    <span class="comment"># La imagen oficial de PostgreSQL lee estas variables al arrancar</span>
+    <span class="comment"># para crear el usuario, password y base de datos iniciales</span>
     <span class="property">environment</span>:
+      <span class="comment"># ${POSTGRES_USER} se reemplaza con el valor del archivo .env</span>
+      <span class="comment"># Asi las credenciales NO estan hardcodeadas en este YAML</span>
       <span class="property">POSTGRES_USER</span>: <span class="string">${POSTGRES_USER}</span>
       <span class="property">POSTGRES_PASSWORD</span>: <span class="string">${POSTGRES_PASSWORD}</span>
       <span class="property">POSTGRES_DB</span>: <span class="string">${POSTGRES_DB}</span>
+
+    <span class="comment"># ports: Mapeo de puertos entre el HOST y el CONTENDOR</span>
+    <span class="comment"># Formato: "PUERTO_HOST:PUERTO_CONTENDOR"</span>
+    <span class="comment"># "5432:5432" = el puerto 5432 de tu PC apunta al 5432 del contenedor</span>
+    <span class="comment"># Esto permite que herramientas externas (DBeaver, pgAdmin)</span>
+    <span class="comment"># se conecten a PostgreSQL via localhost:5432</span>
     <span class="property">ports</span>:
       - <span class="string">"5432:5432"</span>
+
+    <span class="comment"># volumes: Monta almacenamiento persistente en el contenedor</span>
+    <span class="comment"># "crud_pgdata" = volumen nombrado (definido al final del archivo)</span>
+    <span class="comment"># "/var/lib/postgresql/data" = donde PostgreSQL guarda sus datos DENTRO del contenedor</span>
+    <span class="comment"># SIN esto: si eliminas el contenedor, TODOS los datos se pierden</span>
+    <span class="comment"># CON esto: los datos sobreviven en el volumen aunque destruyas el contenedor</span>
     <span class="property">volumes</span>:
       - <span class="string">crud_pgdata:/var/lib/postgresql/data</span>
+
+    <span class="comment"># healthcheck: Docker verifica periodicamente si PostgreSQL esta listo</span>
+    <span class="comment"># Es CRITICO para que item-service no arranque antes de que la DB este lista</span>
     <span class="property">healthcheck</span>:
+      <span class="comment"># test: Comando que se ejecuta para verificar salud</span>
+      <span class="comment"># pg_isready es una utilidad de PostgreSQL que retorna exit(0) si esta listo</span>
+      <span class="comment"># CMD-SHELL = ejecutar como comando de shell</span>
       <span class="property">test</span>: [<span class="string">"CMD-SHELL"</span>, <span class="string">"pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"</span>]
+      <span class="comment"># interval: Cada cuanto verificar (10 segundos)</span>
       <span class="property">interval</span>: <span class="string">10s</span>
+      <span class="comment"># timeout: Si el healthcheck tarda mas de 5s, se considera fallido</span>
       <span class="property">timeout</span>: <span class="string">5s</span>
+      <span class="comment"># retries: Cuantos fallos consecutivos antes de marcar como "unhealthy"</span>
       <span class="property">retries</span>: <span class="number">5</span>
+      <span class="comment"># start_period: Tiempo de gracia inicial (PostgreSQL tarda en arrancar)</span>
+      <span class="comment"># Durante 30s, los fallos de healthcheck no cuentan</span>
       <span class="property">start_period</span>: <span class="string">30s</span>
+
+    <span class="comment"># networks: Red Docker a la que se conecta este contenedor</span>
+    <span class="comment"># Todos los servicios en "crud-network" pueden comunicarse por nombre</span>
+    <span class="comment"># Ejemplo: item-service puede hacer ping a "crud-postgres"</span>
     <span class="property">networks</span>:
       - <span class="string">crud-network</span>
 
-  <span class="comment"># ═══════════════════════════════════════════════════════</span>
+  <span class="comment"># ═══════════════════════════════════════════════════════════════</span>
   <span class="comment"># SERVICIO 2: Item Service (Spring Boot Microservice)</span>
-  <span class="comment"># ═══════════════════════════════════════════════════════</span>
+  <span class="comment"># Microservicio principal que maneja el CRUD de items</span>
+  <span class="comment"># ═══════════════════════════════════════════════════════════════</span>
   <span class="property">item-service</span>:
+    <span class="comment"># build: En vez de descargar una imagen, Docker la CONSTRUYE</span>
+    <span class="comment"># usando las instrucciones del Dockerfile</span>
     <span class="property">build</span>:
+      <span class="comment"># context: Carpeta que Docker usa como "contexto de build"</span>
+      <span class="comment"># Docker envia TODO el contenido de ./item-service al daemon</span>
+      <span class="comment"># (por eso existe .dockerignore: para excluir archivos innecesarios)</span>
       <span class="property">context</span>: <span class="string">./item-service</span>
+      <span class="comment"># dockerfile: Nombre del archivo con las instrucciones de build</span>
       <span class="property">dockerfile</span>: <span class="string">Dockerfile</span>
+
+    <span class="comment"># Nombre del contenedor para "docker ps" y resolucion DNS</span>
     <span class="property">container_name</span>: <span class="string">crud-item-service</span>
     <span class="property">restart</span>: <span class="string">unless-stopped</span>
+
+    <span class="comment"># depends_on: Control de orden de arranque</span>
+    <span class="comment"># "condition: service_healthy" = NO arrancar hasta que PostgreSQL</span>
+    <span class="comment"># pase su healthcheck (este marcado como "healthy")</span>
+    <span class="comment"># SIN esto: Spring Boot arranca e intenta conectarse a una DB</span>
+    <span class="comment"># que aun no esta lista = Connection Refused</span>
     <span class="property">depends_on</span>:
       <span class="property">postgres</span>:
         <span class="property">condition</span>: <span class="string">service_healthy</span>
+
+    <span class="comment"># environment: Variables de entorno para Spring Boot</span>
+    <span class="comment"># Spring Boot acepta variables de entorno con formato "MAYUSCULAS_GUIONES"</span>
+    <span class="comment"># SPRING_DATASOURCE_URL se mapea automaticamente a spring.datasource.url</span>
+    <span class="comment"># Estas SOBREESCRIBEN los valores de application.yml</span>
     <span class="property">environment</span>:
+      <span class="comment"># URL de conexion JDBC. "crud-postgres" = container_name del servicio postgres</span>
+      <span class="comment"># NO es localhost porque estamos DENTRO de la red Docker</span>
       <span class="property">SPRING_DATASOURCE_URL</span>: <span class="string">jdbc:postgresql://crud-postgres:5432/crud_db</span>
       <span class="property">SPRING_DATASOURCE_USERNAME</span>: <span class="string">admin</span>
       <span class="property">SPRING_DATASOURCE_PASSWORD</span>: <span class="string">secret123</span>
+
+    <span class="comment"># ports: Mapeo de puertos del Item Service</span>
     <span class="property">ports</span>:
+      <span class="comment"># 8081: Puerto de la aplicacion Spring Boot</span>
       - <span class="string">"8081:8081"</span>
+      <span class="comment"># 5005: Puerto de debug remoto (para depurar desde VS Code/IDEA)</span>
       - <span class="string">"5005:5005"</span>
+
+    <span class="comment"># volumes: Bind mounts para desarrollo en vivo (hot-reload)</span>
     <span class="property">volumes</span>:
+      <span class="comment"># Bind mount: Tu carpeta local ./item-service/src se "monta"</span>
+      <span class="comment"># dentro del contenedor en /app/src</span>
+      <span class="comment"># Cuando editas un archivo en VS Code, el cambio es INSTANTANEO</span>
+      <span class="comment"># dentro del contenedor. DevTools detecta el cambio y reinicia.</span>
       - <span class="string">./item-service/src:/app/src</span>
+      <span class="comment"># Monta el pom.xml local para que cambios en dependencias se reflejen</span>
       - <span class="string">./item-service/pom.xml:/app/pom.xml</span>
+      <span class="comment"># Volumen nombrado para cache Maven (~/.m2)</span>
+      <span class="comment"># Las dependencias descargadas sobreviven a la recreacion del contenedor</span>
+      <span class="comment"># SIN esto: cada "docker compose up" descargaria TODO de nuevo (5-10 min)</span>
       - <span class="string">maven_cache:/root/.m2</span>
+
     <span class="property">networks</span>:
       - <span class="string">crud-network</span>
 
-  <span class="comment"># ═══════════════════════════════════════════════════════</span>
+  <span class="comment"># ═══════════════════════════════════════════════════════════════</span>
   <span class="comment"># SERVICIO 3: API Gateway (Spring Cloud Gateway)</span>
-  <span class="comment"># ═══════════════════════════════════════════════════════</span>
+  <span class="comment"># Punto de entrada unico para todas las peticiones del cliente</span>
+  <span class="comment"># ═══════════════════════════════════════════════════════════════</span>
   <span class="property">api-gateway</span>:
     <span class="property">build</span>:
       <span class="property">context</span>: <span class="string">./api-gateway</span>
       <span class="property">dockerfile</span>: <span class="string">Dockerfile</span>
     <span class="property">container_name</span>: <span class="string">crud-api-gateway</span>
     <span class="property">restart</span>: <span class="string">unless-stopped</span>
+
+    <span class="comment"># depends_on con lista simple (sin condition)</span>
+    <span class="comment"># Solo espera a que el contenedor item-service ARRANQUE (no a que este healthy)</span>
+    <span class="comment"># El Gateway no tiene healthcheck propio, asi que usamos la forma simple</span>
     <span class="property">depends_on</span>:
       - <span class="string">item-service</span>
+
     <span class="property">ports</span>:
+      <span class="comment"># 8080: Puerto del Gateway. El frontend y Postman se conectan aqui</span>
       - <span class="string">"8080:8080"</span>
+
+    <span class="comment"># Bind mounts para hot-reload (mismo patron que item-service)</span>
     <span class="property">volumes</span>:
       - <span class="string">./api-gateway/src:/app/src</span>
       - <span class="string">./api-gateway/pom.xml:/app/pom.xml</span>
+      <span class="comment"># Cache Maven SEPARADO para el Gateway (tiene dependencias diferentes)</span>
       - <span class="string">gateway_maven_cache:/root/.m2</span>
+
     <span class="property">networks</span>:
       - <span class="string">crud-network</span>
 
+<span class="comment"># ═══════════════════════════════════════════════════════════════════</span>
+<span class="comment"># VOLUMENES: Almacenamiento persistente fuera del ciclo de vida</span>
+<span class="comment"># de los contenedores. Se definen aqui y se referencian en "services"</span>
+<span class="comment"># Los volumenes nombrados los gestiona Docker (no se borran con "down")</span>
+<span class="comment"># ═══════════════════════════════════════════════════════════════════</span>
 <span class="property">volumes</span>:
+  <span class="comment"># Volumen para datos de PostgreSQL</span>
+  <span class="comment"># driver: local = se almacena en el filesystem del host</span>
+  <span class="comment"># (Docker decide la ubicacion exacta: /var/lib/docker/volumes/ en Linux)</span>
   <span class="property">crud_pgdata</span>:
     <span class="property">driver</span>: <span class="string">local</span>
+  <span class="comment"># Cache de dependencias Maven del Item Service</span>
+  <span class="comment"># Sobrevive a "docker compose down" pero NO a "docker compose down -v"</span>
   <span class="property">maven_cache</span>:
     <span class="property">driver</span>: <span class="string">local</span>
+  <span class="comment"># Cache de dependencias Maven del API Gateway (separado)</span>
   <span class="property">gateway_maven_cache</span>:
     <span class="property">driver</span>: <span class="string">local</span>
 
+<span class="comment"># ═══════════════════════════════════════════════════════════════════</span>
+<span class="comment"># REDES: Define redes Docker personalizadas</span>
+<span class="comment"># Por defecto, Docker Compose crea una red automatica, pero</span>
+<span class="comment"># crear una red personalizada nos da control y aislamiento</span>
+<span class="comment"># ═══════════════════════════════════════════════════════════════════</span>
 <span class="property">networks</span>:
+  <span class="comment"># Red tipo "bridge": los contenedores se comunican por nombre</span>
+  <span class="comment"># Docker actua como DNS interno: "crud-postgres" -> 172.x.x.x</span>
   <span class="property">crud-network</span>:
     <span class="property">driver</span>: <span class="string">bridge</span></code>
                 </div>
@@ -1276,34 +1837,193 @@ POSTGRES_DB=crud_db</code>
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
                     <span class="text-accent">2.4</span> Volumenes: Persistencia de Datos
                 </h3>
-                <p class="text-slate-300 leading-relaxed mb-4">Sin volumen, si eliminas el contenedor, <strong class="text-neon-red">todos los datos se pierden</strong>. Con volumen, los datos sobreviven a la destruccion del contenedor.</p>
+
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#128300;</span> Que son los volumenes de Docker y por que existen?</div>
+                    <div class="alert-body">
+                        <p class="mb-3"><strong class="text-white">El problema del almacenamiento efimero:</strong> Por defecto, todos los archivos creados DENTRO de un contenedor viven en su sistema de archivos interno. Cuando eliminas el contenedor (<code>docker compose down</code>), <strong class="text-neon-red">TODO se borra permanentemente</strong>. Esto es como escribir en una pizarra: todo lo que escribes desaparece cuando la borras.</p>
+
+                        <p class="mb-3"><strong class="text-white">Por que Docker hace esto?</strong> Los contenedores estan disenados para ser efimeros (temporales). Puedes destruirlos y recrearlos cuantas veces quieras. Esto es genial para aplicaciones sin estado (stateless), pero es un DESASTRE para bases de datos. Imagina que cada vez que reinicias tu servidor, se borran todos los usuarios, productos y pedidos de tu aplicacion.</p>
+
+                        <p class="mb-3"><strong class="text-white">La solucion - Volumenes:</strong> Un volumen es una zona de almacenamiento que vive FUERA del ciclo de vida del contenedor. Piensa en ello como un "disco duro externo" que conectas al contenedor. Puedes destruir el contenedor mil veces, pero el volumen (y sus datos) permanecen intactos.</p>
+
+                        <p><strong class="text-white">Analogia del edificio de apartamentos:</strong> Si un contenedor es un apartamento amoblado, el volumen es una bodega externa. Si te mudas (destruyes el contenedor), tus cosas en la bodega (volumen) siguen ahi. Cuando te mudas a un nuevo apartamento (nuevo contenedor), puedes volver a conectar la misma bodega.</p>
+                    </div>
+                </div>
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Tipos de Volumenes en Docker</h4>
+                <div class="overflow-x-auto rounded-xl border border-dark-100 mb-8">
+                    <table>
+                        <thead><tr><th class="rounded-tl-xl">Tipo</th><th>Donde vive</th><th>Caso de uso</th><th>Ejemplo en nuestro proyecto</th><th class="rounded-tr-xl">Sobrevive a "down"?</th></tr></thead>
+                        <tbody>
+                            <tr>
+                                <td><strong class="text-neon-green">Named Volume</strong></td>
+                                <td>Gestionado por Docker (<code>/var/lib/docker/volumes/</code>)</td>
+                                <td>Datos que deben persistir: bases de datos, cache de dependencias</td>
+                                <td><code>crud_pgdata</code>, <code>maven_cache</code></td>
+                                <td class="text-neon-green">Si (solo con <code>down -v</code> se borra)</td>
+                            </tr>
+                            <tr>
+                                <td><strong class="text-neon-yellow">Bind Mount</strong></td>
+                                <td>Una carpeta especifica de tu maquina host</td>
+                                <td>Desarrollo en vivo: sincronizar codigo entre host y contenedor</td>
+                                <td><code>./item-service/src:/app/src</code></td>
+                                <td class="text-neon-yellow">Si (es tu disco, no de Docker)</td>
+                            </tr>
+                            <tr>
+                                <td><strong class="text-accent">tmpfs Mount</strong></td>
+                                <td>Memoria RAM del host (no en disco)</td>
+                                <td>Archivos temporales sensibles (secretos, credenciales)</td>
+                                <td>No usamos en este proyecto</td>
+                                <td class="text-neon-red">No (se borra al apagar)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h4 class="text-xl font-bold text-white mb-4">Por que NECESITAMOS un volumen para PostgreSQL en este libro?</h4>
+                <div class="alert-box alert-warning">
+                    <div class="alert-title"><span class="alert-icon">&#9888;&#65039;</span> Escenario sin volumen</div>
+                    <div class="alert-body">
+                        <p class="mb-3">Imagina esta secuencia:</p>
+                        <ol class="list-decimal list-inside ml-4 space-y-2 mb-3">
+                            <li>Arrancas todo con <code>docker compose up -d</code></li>
+                            <li>Creas items desde Postman: "Hola mundo", "Test 1", "Test 2"</li>
+                            <li>Los datos se guardan en PostgreSQL DENTRO del contenedor</li>
+                            <li>Apagas todo con <code>docker compose down</code></li>
+                            <li>Al dia siguiente, arrancas de nuevo con <code>docker compose up -d</code></li>
+                            <li class="text-neon-red"><strong class="text-neon-red">SIN VOLUMEN: Todos los items desaparecieron. La tabla "items" esta vacia.</strong></li>
+                            <li class="text-neon-green"><strong class="text-neon-green">CON VOLUMEN: Todos los items siguen ahi. La tabla "items" tiene tus datos.</strong></li>
+                        </ol>
+                        <p>El volumen <code>crud_pgdata</code> es lo que separa el escenario 6 del 7. Sin el, cada reinicio seria como formatear la base de datos.</p>
+                    </div>
+                </div>
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Paso a paso: Como se crea el volumen en docker-compose.yml</h4>
+                <div class="space-y-4 mb-8">
+                    <div class="border-l-2 border-accent pl-4">
+                        <p class="font-bold text-accent mb-1">Paso 1: Declarar el volumen (seccion "volumes:")</p>
+                        <div class="code-block mt-2" data-lang="yaml"><code><span class="comment"># Al final de docker-compose.yml, fuera de "services:"</span>
+<span class="property">volumes</span>:
+  <span class="comment"># "crud_pgdata" es el nombre del volumen</span>
+  <span class="comment"># Docker lo crea automaticamente la primera vez que arrancas</span>
+  <span class="property">crud_pgdata</span>:
+    <span class="property">driver</span>: <span class="string">local</span></code></div>
+                        <p class="mt-2 text-sm text-slate-400">Esto le dice a Docker: "crea un volumen llamado crud_pgdata usando el driver local". No necesitas crearlo manualmente con <code>docker volume create</code>; Docker Compose lo hace por ti.</p>
+                    </div>
+                    <div class="border-l-2 border-neon-green pl-4">
+                        <p class="font-bold text-neon-green mb-1">Paso 2: Montar el volumen en el servicio (seccion "services: postgres: volumes:")</p>
+                        <div class="code-block mt-2" data-lang="yaml"><code><span class="property">postgres</span>:
+    <span class="property">volumes</span>:
+      <span class="comment"># Formato: "NOMBRE_VOLUMEN:RUTA_DENTRO_DEL_CONTENDOR"</span>
+      - <span class="string">crud_pgdata:/var/lib/postgresql/data</span></code></div>
+                        <p class="mt-2 text-sm text-slate-400">Esto conecta el volumen <code>crud_pgdata</code> con la ruta <code>/var/lib/postgresql/data</code> dentro del contenedor. PostgreSQL guarda TODOS sus datos en esa ruta. Ahora, en vez de escribir en el filesystem efimero del contenedor, escribe en el volumen persistente.</p>
+                    </div>
+                </div>
+
+                <h4 class="text-xl font-bold text-white mb-4">Diagrama: Flujo de datos entre contenedor y volumen</h4>
+                <div class="diagram-container">
+                    <pre class="text-xs sm:text-sm font-mono text-slate-400 leading-relaxed text-center">
+  TU APLICACION                 CONTENEDOR                    VOLUMEN
+  (Postman/Navegador)           (PostgreSQL)                  (crud_pgdata)
+                                +------------------+          +-------------+
+  POST /api/items               |                  |          |             |
+  {"texto":"Hola"}  ----------> | Spring Boot      |          |             |
+                                |      |           |          |             |
+                                |      v           |          |             |
+                                | ItemRepository   |          |             |
+                                |      |           |          |             |
+                                |      v           |  ESCRIBE |             |
+                                | PostgreSQL ----->|--------->|  /data/     |
+                                |      |           |          |  base/      |
+                                |      v           |          |  pg_wal/    |
+                                |  Tabla "items"   |<---------|  ...        |
+                                |  (en /var/lib/   |  LEE     |             |
+                                |  postgresql/data)|          |             |
+                                +------------------+          +-------------+
+                                                                  |
+                                                                  | Sobrevive a:
+                                                                  | - docker compose down
+                                                                  | - docker compose up -d
+                                                                  | - Reinicio de Docker Desktop
+                                                                  |
+                                                                  | Se borra SOLO con:
+                                                                  | - docker compose down -v
+                                                                  | - docker volume rm crud_pgdata</pre>
+                </div>
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Que pasa cuando ejecutas <code class="text-accent">docker compose up</code> con volumenes?</h4>
+                <div class="space-y-3 mb-8">
+                    <div class="flex gap-3 items-start">
+                        <span class="step-number">1</span>
+                        <div>
+                            <p class="font-bold text-white">Docker Compose lee docker-compose.yml</p>
+                            <p class="text-sm text-slate-400">Identifica los volumenes declarados: <code>crud_pgdata</code>, <code>maven_cache</code>, <code>gateway_maven_cache</code></p>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 items-start">
+                        <span class="step-number">2</span>
+                        <div>
+                            <p class="font-bold text-white">Verifica si los volumenes ya existen</p>
+                            <p class="text-sm text-slate-400">Si el volumen NO existe (primera vez), Docker lo crea vacio en <code>/var/lib/docker/volumes/</code>. Si YA existe, lo reutiliza con todos sus datos intactos.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 items-start">
+                        <span class="step-number">3</span>
+                        <div>
+                            <p class="font-bold text-white">Arranca el contenedor PostgreSQL</p>
+                            <p class="text-sm text-slate-400">PostgreSQL detecta el volumen montado en <code>/var/lib/postgresql/data</code>. Si esta vacio, inicializa la base de datos. Si ya tiene datos, los usa directamente (no reinicia nada).</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 items-start">
+                        <span class="step-number">4</span>
+                        <div>
+                            <p class="font-bold text-white">Tu aplicacion escribe datos</p>
+                            <p class="text-sm text-slate-400">Cuando creas un item, PostgreSQL escribe en <code>/var/lib/postgresql/data/base/...</code> que en realidad es el volumen <code>crud_pgdata</code> en tu disco.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-3 items-start">
+                        <span class="step-number">5</span>
+                        <div>
+                            <p class="font-bold text-white">Ejecutas <code>docker compose down</code></p>
+                            <p class="text-sm text-slate-400">El contenedor se destruye, pero el volumen <code>crud_pgdata</code> permanece en tu disco con todos los datos. Cuando vuelvas a arrancar, todo estara ahi.</p>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="alert-box alert-console">
                     <div class="alert-title"><span class="alert-icon">&#128187;</span> CONSOLA - Comandos de Volumenes</div>
                     <div class="alert-body">
                         <div class="code-block mt-3" data-lang="bash">
                             <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
-                            <code><span class="comment"># Levantar todo</span>
+                            <code><span class="comment"># Levantar todo (crea volumenes si no existen)</span>
 <span class="tag">docker</span> compose up -d
 
-<span class="comment"># Ver estado</span>
+<span class="comment"># Ver estado de los contenedores</span>
 <span class="tag">docker</span> compose ps
 
-<span class="comment"># Ver volumenes</span>
+<span class="comment"># Listar todos los volumenes de Docker</span>
+<span class="comment"># Deberias ver: crud_pgdata, maven_cache, gateway_maven_cache</span>
 <span class="tag">docker</span> volume ls
 
-<span class="comment"># Ver logs en tiempo real</span>
+<span class="comment"># Ver detalles de un volumen especifico</span>
+<span class="comment"># Muestra el "Mountpoint": donde vive fisicamente en tu disco</span>
+<span class="tag">docker</span> volume inspect estudio-docker-microserv_crud_pgdata
+
+<span class="comment"># Ver logs en tiempo real de todos los servicios</span>
 <span class="tag">docker</span> compose logs -f
 
-<span class="comment"># Detener (conserva volumenes/datos)</span>
+<span class="comment"># Detener contenedores (conserva volumenes/datos intactos)</span>
 <span class="tag">docker</span> compose down
 
-<span class="comment"># Detener y BORRAR TODO (incluye datos!)</span>
+<span class="comment"># Detener y BORRAR TODO (incluye volumenes = pierdes todos los datos!)</span>
+<span class="comment"># USAR SOLO cuando quieras empezar completamente de cero</span>
 <span class="tag">docker</span> compose down -v</code>
                         </div>
                         <div class="alert-box alert-warning mt-4">
                             <div class="alert-title"><span class="alert-icon">&#9888;&#65039;</span> Cuidado con docker compose down -v</div>
                             <div class="alert-body">
-                                <p>El flag <code>-v</code> elimina los volumenes nombrados. Esto significa que <strong class="text-neon-red">todos los datos de PostgreSQL se borran permanentemente</strong>. Usalo solo cuando quieras empezar de cero.</p>
+                                <p>El flag <code>-v</code> elimina los volumenes nombrados. Esto significa que <strong class="text-neon-red">todos los datos de PostgreSQL se borran permanentemente</strong>. Usalo solo cuando quieras empezar de cero. Es como formatear el disco duro de la base de datos.</p>
                             </div>
                         </div>
                     </div>
@@ -1322,6 +2042,18 @@ POSTGRES_DB=crud_db</code>
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
                     <span class="text-accent">3.1</span> Dockerfile del Item Service
                 </h3>
+
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#128300;</span> Por que estamos creando este archivo?</div>
+                    <div class="alert-body">
+                        <p class="mb-3"><strong class="text-white">Que es un Dockerfile?</strong> Es la "receta de cocina" que Docker usa para construir una imagen. Una imagen es una plantilla inmutable que contiene TODO lo necesario para ejecutar tu aplicacion: Java, Maven, tu codigo, tus dependencias, configuraciones. El Dockerfile le dice a Docker paso a paso como construir esa plantilla.</p>
+
+                        <p class="mb-3"><strong class="text-white">Por que lo necesitamos?</strong> Sin Dockerfile, Docker no sabe como crear la imagen de tu microservicio. No puede adivinar que version de Java usar, que dependencias descargar, o como arrancar tu aplicacion. El Dockerfile es el contrato entre tu codigo y el contenedor.</p>
+
+                        <p><strong class="text-white">Analogia:</strong> Si la imagen Docker es un pastel, el Dockerfile es la receta. Sin receta, no sabes que ingredientes comprar ni en que orden mezclarlos. Cada instruccion del Dockerfile (FROM, RUN, COPY, CMD) es un paso de la receta.</p>
+                    </div>
+                </div>
+
                 <p class="text-slate-300 leading-relaxed mb-4">Un <strong class="text-white">Dockerfile</strong> es la "receta" que Docker usa para construir una imagen. Cada instruccion (FROM, RUN, COPY, etc.) crea una "capa" en la imagen. Docker cachea estas capas: si no cambias una instruccion, no re-ejecuta esa capa.</p>
                 <p class="text-slate-300 leading-relaxed mb-4">Crea <code class="text-accent">item-service/Dockerfile</code>:</p>
                 <div class="code-block" data-lang="item-service/Dockerfile">
@@ -1379,20 +2111,55 @@ POSTGRES_DB=crud_db</code>
                 </div>
 
                 <p class="text-slate-300 leading-relaxed mb-4 mt-8">Crea <code class="text-accent">api-gateway/Dockerfile</code>:</p>
+
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#128300;</span> Por que un Dockerfile separado para el Gateway?</div>
+                    <div class="alert-body">
+                        <p class="mb-3">Cada microservicio tiene su propio Dockerfile porque son aplicaciones independientes con dependencias diferentes. El Item Service necesita JPA, PostgreSQL y Validation. El Gateway necesita Spring Cloud Gateway y WebFlux. Mezclarlos en un solo Dockerfile violaria el principio de microservicios: cada uno debe ser autocontenido e independiente.</p>
+                        <p>El Dockerfile del Gateway es mas simple porque no necesita debug remoto (puerto 5005) ni algunas optimizaciones del Item Service.</p>
+                    </div>
+                </div>
+
                 <div class="code-block" data-lang="api-gateway/Dockerfile">
                     <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
-                    <code><span class="keyword">FROM</span> maven:3.9-eclipse-temurin-21-alpine
+                    <code><span class="comment"># FROM: Define la imagen base (el "punto de partida")</span>
+<span class="comment"># maven:3.9-eclipse-temurin-21-alpine incluye:</span>
+<span class="comment">#   - Maven 3.9 (para compilar el proyecto)</span>
+<span class="comment">#   - JDK 21 (Eclipse Temurin = distribucion open-source de Java)</span>
+<span class="comment">#   - Alpine Linux (distribucion minimalista de ~5MB)</span>
+<span class="keyword">FROM</span> maven:3.9-eclipse-temurin-21-alpine
 
+<span class="comment"># RUN: Ejecuta un comando DENTRO de la imagen durante el build</span>
+<span class="comment"># apk es el gestor de paquetes de Alpine (como apt en Debian)</span>
+<span class="comment"># Instalamos bash (Alpine trae solo sh) y curl (para healthchecks)</span>
+<span class="comment"># --no-cache: no guarda el indice de paquetes (ahorra ~5MB en la imagen)</span>
 <span class="keyword">RUN</span> apk add --no-cache bash curl
 
+<span class="comment"># WORKDIR: Establece el directorio de trabajo dentro del contenedor</span>
+<span class="comment"># Todos los comandos siguientes (COPY, RUN, CMD) se ejecutan desde /app</span>
+<span class="comment"># Si /app no existe, Docker lo crea automaticamente</span>
 <span class="keyword">WORKDIR</span> /app
 
+<span class="comment"># COPY: Copia archivos del HOST (tu PC) a la IMAGEN</span>
+<span class="comment"># Copiamos SOLO pom.xml primero (optimizacion de cache de capas)</span>
+<span class="comment"># Si pom.xml no cambia entre builds, Docker reutiliza la capa siguiente</span>
 <span class="keyword">COPY</span> pom.xml ./pom.xml
 
+<span class="comment"># Descarga TODAS las dependencias Maven antes de copiar el codigo fuente</span>
+<span class="comment"># Esto es una optimizacion CRITICA: las dependencias cambian poco,</span>
+<span class="comment"># pero el codigo fuente cambia constantemente.</span>
+<span class="comment"># Si solo cambias codigo (no pom.xml), Docker salta este paso (cache)</span>
+<span class="comment"># -B = batch mode (sin colores ni animaciones, mejor para logs)</span>
 <span class="keyword">RUN</span> mvn dependency:go-offline -B
 
+<span class="comment"># EXPOSE: Documentacion. Indica que el contenedor escucha en este puerto</span>
+<span class="comment"># No crea el mapeo real (eso lo hace docker-compose.yml con "ports:")</span>
 <span class="keyword">EXPOSE</span> <span class="number">8080</span>
 
+<span class="comment"># CMD: Comando que se ejecuta AL ARRANCAR el contenedor</span>
+<span class="comment"># A diferencia de RUN (que se ejecuta durante el build),</span>
+<span class="comment"># CMD se ejecuta cada vez que el contenedor inicia</span>
+<span class="comment"># Arranca Spring Boot con Maven directamente (no necesita compilar primero)</span>
 <span class="keyword">CMD</span> [<span class="string">"mvn"</span>, <span class="string">"spring-boot:run"</span>]</code>
                 </div>
             </section>
@@ -1406,30 +2173,117 @@ POSTGRES_DB=crud_db</code>
                     <div class="alert-body">
                         <div class="code-block mt-3" data-lang="bash">
                             <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
-                            <code><span class="comment"># Construir imagenes (primera vez: 5-10 min)</span>
+                            <code><span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+<span class="comment"># PASO 1: Construir las imagenes Docker</span>
+<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+<span class="comment"># docker compose build:</span>
+<span class="comment">#   Lee docker-compose.yml y para cada servicio con "build:",</span>
+<span class="comment">#   ejecuta las instrucciones del Dockerfile para crear la imagen.</span>
+<span class="comment">#</span>
+<span class="comment"># Que hace Docker internamente:</span>
+<span class="comment">#   1. Descarga la imagen base (maven:3.9-eclipse-temurin-21-alpine)</span>
+<span class="comment">#      Primera vez: ~500MB de descarga. Despues: cache.</span>
+<span class="comment">#   2. Ejecuta cada instruccion del Dockerfile (FROM, RUN, COPY...)</span>
+<span class="comment">#      Cada instruccion crea una "capa" que se cachea.</span>
+<span class="comment">#   3. "mvn dependency:go-offline" descarga todas las dependencias Maven</span>
+<span class="comment">#      Primera vez: 2-5 minutos. Despues: cache (segundos).</span>
+<span class="comment">#   4. La imagen resultante se guarda localmente con un nombre</span>
+<span class="comment">#      tipo: estudio-docker-microserv-item-service:latest</span>
+<span class="comment">#</span>
+<span class="comment"># Primera vez: 5-10 minutos (descarga imagen base + dependencias Maven)</span>
+<span class="comment"># Siguientes veces: 5-30 segundos (si no cambiaste pom.xml)</span>
 <span class="tag">docker</span> compose build
 
-<span class="comment"># Arrancar los 3 servicios en segundo plano</span>
+<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+<span class="comment"># PASO 2: Arrancar los 3 servicios</span>
+<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+<span class="comment"># docker compose up -d:</span>
+<span class="comment">#   "up" = crear y arrancar los contenedores definidos en docker-compose.yml</span>
+<span class="comment">#   "-d" = detached mode (segundo plano, no bloquea tu terminal)</span>
+<span class="comment">#</span>
+<span class="comment"># Que hace Docker internamente:</span>
+<span class="comment">#   1. Crea la red "crud-network" (si no existe)</span>
+<span class="comment">#   2. Crea los volumenes "crud_pgdata", "maven_cache", etc. (si no existen)</span>
+<span class="comment">#   3. Arranca PostgreSQL primero (no tiene depends_on)</span>
+<span class="comment">#   4. Espera a que PostgreSQL pase el healthcheck (puede tardar 10-30s)</span>
+<span class="comment">#   5. Arranca item-service (porque depends_on: postgres: service_healthy)</span>
+<span class="comment">#   6. Arranca api-gateway (porque depends_on: item-service)</span>
+<span class="comment">#   7. Los 3 contenedores quedan corriendo en segundo plano</span>
+<span class="comment">#</span>
+<span class="comment"># ORDEN DE ARRANQUE: postgres -> item-service -> api-gateway</span>
 <span class="tag">docker</span> compose up -d
 
-<span class="comment"># Ver estado (los 3 deben estar Up)</span>
+<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+<span class="comment"># PASO 3: Verificar que todo esta corriendo</span>
+<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+<span class="comment"># docker compose ps:</span>
+<span class="comment">#   Muestra el estado de cada contenedor definido en docker-compose.yml</span>
+<span class="comment">#   Busca estas columnas:</span>
+<span class="comment">#     NAME          STATUS              PORTS</span>
+<span class="comment">#     crud-postgres Up (healthy)        0.0.0.0:5432->5432/tcp</span>
+<span class="comment">#     crud-item-..  Up                  0.0.0.0:8081->8081/tcp</span>
+<span class="comment">#     crud-api-..   Up                  0.0.0.0:8080->8080/tcp</span>
+<span class="comment">#</span>
+<span class="comment"># Si ves "Up" en STATUS, todo esta bien.</span>
+<span class="comment"># Si ves "Restarting", algo esta fallando (revisa los logs).</span>
+<span class="comment"># Si ves "Exit", el contenedor termino (normal si ya no lo necesitas).</span>
 <span class="tag">docker</span> compose ps
 
-<span class="comment"># Ver logs del Item Service</span>
+<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+<span class="comment"># PASO 4: Ver los logs del Item Service</span>
+<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+<span class="comment"># docker compose logs -f item-service:</span>
+<span class="comment">#   "logs" = muestra la salida estandar del contenedor</span>
+<span class="comment">#   "-f" = follow (muestra nuevos logs en tiempo real, como tail -f)</span>
+<span class="comment">#   "item-service" = solo muestra logs de este servicio</span>
+<span class="comment">#</span>
+<span class="comment"># Que buscar en los logs:</span>
+<span class="comment">#   - "Started ItemServiceApplication in X.XXX seconds" = ARRANCO OK</span>
+<span class="comment">#   - "Tomcat started on port(s): 8081" = Servidor web listo</span>
+<span class="comment">#   - "HikariPool - Start completed" = Conexion a PostgreSQL exitosa</span>
+<span class="comment">#</span>
+<span class="comment"># Errores comunes en los logs:</span>
+<span class="comment">#   - "Connection refused" = PostgreSQL no esta listo aun (espera)</span>
+<span class="comment">#   - "Cannot determine jdbc url" = Falta SPRING_DATASOURCE_URL</span>
+<span class="comment">#   - "Port 8081 already in use" = Otro proceso usa ese puerto</span>
 <span class="tag">docker</span> compose logs -f item-service
 <span class="comment"># Espera: "Started ItemServiceApplication in X.XXX seconds"</span>
 
-<span class="comment"># Ver logs del API Gateway</span>
+<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+<span class="comment"># Ver los logs del API Gateway</span>
+<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
 <span class="tag">docker</span> compose logs -f api-gateway
 <span class="comment"># Espera: "Started ApiGatewayApplication in X.XXX seconds"</span>
 
-<span class="comment"># Ver logs de todos los servicios</span>
+<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+<span class="comment"># Ver logs de TODOS los servicios simultaneamente</span>
+<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+<span class="comment"># Cada linea tiene un prefijo con el nombre del servicio:</span>
+<span class="comment">#   crud-postgres    | 2024-01-01 ... database system is ready</span>
+<span class="comment">#   crud-item-..     | 2024-01-01 ... Started ItemServiceApplication</span>
+<span class="comment">#   crud-api-..      | 2024-01-01 ... Started ApiGatewayApplication</span>
 <span class="tag">docker</span> compose logs -f</code>
                         </div>
                         <div class="alert-box alert-warning mt-4">
                             <div class="alert-title"><span class="alert-icon">&#9888;&#65039;</span> Primera construccion es lenta</div>
                             <div class="alert-body">
                                 <p>La primera vez que ejecutas <code>docker compose build</code>, Docker descarga las imagenes base y todas las dependencias Maven. Esto tarda 5-10 minutos. Las siguientes veces sera mucho mas rapido gracias al cache de capas.</p>
+                            </div>
+                        </div>
+                        <div class="alert-box alert-analysis mt-4">
+                            <div class="alert-title"><span class="alert-icon">&#128300;</span> Comandos utiles adicionales</div>
+                            <div class="alert-body">
+                                <table class="mt-2">
+                                    <thead><tr><th>Comando</th><th>Que hace</th><th>Cuando usarlo</th></tr></thead>
+                                    <tbody>
+                                        <tr><td><code>docker compose down</code></td><td>Detiene y elimina los contenedores y la red. <strong>Conserva volumenes</strong> (datos de PostgreSQL intactos).</td><td>Cuando terminas de trabajar y quieres apagar todo limpiamente.</td></tr>
+                                        <tr><td><code>docker compose down -v</code></td><td>Igual que "down" pero <strong class="text-neon-red">BORRA los volumenes</strong> (pierdes todos los datos de PostgreSQL).</td><td>Solo cuando quieres empezar completamente de cero.</td></tr>
+                                        <tr><td><code>docker compose restart</code></td><td>Reinicia los contenedores sin recrearlos. Los volumenes se mantienen.</td><td>Cuando un servicio se queda "colgado" o necesitas reiniciar.</td></tr>
+                                        <tr><td><code>docker compose build --no-cache</code></td><td>Reconstruye las imagenes IGNORANDO el cache. Todo se descarga de nuevo.</td><td>Cuando algo esta muy roto y crees que el cache esta corrupto.</td></tr>
+                                        <tr><td><code>docker compose up -d --build</code></td><td>Construye Y arranca en un solo comando. Combina "build" + "up -d".</td><td>Cuando cambiaste el Dockerfile o pom.xml y quieres reconstruir rapido.</td></tr>
+                                        <tr><td><code>docker compose exec item-service bash</code></td><td>Abre una terminal DENTRO del contenedor item-service.</td><td>Para debug: verificar archivos, ejecutar comandos, inspeccionar el contenedor.</td></tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -1440,40 +2294,67 @@ POSTGRES_DB=crud_db</code>
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
                     <span class="text-accent">3.3</span> Archivo .dockerignore
                 </h3>
+
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#128300;</span> Por que estamos creando este archivo?</div>
+                    <div class="alert-body">
+                        <p class="mb-3"><strong class="text-white">Que es .dockerignore?</strong> Es el "guardian" del build context. Cuando ejecutas <code>docker compose build</code>, Docker envia TODOS los archivos de la carpeta del proyecto al daemon de Docker (el "contexto de build"). Esto incluye archivos que NO necesitas: la carpeta <code>.git</code> (que puede pesar cientos de MB), <code>node_modules</code>, archivos temporales, tu archivo <code>.env</code> con credenciales, etc.</p>
+
+                        <p class="mb-3"><strong class="text-white">Que pasaria sin este archivo?</strong> Docker enviaria TODOS los archivos al daemon, incluyendo:</p>
+                        <ul class="list-disc list-inside ml-4 space-y-1 mb-3">
+                            <li><code>.git/</code> = cientos de MB innecesarios que ralentizan el build</li>
+                            <li><code>.env</code> = credenciales que podrian quedar accidentalmente en la imagen</li>
+                            <li><code>target/</code> = archivos compilados que Maven recompilara dentro del contenedor</li>
+                            <li><code>.vscode/</code> = configuracion personal de tu editor</li>
+                        </ul>
+
+                        <p><strong class="text-white">Analogia:</strong> Si Docker Compose es el director de orquesta, .dockerignore es la lista de "no incluir" para el escenario. Le dice al stage manager: "no subas estos objetos al escenario porque solo estorban".</p>
+                    </div>
+                </div>
+
                 <p class="text-slate-300 leading-relaxed mb-4">Cuando ejecutas <code class="text-accent">docker compose build</code>, Docker envia todo el contenido de la carpeta actual (el "build context") al daemon. Esto incluye archivos que no necesitas: <code>.git</code>, <code>node_modules</code>, archivos temporales, etc. Para evitar esto, crea un archivo <code class="text-accent">.dockerignore</code> en la raiz del proyecto.</p>
                 <div class="code-block" data-lang=".dockerignore">
                     <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
-                    <code><span class="comment"># Control de versiones</span>
+                    <code><span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+<span class="comment"># ARCHIVOS QUE Docker NO DEBE ENVIAR AL BUILD CONTEXT</span>
+<span class="comment"># Cada linea es un patron de exclusion (similar a .gitignore)</span>
+<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="comment"># Control de versiones: la carpeta .git puede pesar cientos de MB</span>
+<span class="comment"># No tiene sentido enviarla al daemon de Docker</span>
 .git
 .gitignore
 
-<span class="comment"># IDE y editores</span>
+<span class="comment"># IDE y editores: configuraciones personales que no pertenecen en la imagen</span>
 .vscode
 .idea
 *.iml
 
-<span class="comment"># Archivos de sistema</span>
+<span class="comment"># Archivos de sistema (macOS y Windows)</span>
 .DS_Store
 Thumbs.db
 
-<span class="comment"># Docker (no incluir en build context)</span>
+<span class="comment"># Archivos de Docker (no incluir en build context para evitar loops)</span>
 Dockerfile
 docker-compose.yml
 .dockerignore
 
-<span class="comment"># Documentacion (no necesaria en la imagen)</span>
+<span class="comment"># Documentacion: no es necesaria dentro de la imagen Docker</span>
 *.md
 README*
 
-<span class="comment"># Variables de entorno (NUNCA subir secretos)</span>
+<span class="comment"># Variables de entorno: NUNCA enviar credenciales al build context</span>
+<span class="comment"># Aunque el .env no se copia en la imagen, podria quedar en una capa</span>
 .env
 
-<span class="comment"># Java compilado (Maven lo compila dentro del contenedor)</span>
+<span class="comment"># Java compilado: Maven lo compila DENTRO del contenedor</span>
+<span class="comment"># No tiene sentido enviar .class o .jar locales (pueden estar desactualizados)</span>
 target/
 *.class
 *.jar
 
-<span class="comment"># Node (si hubiera frontend Node)</span>
+<span class="comment"># Node: si hubiera un frontend con Node.js, excluir node_modules</span>
+<span class="comment"># node_modules puede pesar 500MB+ y no se necesita en la imagen Java</span>
 node_modules/</code>
                 </div>
                 <div class="alert-box alert-analysis">
@@ -1514,31 +2395,60 @@ node_modules/</code>
             </section>
             <section id="m5-pom" class="mb-16">
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">5.2</span> pom.xml del Gateway</h3>
+
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#128300;</span> Por que estamos creando este archivo?</div>
+                    <div class="alert-body">
+                        <p class="mb-3"><strong class="text-white">Que es este pom.xml?</strong> Es el archivo de configuracion Maven del API Gateway. Similar al pom.xml del Item Service, pero con dependencias diferentes: en vez de JPA y PostgreSQL, necesita Spring Cloud Gateway (que usa WebFlux reactivo en vez de MVC).</p>
+
+                        <p class="mb-3"><strong class="text-white">Diferencia clave con el Item Service:</strong> El Gateway usa <code>spring-cloud-starter-gateway</code> en vez de <code>spring-boot-starter-web</code>. Esto es porque el Gateway es reactivo (WebFlux), no bloqueante (MVC). Puede manejar miles de conexiones simultaneas con menos recursos.</p>
+
+                        <p><strong class="text-white">Que pasaria sin este archivo?</strong> El Gateway no tendria dependencias. No sabria que es Spring Cloud Gateway, no tendria WebFlux, no podria enrutar peticiones. Es tan esencial como el pom.xml del Item Service.</p>
+                    </div>
+                </div>
+
                 <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">api-gateway/pom.xml</code>:</p>
-                <div class="code-block" data-lang="api-gateway/pom.xml"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="tag">&lt;?xml</span> <span class="attr">version</span>=<span class="value">"1.0"</span> <span class="attr">encoding</span>=<span class="value">"UTF-8"</span><span class="tag">?&gt;</span>
+                <div class="code-block" data-lang="api-gateway/pom.xml"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment">&lt;!-- Declaracion XML estandar --&gt;</span>
+<span class="tag">&lt;?xml</span> <span class="attr">version</span>=<span class="value">"1.0"</span> <span class="attr">encoding</span>=<span class="value">"UTF-8"</span><span class="tag">?&gt;</span>
+<span class="comment">&lt;!-- Elemento raiz con namespace y schema location de Maven --&gt;</span>
 <span class="tag">&lt;project</span> <span class="attr">xmlns</span>=<span class="value">"http://maven.apache.org/POM/4.0.0"</span>
          <span class="attr">xmlns:xsi</span>=<span class="value">"http://www.w3.org/2001/XMLSchema-instance"</span>
          <span class="attr">xsi:schemaLocation</span>=<span class="value">"http://maven.apache.org/POM/4.0.0
          https://maven.apache.org/xsd/maven-4.0.0.xsd"</span><span class="tag">&gt;</span>
     <span class="tag">&lt;modelVersion&gt;</span>4.0.0<span class="tag">&lt;/modelVersion&gt;</span>
+
+    <span class="comment">&lt;!-- HERENCIA: Mismo parent que Item Service (Spring Boot 3.3.4) --&gt;</span>
     <span class="tag">&lt;parent&gt;</span>
         <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
         <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-parent<span class="tag">&lt;/artifactId&gt;</span>
         <span class="tag">&lt;version&gt;</span>3.3.4<span class="tag">&lt;/version&gt;</span>
     <span class="tag">&lt;/parent&gt;</span>
+
+    <span class="comment">&lt;!-- COORDENADAS: Identificacion unica del Gateway --&gt;</span>
+    <span class="comment">&lt;!-- groupId diferente: com.gateway (no com.singleinput) --&gt;</span>
     <span class="tag">&lt;groupId&gt;</span>com.gateway<span class="tag">&lt;/groupId&gt;</span>
     <span class="tag">&lt;artifactId&gt;</span>api-gateway<span class="tag">&lt;/artifactId&gt;</span>
     <span class="tag">&lt;version&gt;</span>0.0.1-SNAPSHOT<span class="tag">&lt;/version&gt;</span>
+
+    <span class="comment">&lt;!-- PROPERTIES: Versiones de Java y Spring Cloud --&gt;</span>
     <span class="tag">&lt;properties&gt;</span>
         <span class="tag">&lt;java.version&gt;</span>21<span class="tag">&lt;/java.version&gt;</span>
+        <span class="comment">&lt;!-- Spring Cloud version: BOM que gestiona versiones de todos los starters --&gt;</span>
         <span class="tag">&lt;spring-cloud.version&gt;</span>2023.0.3<span class="tag">&lt;/spring-cloud.version&gt;</span>
     <span class="tag">&lt;/properties&gt;</span>
+
+    <span class="comment">&lt;!-- DEPENDENCIAS: Solo necesita Spring Cloud Gateway --&gt;</span>
+    <span class="comment">&lt;!-- NO necesita spring-boot-starter-web (usa WebFlux reactivo) --&gt;</span>
     <span class="tag">&lt;dependencies&gt;</span>
         <span class="tag">&lt;dependency&gt;</span>
             <span class="tag">&lt;groupId&gt;</span>org.springframework.cloud<span class="tag">&lt;/groupId&gt;</span>
             <span class="tag">&lt;artifactId&gt;</span>spring-cloud-starter-gateway<span class="tag">&lt;/artifactId&gt;</span>
         <span class="tag">&lt;/dependency&gt;</span>
     <span class="tag">&lt;/dependencies&gt;</span>
+
+    <span class="comment">&lt;!-- DEPENDENCY MANAGEMENT: Importa el BOM de Spring Cloud --&gt;</span>
+    <span class="comment">&lt;!-- Un BOM (Bill of Materials) es una "lista de versiones compatibles" --&gt;</span>
+    <span class="comment">&lt;!-- Garantiza que todas las librerias de Spring Cloud funcionen juntas --&gt;</span>
     <span class="tag">&lt;dependencyManagement&gt;</span>
         <span class="tag">&lt;dependencies&gt;</span>
             <span class="tag">&lt;dependency&gt;</span>
@@ -1546,10 +2456,13 @@ node_modules/</code>
                 <span class="tag">&lt;artifactId&gt;</span>spring-cloud-dependencies<span class="tag">&lt;/artifactId&gt;</span>
                 <span class="tag">&lt;version&gt;</span><span class="tag">&lt;/version&gt;</span>
                 <span class="tag">&lt;type&gt;</span>pom<span class="tag">&lt;/type&gt;</span>
+                <span class="comment">&lt;!-- scope=import: importa las versiones del BOM --&gt;</span>
                 <span class="tag">&lt;scope&gt;</span>import<span class="tag">&lt;/scope&gt;</span>
             <span class="tag">&lt;/dependency&gt;</span>
         <span class="tag">&lt;/dependencies&gt;</span>
     <span class="tag">&lt;/dependencyManagement&gt;</span>
+
+    <span class="comment">&lt;!-- BUILD: Mismo plugin que Item Service (crear JAR ejecutable) --&gt;</span>
     <span class="tag">&lt;build&gt;</span>
         <span class="tag">&lt;plugins&gt;</span>
             <span class="tag">&lt;plugin&gt;</span>
@@ -1562,36 +2475,82 @@ node_modules/</code>
             </section>
             <section id="m5-config" class="mb-16">
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">5.3</span> Configuracion del Gateway</h3>
+
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#128300;</span> Por que estamos creando estos archivos?</div>
+                    <div class="alert-body">
+                        <p class="mb-3"><strong class="text-white">application.yml del Gateway:</strong> Le dice al Gateway DOS cosas criticas: (1) A donde reenviar las peticiones (rutas), y (2) Desde que origenes aceptar peticiones (CORS). Sin este archivo, el Gateway no sabria que hacer con las peticiones que recibe.</p>
+
+                        <p class="mb-3"><strong class="text-white">ApiGatewayApplication.java:</strong> Es el punto de entrada del Gateway (igual que ItemServiceApplication.java). Sin el, el Gateway no arranca.</p>
+
+                        <p><strong class="text-white">Que pasarian sin estos archivos?</strong> Sin application.yml, el Gateway no tiene rutas: todas las peticiones retornarian 404. Sin ApiGatewayApplication.java, no hay punto de entrada para arrancar el Gateway.</p>
+                    </div>
+                </div>
+
                 <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">api-gateway/src/main/resources/application.yml</code>:</p>
-                <div class="code-block" data-lang="application.yml"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="property">server</span>:
+                <div class="code-block" data-lang="application.yml"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment"># Puerto donde escucha el Gateway</span>
+<span class="comment"># Es el puerto "publico": el frontend y Postman se conectan aqui</span>
+<span class="property">server</span>:
   <span class="property">port</span>: <span class="number">8080</span>
 <span class="property">spring</span>:
+  <span class="comment"># Nombre del servicio (aparece en logs)</span>
   <span class="property">application</span>:
     <span class="property">name</span>: <span class="string">api-gateway</span>
   <span class="property">cloud</span>:
     <span class="property">gateway</span>:
+      <span class="comment"># ═══════════════════════════════════════════════════════</span>
+      <span class="comment"># ROUTES: Tabla de enrutamiento del Gateway</span>
+      <span class="comment"># Define "si la peticion viene por esta ruta, reenviala a este destino"</span>
+      <span class="comment"># ═══════════════════════════════════════════════════════</span>
       <span class="property">routes</span>:
+        <span class="comment"># Cada ruta tiene: id (identificador), uri (destino), predicates (condicion)</span>
         - <span class="property">id</span>: <span class="string">item-service</span>
+          <span class="comment"># uri: A donde reenviar la peticion</span>
+          <span class="comment"># "item-service" = container_name en docker-compose.yml</span>
+          <span class="comment"># Docker DNS resuelve "item-service" -> IP del contenedor</span>
+          <span class="comment"># 8081 = puerto interno del Item Service</span>
           <span class="property">uri</span>: <span class="string">http://item-service:8081</span>
+          <span class="comment"># predicates: Condiciones que debe cumplir la peticion para usar esta ruta</span>
+          <span class="comment"># Path=/api/items/** = si la URL empieza con /api/items/, usar esta ruta</span>
+          <span class="comment"># "**" = cualquier cosa despues de /api/items/ (incluyendo /api/items/1, /api/items/search, etc.)</span>
           <span class="property">predicates</span>:
             - <span class="string">Path=/api/items/**</span>
+      <span class="comment"># ═══════════════════════════════════════════════════════</span>
+      <span class="comment"># CORS: Cross-Origin Resource Sharing</span>
+      <span class="comment"># El navegador BLOQUEA peticiones entre origenes diferentes</span>
+      <span class="comment"># (frontend en localhost:5500 -> gateway en localhost:8080 = diferente origen)</span>
+      <span class="comment># CORS le dice al navegador: "esta bien, permite esta peticion"</span>
+      <span class="comment"># ═══════════════════════════════════════════════════════</span>
       <span class="property">globalcors</span>:
         <span class="property">corsConfigurations</span>:
+          <span class="comment"># '[/**]' = aplicar estas reglas a TODAS las rutas del Gateway</span>
           <span class="string">'[/**]'</span>:
+            <span class="comment"># allowedOrigins: Desde que URLs se aceptan peticiones</span>
+            <span class="comment"># "http://localhost:5500" = VS Code Live Server (donde corre el frontend)</span>
+            <span class="comment"># Si cambias el puerto del frontend, actualiza esto</span>
             <span class="property">allowedOrigins</span>: <span class="string">"http://localhost:5500"</span>
+            <span class="comment"># allowedMethods: Que verbos HTTP se permiten</span>
             <span class="property">allowedMethods</span>:
               - <span class="string">GET</span>
               - <span class="string">POST</span>
               - <span class="string">PUT</span>
               - <span class="string">DELETE</span>
+            <span class="comment"># allowedHeaders: Que headers se permiten ("*" = todos)</span>
+            <span class="comment"># Necesario para Content-Type: application/json, Authorization, etc.</span>
             <span class="property">allowedHeaders</span>: <span class="string">"*"</span></code></div>
                 <p class="text-slate-300 leading-relaxed mb-4 mt-6"><code class="text-accent">api-gateway/src/main/java/com/gateway/ApiGatewayApplication.java</code>:</p>
                 <div class="code-block" data-lang="ApiGatewayApplication.java"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="keyword">package</span> com.gateway;
 <span class="keyword">import</span> org.springframework.boot.SpringApplication;
 <span class="keyword">import</span> org.springframework.boot.autoconfigure.SpringBootApplication;
 
+<span class="comment">// @SpringBootApplication: Activa Spring Boot para el Gateway</span>
+<span class="comment">// Hace 3 cosas: @Configuration + @EnableAutoConfiguration + @ComponentScan</span>
+<span class="comment">// Auto-detecta Spring Cloud Gateway y configura el servidor reactivo (Netty)</span>
 <span class="annotation">@SpringBootApplication</span>
 <span class="keyword">public class</span> <span class="type">ApiGatewayApplication</span> {
+    <span class="comment">// Punto de entrada estandar de Java</span>
+    <span class="comment">// SpringApplication.run() arranca el Gateway con Netty (servidor reactivo)</span>
+    <span class="comment">// en el puerto 8080 definido en application.yml</span>
     <span class="keyword">public static void</span> main(<span class="type">String</span>[] args) {
         SpringApplication.run(<span class="type">ApiGatewayApplication</span>.class, args);
     }
@@ -1605,8 +2564,28 @@ node_modules/</code>
                 <h2 class="module-title">Frontend - Single Input CRUD</h2>
                 <p class="text-slate-400 mt-3 text-sm">Una pagina HTML con un input y 4 botones. Toda la logica via Fetch API.</p>
             </div>
+
+            <div class="alert-box alert-analysis mb-8">
+                <div class="alert-title"><span class="alert-icon">&#128300;</span> Por que estamos creando estos archivos?</div>
+                <div class="alert-body">
+                    <p class="mb-3"><strong class="text-white">El Frontend:</strong> Es la interfaz visual que el usuario final ve e interactua. Hasta ahora, todo el backend (Item Service, API Gateway, PostgreSQL) funciona perfectamente, pero no hay forma visual de usarlo. El frontend convierte tu API en una aplicacion utilizable.</p>
+
+                    <p class="mb-3"><strong class="text-white">Por que Vanilla JS (sin React/Vue/Angular)?</strong> Porque el objetivo es entender como funciona la comunicacion HTTP entre frontend y backend. Los frameworks anaden complejidad (build tools, bundlers, virtual DOM) que distraen del concepto fundamental: <code>fetch()</code> + JSON.</p>
+
+                    <p><strong class="text-white">Que pasarian sin estos archivos?</strong> Tendrias un backend perfecto pero inutilizable para un usuario no-tecnico. Solo podrias probar con Postman. El frontend cierra el ciclo: usuario -> interfaz -> API -> base de datos -> respuesta visual.</p>
+                </div>
+            </div>
+
             <section id="m6-html" class="mb-16">
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">7.1</span> index.html</h3>
+
+                <div class="alert-box alert-analysis mb-4">
+                    <div class="alert-title"><span class="alert-icon">&#128300;</span> Por que este archivo?</div>
+                    <div class="alert-body">
+                        <p>Es la estructura (esqueleto) de la pagina web. Define los elementos visuales: un input de texto, un input oculto (para guardar el ID del item seleccionado), 4 botones (Crear, Actualizar, Eliminar, Buscar), y una lista donde se muestran los items. Sin HTML, no hay pagina que mostrar en el navegador.</p>
+                    </div>
+                </div>
+
                 <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">frontend/index.html</code>:</p>
                 <div class="code-block" data-lang="index.html"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="tag">&lt;!DOCTYPE html&gt;</span>
 <span class="tag">&lt;html</span> <span class="attr">lang</span>=<span class="value">"es"</span><span class="tag">&gt;</span>
@@ -1637,6 +2616,14 @@ node_modules/</code>
             </section>
             <section id="m6-css" class="mb-16">
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">7.2</span> style.css</h3>
+
+                <div class="alert-box alert-analysis mb-4">
+                    <div class="alert-title"><span class="alert-icon">&#128300;</span> Por que este archivo?</div>
+                    <div class="alert-body">
+                        <p>Define la apariencia visual de la pagina: colores, tipografia, espaciado, layout. Sin CSS, la pagina se veria como un documento de Word de los anos 90 (texto negro sobre fondo blanco, sin estilo). Nuestro CSS implementa modo oscuro, botones con colores semanticos (verde=crear, rojo=eliminar), y diseno responsive.</p>
+                    </div>
+                </div>
+
                 <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">frontend/style.css</code>:</p>
                 <div class="code-block" data-lang="style.css"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code>* { margin: 0; padding: 0; box-sizing: border-box; }
 body {
@@ -1702,85 +2689,158 @@ input[type="text"]:focus { border-color: #38bdf8; }
             </section>
             <section id="m6-js" class="mb-16">
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">7.3</span> app.js</h3>
-                <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">frontend/app.js</code>:</p>
-                <div class="code-block" data-lang="app.js"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code>const API = 'http://localhost:8080/api/items';
-const input = document.getElementById('itemInput');
-const hiddenId = document.getElementById('itemId');
-const list = document.getElementById('itemList');
 
+                <div class="alert-box alert-analysis mb-4">
+                    <div class="alert-title"><span class="alert-icon">&#128300;</span> Por que este archivo?</div>
+                    <div class="alert-body">
+                        <p><strong class="text-white">Es el "cerebro" del frontend.</strong> Contiene toda la logica de la aplicacion: que hacer cuando el usuario hace clic en un boton, como comunicarse con el API Gateway (fetch API), como renderizar los datos en la lista, y como manejar los errores. Sin app.js, los botones no harian nada y la lista estaria vacia.</p>
+                    </div>
+                </div>
+
+                <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">frontend/app.js</code>:</p>
+                <div class="code-block" data-lang="app.js"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment">// URL base del API Gateway. Todas las peticiones van al puerto 8080</span>
+<span class="comment">// NUNCA al Item Service directamente (8081). El Gateway es la unica puerta.</span>
+const API = 'http://localhost:8080/api/items';
+
+<span class="comment">// Obtener referencias a los elementos del DOM (HTML)</span>
+<span class="comment">// document.getElementById() busca un elemento por su atributo "id"</span>
+const input = document.getElementById('itemInput');     <span class="comment">// Input de texto visible</span>
+const hiddenId = document.getElementById('itemId');     <span class="comment">// Input oculto (guarda el ID del item seleccionado)</span>
+const list = document.getElementById('itemList');       <span class="comment">// Lista &lt;ul&gt; donde se renderizan los items</span>
+
+<span class="comment">// ═══════════════════════════════════════════════════════════</span>
+<span class="comment">// EVENT LISTENERS: Conectar botones con funciones</span>
+<span class="comment">// addEventListener("click", funcion) = "cuando hagan clic, ejecuta esta funcion"</span>
+<span class="comment">// ═══════════════════════════════════════════════════════════</span>
 document.getElementById('btnCreate').addEventListener('click', createItem);
 document.getElementById('btnUpdate').addEventListener('click', updateItem);
 document.getElementById('btnDelete').addEventListener('click', deleteItem);
 document.getElementById('btnSearch').addEventListener('click', searchItems);
 
+<span class="comment">// ═══════════════════════════════════════════════════════════</span>
+<span class="comment">// FUNCIONES ASINCRONAS (async/await)</span>
+<span class="comment">// "async" = esta funcion hace operaciones que tardan (llamadas HTTP)</span>
+<span class="comment">// "await" = esperar a que la operacion termine antes de continuar</span>
+<span class="comment">// Sin async/await, tendriamos que usar callbacks o Promises .then()</span>
+<span class="comment">// ═══════════════════════════════════════════════════════════</span>
+
+<span class="comment">// Cargar todos los items desde la API y renderizarlos en la lista</span>
 async function loadAll() {
+    <span class="comment">// fetch() hace una peticion HTTP GET a la URL del API</span>
+    <span class="comment">// GET /api/items retorna un array JSON de todos los items</span>
     const res = await fetch(API);
+    <span class="comment">// .json() convierte la respuesta JSON a un objeto/array de JavaScript</span>
     const data = await res.json();
+    <span class="comment">// Pasar los datos a la funcion render() para mostrarlos en pantalla</span>
     render(data);
 }
 
+<span class="comment">// CREAR un nuevo item</span>
 async function createItem() {
+    <span class="comment">// Obtener el texto del input y eliminar espacios al inicio/final</span>
     const texto = input.value.trim();
+    <span class="comment">// Si el input esta vacio, no hacer nada (validacion basica)</span>
     if (!texto) return;
+    <span class="comment">// fetch con method: 'POST' = peticion HTTP POST (crear)</span>
     await fetch(API, {
         method: 'POST',
+        <span class="comment">// headers: metadatos de la peticion</span>
+        <span class="comment">// 'Content-Type: application/json' le dice al servidor: "te envio JSON"</span>
         headers: { 'Content-Type': 'application/json' },
+        <span class="comment">// body: el contenido de la peticion</span>
+        <span class="comment">// JSON.stringify() convierte un objeto JS a string JSON</span>
+        <span class="comment">// { texto } es shorthand para { texto: texto }</span>
         body: JSON.stringify({ texto })
     });
+    <span class="comment">// Limpiar el input despues de crear</span>
     input.value = '';
+    <span class="comment">// Recargar la lista para mostrar el nuevo item</span>
     loadAll();
 }
 
+<span class="comment">// ACTUALIZAR un item existente</span>
 async function updateItem() {
+    <span class="comment">// Obtener el ID del input oculto (se llena al hacer clic en un item de la lista)</span>
     const id = hiddenId.value;
     const texto = input.value.trim();
+    <span class="comment">// Si no hay ID seleccionado o el texto esta vacio, no hacer nada</span>
     if (!id || !texto) return;
-    await fetch(${API}/, {
+    <span class="comment">// PUT = actualizar. La URL incluye el ID del item a actualizar</span>
+    await fetch(`${API}/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ texto })
     });
+    <span class="comment">// Limpiar inputs despues de actualizar</span>
     input.value = '';
     hiddenId.value = '';
     loadAll();
 }
 
+<span class="comment">// ELIMINAR un item</span>
 async function deleteItem() {
     const id = hiddenId.value;
+    <span class="comment">// Si no hay item seleccionado, no hacer nada</span>
     if (!id) return;
-    await fetch(${API}/, { method: 'DELETE' });
+    <span class="comment">// DELETE = eliminar. Solo necesita la URL con el ID (no body)</span>
+    await fetch(`${API}/${id}`, { method: 'DELETE' });
     input.value = '';
     hiddenId.value = '';
     loadAll();
 }
 
+<span class="comment">// BUSCAR items por texto parcial</span>
 async function searchItems() {
     const texto = input.value.trim();
+    <span class="comment">// Si el input esta vacio, mostrar todos los items (resetear busqueda)</span>
     if (!texto) { loadAll(); return; }
-    const res = await fetch(${API}/search?texto=);
+    <span class="comment">// GET con query parameter: /api/items/search?texto=valor</span>
+    const res = await fetch(`${API}/search?texto=${encodeURIComponent(texto)}`);
     const data = await res.json();
     render(data);
 }
 
+<span class="comment">// ═══════════════════════════════════════════════════════════</span>
+<span class="comment">// RENDER: Convertir datos (array JSON) a elementos HTML visibles</span>
+<span class="comment">// ═══════════════════════════════════════════════════════════</span>
 function render(items) {
+    <span class="comment">// Limpiar la lista actual (eliminar todos los &lt;li&gt; anteriores)</span>
     list.innerHTML = '';
+    <span class="comment">// Iterar sobre cada item del array</span>
     items.forEach(item =&gt; {
+        <span class="comment">// Crear un elemento &lt;li&gt; (lista item) para cada item</span>
         const li = document.createElement('li');
+
+        <span class="comment">// Crear un &lt;span&gt; con el texto del item</span>
         const span = document.createElement('span');
+        <span class="comment">// textContent es SEGURO contra XSS (no interpreta HTML)</span>
+        <span class="comment">// NUNCA usar innerHTML con datos del usuario (vulnerable a XSS)</span>
         span.textContent = item.texto;
+
+        <span class="comment">// Crear un &lt;span&gt; con el ID del item (para referencia visual)</span>
         const idSpan = document.createElement('span');
         idSpan.className = 'item-id';
         idSpan.textContent = '#' + item.id;
+
+        <span class="comment">// Agregar ambos spans al &lt;li&gt;</span>
         li.appendChild(span);
         li.appendChild(idSpan);
+
+        <span class="comment">// Al hacer clic en un item de la lista:</span>
+        <span class="comment">// - Llenar el input con el texto del item</span>
+        <span class="comment">// - Llenar el input oculto con el ID del item</span>
+        <span class="comment">// Esto permite actualizar o eliminar el item seleccionado</span>
         li.addEventListener('click', () =&gt; {
             input.value = item.texto;
             hiddenId.value = item.id;
         });
+
+        <span class="comment">// Agregar el &lt;li&gt; a la lista &lt;ul&gt;</span>
         list.appendChild(li);
     });
 }
 
+<span class="comment">// Cargar todos los items al abrir la pagina (ejecucion automatica)</span>
 loadAll();</code></div>
             </section>
         </section>
@@ -1967,27 +3027,62 @@ Headers: Authorization: Bearer eyJhbGciOiJIUzI1NiJ9...</code></div>
             </section>
             <section id="m9-pipeline" class="mb-16">
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">9.3</span> Pipeline para Item Service</h3>
-                <p class="text-slate-300 leading-relaxed mb-4">Crea <code class="text-accent">.github/workflows/ci-item-service.yml</code>:</p>
-                <div class="code-block" data-lang=".github/workflows/ci-item-service.yml"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="property">name</span>: <span class="string">CI Item Service</span>
 
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#128300;</span> Por que estamos creando este archivo?</div>
+                    <div class="alert-body">
+                        <p class="mb-3"><strong class="text-white">Que es este archivo?</strong> Es un "workflow" de GitHub Actions: un archivo YAML que define una serie de pasos automatizados que se ejecutan cada vez que haces push a la rama main. Es tu "asistente de calidad" que verifica automaticamente que el codigo compila y que los tests pasan.</p>
+
+                        <p class="mb-3"><strong class="text-white">Que problema resuelve?</strong> Sin CI/CD, tendrias que recordar manualmente: compilar el proyecto, ejecutar los tests, verificar que nada se rompio. Con este archivo, GitHub hace todo eso automaticamente en cada push. Si algo falla, te notifica inmediatamente.</p>
+
+                        <p><strong class="text-white">Que pasaria sin este archivo?</strong> No habria verificacion automatica. Podrias subir codigo roto a main sin darte cuenta. En un equipo real, esto causaria conflictos y bugs en produccion.</p>
+                    </div>
+                </div>
+
+                <p class="text-slate-300 leading-relaxed mb-4">Crea <code class="text-accent">.github/workflows/ci-item-service.yml</code>:</p>
+                <div class="code-block" data-lang=".github/workflows/ci-item-service.yml"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment"># Nombre del workflow (aparece en la pestana "Actions" de GitHub)</span>
+<span class="property">name</span>: <span class="string">CI Item Service</span>
+
+<span class="comment"># ═══════════════════════════════════════════════════════════</span>
+<span class="comment"># ON: Disparadores - Cuando se ejecuta este workflow</span>
+<span class="comment"># ═══════════════════════════════════════════════════════════</span>
 <span class="property">on</span>:
+  <span class="comment"># Se ejecuta cuando se hace push a la rama main</span>
   <span class="property">push</span>:
     <span class="property">branches</span>: [<span class="string">main</span>]
+    <span class="comment"># paths: Solo se ejecuta si cambian archivos en item-service/</span>
+    <span class="comment"># Si solo cambias el frontend, NO se ejecuta (ahorra recursos)</span>
     <span class="property">paths</span>:
       - <span class="string">'item-service/**'</span>
+  <span class="comment"># Tambien se ejecuta cuando se crea/actualiza un Pull Request a main</span>
   <span class="property">pull_request</span>:
     <span class="property">branches</span>: [<span class="string">main</span>]
     <span class="property">paths</span>:
       - <span class="string">'item-service/**'</span>
 
+<span class="comment"># ═══════════════════════════════════════════════════════════</span>
+<span class="comment"># JOBS: Grupos de pasos que se ejecutan en orden</span>
+<span class="comment"># Cada job corre en una maquina virtual separada (runner)</span>
+<span class="comment"># ═══════════════════════════════════════════════════════════</span>
 <span class="property">jobs</span>:
+  <span class="comment"># Job: compilar y testear el Item Service</span>
   <span class="property">build-and-test</span>:
+    <span class="comment"># runs-on: Sistema operativo del runner</span>
+    <span class="comment"># ubuntu-latest = ultima version de Ubuntu (gratuito en GitHub)</span>
     <span class="property">runs-on</span>: <span class="string">ubuntu-latest</span>
     
+    <span class="comment"># steps: Secuencia de pasos que se ejecutan en orden</span>
     <span class="property">steps</span>:
+      <span class="comment"># Paso 1: Descargar el codigo del repositorio</span>
+      <span class="comment"># actions/checkout@v4 es una "action" oficial de GitHub</span>
+      <span class="comment"># Clona tu repositorio en la maquina virtual del runner</span>
       - <span class="property">name</span>: <span class="string">Checkout code</span>
         <span class="property">uses</span>: <span class="string">actions/checkout@v4</span>
       
+      <span class="comment"># Paso 2: Instalar JDK 21 en la maquina virtual</span>
+      <span class="comment"># Sin Java, no se puede compilar el proyecto Maven</span>
+      <span class="comment"># cache: 'maven' = cachea las dependencias entre ejecuciones</span>
+      <span class="comment"># (ahorra 2-3 minutos en cada ejecucion despues de la primera)</span>
       - <span class="property">name</span>: <span class="string">Set up JDK 21</span>
         <span class="property">uses</span>: <span class="string">actions/setup-java@v4</span>
         <span class="property">with</span>:
@@ -1995,14 +3090,25 @@ Headers: Authorization: Bearer eyJhbGciOiJIUzI1NiJ9...</code></div>
           <span class="property">distribution</span>: <span class="string">'temurin'</span>
           <span class="property">cache</span>: <span class="string">'maven'</span>
       
+      <span class="comment"># Paso 3: Compilar el proyecto (generar .jar)</span>
+      <span class="comment"># working-directory: ejecutar el comando dentro de item-service/</span>
+      <span class="comment"># mvn clean package: limpia, compila y empaqueta</span>
+      <span class="comment"># -DskipTests: no ejecutar tests aqui (se ejecutan en el paso siguiente)</span>
       - <span class="property">name</span>: <span class="string">Build with Maven</span>
         <span class="property">working-directory</span>: <span class="string">./item-service</span>
         <span class="property">run</span>: <span class="string">mvn clean package -DskipTests</span>
       
+      <span class="comment"># Paso 4: Ejecutar todos los tests unitarios</span>
+      <span class="comment"># Si algun test falla, el workflow se marca como "failed"</span>
+      <span class="comment"># y GitHub notifica al equipo</span>
       - <span class="property">name</span>: <span class="string">Run tests</span>
         <span class="property">working-directory</span>: <span class="string">./item-service</span>
         <span class="property">run</span>: <span class="string">mvn test</span>
       
+      <span class="comment"># Paso 5: Subir resultados de tests como "artifacts"</span>
+      <span class="comment"># if: always() = ejecutar este paso incluso si los tests fallaron</span>
+      <span class="comment"># (para poder ver QUE tests fallaron y POR QUE)</span>
+      <span class="comment"># Los artifacts se pueden descargar desde la pestana "Actions" en GitHub</span>
       - <span class="property">name</span>: <span class="string">Upload test results</span>
         <span class="property">if</span>: <span class="string">always()</span>
         <span class="property">uses</span>: <span class="string">actions/upload-artifact@v4</span>
