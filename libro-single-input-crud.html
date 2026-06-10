@@ -1,0 +1,1696 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Single Input CRUD - Microservicios con API Gateway, Docker, Spring Boot, Git">
+    <title>Single Input CRUD - Microservicios con API Gateway</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        dark: { 50: '#f8fafc', 100: '#1e293b', 200: '#0f172a', 300: '#0a0f1a', 400: '#060a12' },
+                        accent: { DEFAULT: '#38bdf8', dark: '#0284c7', light: '#7dd3fc' },
+                        neon: { green: '#4ade80', red: '#f87171', yellow: '#facc15', purple: '#c084fc' }
+                    },
+                    fontFamily: {
+                        mono: ['"JetBrains Mono"', '"Fira Code"', 'monospace'],
+                        sans: ['"Inter"', 'system-ui', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { scrollbar-width: thin; scrollbar-color: #38bdf8 #0f172a; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #38bdf8; border-radius: 4px; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; background: #0a0f1a; color: #e2e8f0; }
+        .code-block { background: #0d1117; border: 1px solid #21262d; border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; line-height: 1.6; overflow-x: auto; position: relative; }
+        .code-block::before { content: attr(data-lang); position: absolute; top: 0; right: 0; background: #21262d; color: #8b949e; padding: 2px 10px; border-radius: 0 8px 0 8px; font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px; }
+        .code-block code { display: block; padding: 1rem; white-space: pre; color: #c9d1d9; }
+        .alert-box { border-left: 4px solid; border-radius: 8px; padding: 1rem; margin: 1.5rem 0; }
+        .alert-warning { background: rgba(250,204,21,0.05); border-color: #facc15; }
+        .alert-warning .alert-icon { color: #facc15; }
+        .alert-analysis { background: rgba(56,189,248,0.05); border-color: #38bdf8; }
+        .alert-analysis .alert-icon { color: #38bdf8; }
+        .alert-console { background: rgba(74,222,128,0.05); border-color: #4ade80; }
+        .alert-console .alert-icon { color: #4ade80; }
+        .alert-title { font-weight: 700; font-size: 0.85rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.5rem; }
+        .alert-body { font-size: 0.82rem; line-height: 1.7; color: #cbd5e1; }
+        .alert-body code { background: rgba(255,255,255,0.08); padding: 2px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: #7dd3fc; }
+        .module-header { background: linear-gradient(135deg, rgba(56,189,248,0.1) 0%, rgba(192,132,252,0.1) 100%); border: 1px solid rgba(56,189,248,0.2); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; }
+        .module-number { font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; color: #38bdf8; font-weight: 600; }
+        .module-title { font-size: 1.35rem; font-weight: 800; background: linear-gradient(to right, #38bdf8, #c084fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-top: 0.5rem; }
+        .diagram-container { background: #0d1117; border: 1px solid #21262d; border-radius: 12px; padding: 1rem; margin: 1.5rem 0; overflow-x: auto; }
+        .nav-link { display: block; padding: 0.5rem 1rem; border-radius: 6px; color: #94a3b8; text-decoration: none; font-size: 0.85rem; transition: all 0.2s; border-left: 2px solid transparent; }
+        .nav-link:hover, .nav-link.active { background: rgba(56,189,248,0.1); color: #38bdf8; border-left-color: #38bdf8; }
+        .keyword { color: #ff7b72; } .annotation { color: #d2a8ff; } .string { color: #a5d6ff; }
+        .comment { color: #8b949e; font-style: italic; } .type { color: #79c0ff; } .number { color: #4ade80; }
+        .tag { color: #7ee787; } .attr { color: #d2a8ff; } .value { color: #a5d6ff; }
+        .property { color: #79c0ff; } .flag { color: #facc15; }
+        .step-number { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; background: linear-gradient(135deg, #38bdf8, #0284c7); color: #0a0f1a; border-radius: 50%; font-weight: 800; font-size: 0.75rem; flex-shrink: 0; }
+        .arch-node { background: rgba(56,189,248,0.08); border: 1px solid rgba(56,189,248,0.3); border-radius: 12px; padding: 1rem; text-align: center; transition: all 0.3s; }
+        .arch-node:hover { background: rgba(56,189,248,0.15); border-color: #38bdf8; transform: translateY(-2px); box-shadow: 0 8px 30px rgba(56,189,248,0.15); }
+        .arch-arrow { display: flex; align-items: center; justify-content: center; color: #475569; font-size: 1.5rem; }
+        table { border-collapse: collapse; width: 100%; display: block; overflow-x: auto; }
+        th { background: rgba(56,189,248,0.1); color: #38bdf8; font-weight: 600; text-align: left; }
+        th, td { padding: 0.5rem; border: 1px solid #1e293b; font-size: 0.78rem; white-space: nowrap; }
+        tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+        td code { background: rgba(255,255,255,0.08); padding: 2px 6px; border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: #7dd3fc; }
+        .sidebar { position: sticky; top: 0; height: 100vh; overflow-y: auto; }
+        .sidebar { display: none; }
+        .copy-btn { position: absolute; top: 8px; left: 8px; background: #21262d; border: 1px solid #30363d; color: #8b949e; padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; cursor: pointer; opacity: 0; transition: opacity 0.2s; }
+        .code-block:hover .copy-btn { opacity: 1; }
+        .copy-btn:hover { background: #30363d; color: #c9d1d9; }
+        .mobile-nav { position: fixed; top: 0; left: 0; right: 0; background: #0a0f1a; border-bottom: 1px solid #1e293b; padding: 0.75rem 1rem; z-index: 100; }
+        .mobile-nav select { width: 100%; background: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 6px; padding: 0.5rem; font-size: 0.85rem; }
+        main { padding-top: 4rem !important; }
+
+        /* MOBILE FIRST: base styles above, enhancements for larger screens below */
+        @media (min-width: 640px) {
+            .code-block code { font-size: 0.8rem; padding: 1.25rem; }
+            .alert-box { padding: 1.25rem 1.5rem; }
+            .alert-title { font-size: 0.95rem; }
+            .alert-body { font-size: 0.9rem; }
+            .alert-body code { font-size: 0.82rem; }
+            th, td { padding: 0.65rem 0.85rem; font-size: 0.85rem; }
+            td code { font-size: 0.78rem; }
+            .module-title { font-size: 1.6rem; }
+            .module-header { padding: 2rem; }
+            .diagram-container { padding: 1.5rem; }
+            .arch-node { padding: 1.25rem; }
+            .step-number { width: 32px; height: 32px; font-size: 0.85rem; }
+        }
+
+        @media (min-width: 768px) {
+            .code-block { font-size: 0.82rem; }
+            .code-block code { padding: 1.5rem; }
+            .module-title { font-size: 1.8rem; }
+            .module-header { padding: 2.25rem; border-radius: 16px; }
+            th, td { padding: 0.75rem 1rem; font-size: 0.88rem; }
+            td code { font-size: 0.8rem; }
+        }
+
+        @media (min-width: 1024px) {
+            .sidebar { display: block; }
+            .mobile-nav { display: none; }
+            main { padding-top: 0 !important; }
+            .code-block { font-size: 0.85rem; }
+            .module-title { font-size: 2rem; }
+            .module-header { padding: 2.5rem; }
+            .diagram-container { padding: 2rem; }
+            .arch-node { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+<div class="flex">
+    <aside class="sidebar w-64 min-w-[256px] bg-dark-300 border-r border-dark-100 p-6 hidden lg:block">
+        <div class="mb-8">
+            <h2 class="text-accent font-bold text-sm tracking-widest uppercase">Single Input CRUD</h2>
+            <p class="text-xs text-slate-500 mt-1">Arquitectura de Microservicios v2.0</p>
+        </div>
+        <nav class="space-y-1">
+            <a href="#modulo0" class="nav-link active">Mod 0 - Introduccion</a>
+            <a href="#m0-arquitectura" class="nav-link pl-8 text-xs">Arquitectura Gateway</a>
+            <a href="#m0-stack" class="nav-link pl-8 text-xs">Stack Tecnologico</a>
+            <div class="border-t border-dark-100 my-4"></div>
+            <a href="#modulo1" class="nav-link">Mod 1 - Git</a>
+            <a href="#m1-bases" class="nav-link pl-8 text-xs">Bases de Git</a>
+            <a href="#m1-init" class="nav-link pl-8 text-xs">Inicializar Repo</a>
+            <a href="#m1-commits" class="nav-link pl-8 text-xs">Commits y Ramas</a>
+            <div class="border-t border-dark-100 my-4"></div>
+            <a href="#modulo2" class="nav-link">Mod 2 - Docker</a>
+            <a href="#m2-contenedores" class="nav-link pl-8 text-xs">Contenedores</a>
+            <a href="#m2-compose" class="nav-link pl-8 text-xs">Docker Compose</a>
+            <a href="#m2-redes" class="nav-link pl-8 text-xs">Redes Docker</a>
+            <a href="#m2-volumenes" class="nav-link pl-8 text-xs">Volumenes</a>
+            <div class="border-t border-dark-100 my-4"></div>
+            <a href="#modulo3" class="nav-link">Mod 3 - Dev en Vivo</a>
+            <a href="#m3-dockerfile" class="nav-link pl-8 text-xs">Dockerfiles</a>
+            <a href="#m3-compose-update" class="nav-link pl-8 text-xs">Compose Completo</a>
+            <a href="#m3-env" class="nav-link pl-8 text-xs">Archivo .env</a>
+            <div class="border-t border-dark-100 my-4"></div>
+            <a href="#modulo4" class="nav-link">Mod 4 - Item Service</a>
+            <a href="#m4-pom" class="nav-link pl-8 text-xs">pom.xml</a>
+            <a href="#m4-yml" class="nav-link pl-8 text-xs">application.yml</a>
+            <a href="#m4-entity" class="nav-link pl-8 text-xs">Entity + DTO</a>
+            <a href="#m4-repository" class="nav-link pl-8 text-xs">Repository</a>
+            <a href="#m4-service" class="nav-link pl-8 text-xs">Service</a>
+            <a href="#m4-controller" class="nav-link pl-8 text-xs">Controller</a>
+            <a href="#m4-exception" class="nav-link pl-8 text-xs">Exception Handler</a>
+            <div class="border-t border-dark-100 my-4"></div>
+            <a href="#modulo5" class="nav-link">Mod 5 - API Gateway</a>
+            <a href="#m5-que-es" class="nav-link pl-8 text-xs">Que es Gateway?</a>
+            <a href="#m5-pom" class="nav-link pl-8 text-xs">pom.xml Gateway</a>
+            <a href="#m5-config" class="nav-link pl-8 text-xs">Configuracion</a>
+            <div class="border-t border-dark-100 my-4"></div>
+            <a href="#modulo6" class="nav-link">Mod 6 - Postman</a>
+            <a href="#m6-endpoints" class="nav-link pl-8 text-xs">Probar Endpoints</a>
+            <a href="#m6-variables" class="nav-link pl-8 text-xs">Variables Dinamicas</a>
+            <div class="border-t border-dark-100 my-4"></div>
+            <a href="#modulo7" class="nav-link">Mod 7 - Frontend</a>
+            <a href="#m7-html" class="nav-link pl-8 text-xs">index.html</a>
+            <a href="#m7-css" class="nav-link pl-8 text-xs">style.css</a>
+            <a href="#m7-js" class="nav-link pl-8 text-xs">app.js</a>
+            <div class="border-t border-dark-100 my-4"></div>
+            <a href="#modulo8" class="nav-link">Mod 8 - Troubleshooting</a>
+            <a href="#modulo9" class="nav-link">Mod 9 - Siguientes Pasos</a>
+        </nav>
+    </aside>
+    <!-- NAVEGACION MOVIL -->
+    <div class="mobile-nav">
+        <select onchange="window.location.href=this.value">
+            <option value="#modulo0">Mod 0 - Introduccion</option>
+            <option value="#m0-arquitectura">-- Arquitectura Gateway</option>
+            <option value="#m0-stack">-- Stack Tecnologico</option>
+            <option value="#modulo1">Mod 1 - Git</option>
+            <option value="#m1-bases">-- Bases de Git</option>
+            <option value="#m1-init">-- Inicializar Repo</option>
+            <option value="#m1-commits">-- Commits y Ramas</option>
+            <option value="#modulo2">Mod 2 - Docker</option>
+            <option value="#m2-contenedores">-- Contenedores</option>
+            <option value="#m2-compose">-- Docker Compose</option>
+            <option value="#m2-redes">-- Redes Docker</option>
+            <option value="#m2-volumenes">-- Volumenes</option>
+            <option value="#modulo3">Mod 3 - Dev en Vivo</option>
+            <option value="#m3-dockerfile">-- Dockerfiles</option>
+            <option value="#m3-compose-update">-- Compose Completo</option>
+            <option value="#m3-env">-- Archivo .env</option>
+            <option value="#modulo4">Mod 4 - Item Service</option>
+            <option value="#m4-pom">-- pom.xml</option>
+            <option value="#m4-yml">-- application.yml</option>
+            <option value="#m4-entity">-- Entity + DTO</option>
+            <option value="#m4-repository">-- Repository</option>
+            <option value="#m4-service">-- Service</option>
+            <option value="#m4-controller">-- Controller</option>
+            <option value="#m4-exception">-- Exception Handler</option>
+            <option value="#modulo5">Mod 5 - API Gateway</option>
+            <option value="#m5-que-es">-- Que es Gateway?</option>
+            <option value="#m5-pom">-- pom.xml Gateway</option>
+            <option value="#m5-config">-- Configuracion</option>
+            <option value="#modulo6">Mod 6 - Postman</option>
+            <option value="#m6-endpoints">-- Probar Endpoints</option>
+            <option value="#m6-variables">-- Variables Dinamicas</option>
+            <option value="#modulo7">Mod 7 - Frontend</option>
+            <option value="#m7-html">-- index.html</option>
+            <option value="#m7-css">-- style.css</option>
+            <option value="#m7-js">-- app.js</option>
+            <option value="#modulo8">Mod 8 - Troubleshooting</option>
+            <option value="#modulo9">Mod 9 - Siguientes Pasos</option>
+        </select>
+    </div>
+
+    <main class="flex-1 max-w-7xl mx-auto px-4 sm:px-6 py-12 lg:px-12 xl:px-16">
+        <header class="text-center mb-20 pt-12">
+            <p class="text-accent text-xs tracking-[6px] uppercase font-semibold mb-4">Ingenieria de Software &mdash; Edicion Microservicios</p>
+            <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-tight mb-6">
+                <span class="bg-gradient-to-r from-sky-400 via-blue-400 to-purple-400 bg-clip-text text-transparent">Single Input CRUD</span>
+            </h1>
+            <p class="text-base sm:text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
+                De un simple input a una arquitectura profesional de microservicios con API Gateway.<br class="hidden sm:inline">
+                <span class="text-slate-500">Docker &bull; Spring Boot &bull; API Gateway &bull; PostgreSQL &bull; Git &bull; Postman</span>
+            </p>
+            <div class="flex justify-center gap-4 mt-8 flex-wrap">
+                <span class="px-3 py-1 bg-sky-500/10 border border-sky-500/20 rounded-full text-sky-400 text-xs font-medium">Java 21</span>
+                <span class="px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 text-xs font-medium">Spring Boot 3.3.4</span>
+                <span class="px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400 text-xs font-medium">Spring Cloud 2023.0.3</span>
+                <span class="px-3 py-1 bg-indigo-500/10 border border-indigo-500/20 rounded-full text-indigo-400 text-xs font-medium">PostgreSQL 16</span>
+                <span class="px-3 py-1 bg-purple-500/10 border border-purple-500/20 rounded-full text-purple-400 text-xs font-medium">API Gateway</span>
+                <span class="px-3 py-1 bg-violet-500/10 border border-violet-500/20 rounded-full text-violet-400 text-xs font-medium">Git</span>
+            </div>
+        </header>
+
+        <!-- DISCLAIMER -->
+        <div class="mb-12 p-5 rounded-xl border border-amber-500/30 bg-amber-500/5">
+            <p class="text-amber-400 font-bold text-sm mb-2 flex items-center gap-2">
+                <span>&#9888;&#65039;</span> Aviso importante
+            </p>
+            <p class="text-slate-300 text-sm leading-relaxed">
+                Este material tiene <strong class="text-white">fines educativos</strong> y busca facilitar la comprension de las tecnologias mencionadas (Docker, Spring Boot, API Gateway, PostgreSQL, Git, etc.). En ningun caso reemplaza ni esta por sobre la <strong class="text-white">documentacion oficial</strong> de cada herramienta. Para informacion definitiva, consultas tecnicas avanzadas o decisiones de produccion, consulta siempre las fuentes oficiales:
+            </p>
+            <ul class="text-slate-400 text-xs mt-3 ml-4 space-y-1 list-disc">
+                <li><a href="https://docs.docker.com" class="text-accent hover:underline" target="_blank">docs.docker.com</a></li>
+                <li><a href="https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/" class="text-accent hover:underline" target="_blank">docs.spring.io/spring-boot</a></li>
+                <li><a href="https://docs.spring.io/spring-cloud-gateway/reference/" class="text-accent hover:underline" target="_blank">docs.spring.io/spring-cloud-gateway</a></li>
+                <li><a href="https://www.postgresql.org/docs/" class="text-accent hover:underline" target="_blank">postgresql.org/docs</a></li>
+                <li><a href="https://git-scm.com/doc" class="text-accent hover:underline" target="_blank">git-scm.com/doc</a></li>
+            </ul>
+        </div>
+
+        <!-- MODULO 0: INTRODUCCION -->
+        <section id="modulo0">
+            <div class="module-header">
+                <p class="module-number">Modulo 0</p>
+                <h2 class="module-title">Introduccion y Arquitectura de Microservicios</h2>
+                <p class="text-slate-400 mt-3 text-sm">Entender el terreno de juego antes de escribir una sola linea de codigo.</p>
+            </div>
+
+            <section class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                    <span class="text-accent">0.1</span> Que Vamos a Construir?
+                </h3>
+                <p class="text-slate-300 leading-relaxed mb-4">
+                    Imagina la aplicacion web mas simple del mundo: <strong class="text-white">una pagina con un solo cuadro de texto y cuatro botones</strong>. Solo un <code class="bg-white/10 px-2 py-0.5 rounded text-accent text-sm font-mono">input</code> y las operaciones fundamentales: <strong class="text-neon-green">Crear</strong>, <strong class="text-neon-yellow">Modificar</strong>, <strong class="text-neon-red">Eliminar</strong> y <strong class="text-accent">Buscar</strong>.
+                </p>
+                <p class="text-slate-300 leading-relaxed mb-6">
+                    La interfaz es minimalista, pero <strong class="text-accent">la arquitectura no lo es</strong>. Detras de ese input, desplegaremos una arquitectura profesional de microservicios con API Gateway.
+                </p>
+
+                <div class="diagram-container">
+                    <p class="text-center text-slate-500 text-xs uppercase tracking-widest mb-6">Arquitectura Completa del Sistema</p>
+                    <!-- Desktop: horizontal -->
+                    <div class="hidden md:grid md:grid-cols-7 gap-4 items-center">
+                        <div class="arch-node">
+                            <div class="text-3xl mb-2">&#127760;</div>
+                            <p class="font-bold text-white text-sm">Navegador</p>
+                            <p class="text-xs text-slate-400 mt-1">HTML + CSS + JS</p>
+                            <p class="text-xs text-accent mt-2 font-mono">:5500</p>
+                        </div>
+                        <div class="arch-arrow">&rarr;</div>
+                        <div class="arch-node" style="border-color: rgba(192,132,252,0.4); background: rgba(192,132,252,0.05);">
+                            <div class="text-3xl mb-2">&#128682;</div>
+                            <p class="font-bold text-white text-sm">API Gateway</p>
+                            <p class="text-xs text-slate-400 mt-1">Spring Cloud Gateway</p>
+                            <p class="text-xs text-purple-400 mt-2 font-mono">:8080</p>
+                        </div>
+                        <div class="arch-arrow">&rarr;</div>
+                        <div class="arch-node">
+                            <div class="text-3xl mb-2">&#9881;&#65039;</div>
+                            <p class="font-bold text-white text-sm">Item Service</p>
+                            <p class="text-xs text-slate-400 mt-1">Spring Boot (4 capas)</p>
+                            <p class="text-xs text-accent mt-2 font-mono">:8081</p>
+                        </div>
+                        <div class="arch-arrow">&rarr;</div>
+                        <div class="arch-node">
+                            <div class="text-3xl mb-2">&#128024;</div>
+                            <p class="font-bold text-white text-sm">PostgreSQL 16</p>
+                            <p class="text-xs text-slate-400 mt-1">Alpine Container</p>
+                            <p class="text-xs text-accent mt-2 font-mono">:5432</p>
+                        </div>
+                    </div>
+                    <!-- Mobile: vertical -->
+                    <div class="md:hidden flex flex-col items-center gap-3">
+                        <div class="arch-node w-full max-w-[220px]">
+                            <div class="text-2xl mb-1">&#127760;</div>
+                            <p class="font-bold text-white text-xs">Navegador</p>
+                            <p class="text-[10px] text-slate-400">HTML + CSS + JS</p>
+                            <p class="text-[10px] text-accent font-mono">:5500</p>
+                        </div>
+                        <div class="text-slate-500 text-xl">&darr;</div>
+                        <div class="arch-node w-full max-w-[220px]" style="border-color: rgba(192,132,252,0.4); background: rgba(192,132,252,0.05);">
+                            <div class="text-2xl mb-1">&#128682;</div>
+                            <p class="font-bold text-white text-xs">API Gateway</p>
+                            <p class="text-[10px] text-slate-400">Spring Cloud Gateway</p>
+                            <p class="text-[10px] text-purple-400 font-mono">:8080</p>
+                        </div>
+                        <div class="text-slate-500 text-xl">&darr;</div>
+                        <div class="arch-node w-full max-w-[220px]">
+                            <div class="text-2xl mb-1">&#9881;&#65039;</div>
+                            <p class="font-bold text-white text-xs">Item Service</p>
+                            <p class="text-[10px] text-slate-400">Spring Boot (4 capas)</p>
+                            <p class="text-[10px] text-accent font-mono">:8081</p>
+                        </div>
+                        <div class="text-slate-500 text-xl">&darr;</div>
+                        <div class="arch-node w-full max-w-[220px]">
+                            <div class="text-2xl mb-1">&#128024;</div>
+                            <p class="font-bold text-white text-xs">PostgreSQL 16</p>
+                            <p class="text-[10px] text-slate-400">Alpine Container</p>
+                            <p class="text-[10px] text-accent font-mono">:5432</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#128300;</span> Por que un API Gateway?</div>
+                    <div class="alert-body">
+                        <ul class="list-disc list-inside space-y-2 ml-4">
+                            <li><strong class="text-neon-green">Enrutamiento:</strong> Dirige peticiones al microservicio correcto. <code>/api/items/**</code> va al Item Service.</li>
+                            <li><strong class="text-neon-yellow">CORS Centralizado:</strong> Maneja Cross-Origin en un solo lugar, no en cada microservicio.</li>
+                            <li><strong class="text-neon-purple">Seguridad:</strong> Puede validar tokens JWT, rate limiting antes de llegar a los servicios.</li>
+                            <li><strong class="text-accent">Aislamiento:</strong> Los microservicios internos no necesitan estar expuestos al exterior.</li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section id="m0-arquitectura" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                    <span class="text-accent">0.2</span> Las 4 Capas del Microservicio (Clean Architecture)
+                </h3>
+                <div class="diagram-container">
+                    <div class="max-w-2xl mx-auto space-y-4">
+                        <div class="border-2 border-sky-500/40 rounded-xl p-6 bg-sky-500/5">
+                            <span class="px-3 py-1 bg-sky-500/20 rounded-full text-sky-400 text-xs font-bold">CAPA 4</span>
+                            <span class="font-bold text-white ml-2">Controller</span>
+                            <p class="text-sm text-slate-400 mt-2">Recibe HTTP y devuelve JSON. Convierte DTOs a entidades.</p>
+                        </div>
+                        <div class="text-center text-slate-600 text-xl">&darr;&darr; Delega &darr;&darr;</div>
+                        <div class="border-2 border-purple-500/40 rounded-xl p-6 bg-purple-500/5">
+                            <span class="px-3 py-1 bg-purple-500/20 rounded-full text-purple-400 text-xs font-bold">CAPA 3</span>
+                            <span class="font-bold text-white ml-2">Service</span>
+                            <p class="text-sm text-slate-400 mt-2">Logica de negocio, validaciones, transformaciones DTO-Entity.</p>
+                        </div>
+                        <div class="text-center text-slate-600 text-xl">&darr;&darr; Delega &darr;&darr;</div>
+                        <div class="border-2 border-green-500/40 rounded-xl p-6 bg-green-500/5">
+                            <span class="px-3 py-1 bg-green-500/20 rounded-full text-green-400 text-xs font-bold">CAPA 2</span>
+                            <span class="font-bold text-white ml-2">Repository</span>
+                            <p class="text-sm text-slate-400 mt-2">Interfaz con la BD. Spring Data JPA genera SQL automaticamente.</p>
+                        </div>
+                        <div class="text-center text-slate-600 text-xl">&darr;&darr; Mapea &darr;&darr;</div>
+                        <div class="border-2 border-amber-500/40 rounded-xl p-6 bg-amber-500/5">
+                            <span class="px-3 py-1 bg-amber-500/20 rounded-full text-amber-400 text-xs font-bold">CAPA 1</span>
+                            <span class="font-bold text-white ml-2">Entity</span>
+                            <p class="text-sm text-slate-400 mt-2">Representacion Java de la tabla de la base de datos.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="m0-stack" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                    <span class="text-accent">0.3</span> Stack Tecnologico
+                </h3>
+                <div class="overflow-x-auto rounded-xl border border-dark-100">
+                    <table>
+                        <thead><tr><th class="rounded-tl-xl">Herramienta</th><th>Versión</th><th>Rol</th><th class="rounded-tr-xl">Donde corre</th></tr></thead>
+                        <tbody>
+                            <tr><td><code>Git</code></td><td>2.40+</td><td>Control de versiones</td><td>Host</td></tr>
+                            <tr><td><code>Docker Desktop</code></td><td>4.25+</td><td>Motor de contenedores</td><td>Host</td></tr>
+                            <tr><td><code>Java JDK</code></td><td>21 (LTS)</td><td>Lenguaje de programacion</td><td>Contenedores</td></tr>
+                            <tr><td><code>Spring Boot</code></td><td>3.3.4</td><td>Framework microservicios</td><td>Contenedores</td></tr>
+                            <tr><td><code>Spring Cloud</code></td><td>2023.0.3</td><td>API Gateway</td><td>Contenedor Gateway</td></tr>
+                            <tr><td><code>PostgreSQL</code></td><td>16 Alpine</td><td>Base de datos relacional</td><td>Contenedor DB</td></tr>
+                            <tr><td><code>Postman</code></td><td>Ultima</td><td>Cliente HTTP para probar APIs</td><td>Host</td></tr>
+                            <tr><td><code>VS Code + Live Server</code></td><td>Ultima</td><td>Editor + servidor estatico</td><td>Host</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                    <span class="text-accent">0.4</span> Estructura de Archivos del Proyecto
+                </h3>
+                <div class="code-block" data-lang="Estructura">
+                    <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                    <code>estudio-docker-microserv/
+|
++-- docker-compose.yml          # Orquesta los 3 servicios
++-- .env                        # Variables de entorno (credenciales)
++-- .gitignore                  # Archivos que Git ignora
++-- .dockerignore               # Archivos que Docker ignora
+|
++-- api-gateway/                # API Gateway (Spring Cloud Gateway)
+|   +-- Dockerfile
+|   +-- pom.xml
+|   +-- src/main/
+|       +-- java/com/gateway/
+|       |   +-- ApiGatewayApplication.java
+|       +-- resources/
+|           +-- application.yml     # Rutas y CORS
+|
++-- item-service/               # Microservicio (Spring Boot)
+|   +-- Dockerfile
+|   +-- pom.xml
+|   +-- src/main/
+|       +-- java/com/singleinput/
+|       |   +-- ItemServiceApplication.java
+|       |   +-- domain/Item.java           # CAPA 1: Entity
+|       |   +-- dto/ItemDTO.java           # Data Transfer Object
+|       |   +-- persistence/ItemRepository.java  # CAPA 2
+|       |   +-- service/ItemService.java         # CAPA 3: Interface
+|       |   +-- service/ItemServiceImpl.java     # CAPA 3: Impl
+|       |   +-- controller/ItemController.java   # CAPA 4
+|       |   +-- exception/ItemNotFoundException.java
+|       |   +-- exception/GlobalExceptionHandler.java
+|       +-- resources/application.yml
+|
++-- frontend/                   # Frontend estatico
+    +-- index.html
+    +-- style.css
+    +-- app.js</code>
+                </div>
+            </section>
+        </section>
+
+        <!-- MODULO 1: GIT -->
+        <section id="modulo1" class="mt-24">
+            <div class="module-header">
+                <p class="module-number">Modulo 1</p>
+                <h2 class="module-title">Git: Control de Versiones Profesional</h2>
+                <p class="text-slate-400 mt-3 text-sm">Una maquina del tiempo para tu codigo.</p>
+            </div>
+
+            <section id="m1-bases" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                    <span class="text-accent">1.1</span> Que es Git?
+                </h3>
+                <p class="text-slate-300 leading-relaxed mb-4">
+                    <strong class="text-white">Git</strong> es un sistema de control de versiones distribuido. Cada vez que haces un "commit", tomas una fotografia del estado actual de tu proyecto. Si algo se rompe, puedes volver a cualquier fotografia anterior.
+                </p>
+                <div class="alert-box alert-warning">
+                    <div class="alert-title"><span class="alert-icon">&#9888;&#65039;</span> Git NO es GitHub</div>
+                    <div class="alert-body">
+                        <ul class="list-disc list-inside space-y-2 ml-4">
+                            <li><strong class="text-neon-yellow">Git:</strong> Software que corre en tu maquina. Gestiona el historial localmente.</li>
+                            <li><strong class="text-neon-green">GitHub/GitLab:</strong> Servicios en la nube que almacenan repositorios Git. Son opcionales.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="alert-box alert-console">
+                    <div class="alert-title"><span class="alert-icon">&#128187;</span> CONSOLA - Instalar y Configurar Git</div>
+                    <div class="alert-body">
+                        <div class="code-block mt-3" data-lang="bash">
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                            <code><span class="comment"># Verificar instalacion</span>
+<span class="tag">git</span> --version
+<span class="comment"># Salida: git version 2.40.0 (o superior)</span>
+
+<span class="comment"># Configurar identidad (obligatorio para commits)</span>
+<span class="tag">git</span> config --global user.name <span class="string">"Tu Nombre"</span>
+<span class="tag">git</span> config --global user.email <span class="string">"tu@email.com"</span>
+
+<span class="comment"># Verificar</span>
+<span class="tag">git</span> config --global --list</code>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="m1-init" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                    <span class="text-accent">1.2</span> Inicializar Repositorio y .gitignore
+                </h3>
+                <div class="alert-box alert-console">
+                    <div class="alert-title"><span class="alert-icon">&#128187;</span> CONSOLA - git init</div>
+                    <div class="alert-body">
+                        <div class="code-block mt-3" data-lang="bash">
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                            <code><span class="comment"># Ir a la carpeta del proyecto</span>
+<span class="tag">cd</span> estudio-docker-microserv
+
+<span class="comment"># Inicializar repositorio</span>
+<span class="tag">git</span> init
+
+<span class="comment"># Crear .gitignore ANTES del primer commit</span>
+<span class="comment"># (ver codigo abajo)</span>
+
+<span class="comment"># Anadir todos los archivos</span>
+<span class="tag">git</span> add .
+
+<span class="comment"># Primer commit</span>
+<span class="tag">git</span> commit -m <span class="string">"Initial commit: estructura base"</span></code>
+                        </div>
+                    </div>
+                </div>
+
+                <p class="text-slate-300 leading-relaxed mb-4 mt-6">Crea <code class="text-accent">.gitignore</code> en la raiz:</p>
+                <div class="code-block" data-lang=".gitignore">
+                    <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                    <code><span class="comment"># Variables de entorno (NUNCA subir secretos)</span>
+.env
+.env.local
+
+<span class="comment"># IDE</span>
+.vscode/
+.idea/
+*.iml
+
+<span class="comment"># Sistema</span>
+.DS_Store
+Thumbs.db
+
+<span class="comment"># Java compilado</span>
+target/
+*.class
+*.jar
+
+<span class="comment"># Logs</span>
+*.log
+logs/
+
+<span class="comment"># Node</span>
+node_modules/</code>
+                </div>
+            </section>
+
+            <section id="m1-commits" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                    <span class="text-accent">1.3</span> Commits y Ramas
+                </h3>
+                <div class="alert-box alert-console">
+                    <div class="alert-title"><span class="alert-icon">&#128187;</span> CONSOLA - Flujo de Trabajo con Ramas</div>
+                    <div class="alert-body">
+                        <div class="code-block mt-3" data-lang="bash">
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                            <code><span class="comment"># Renombrar rama principal a main</span>
+<span class="tag">git</span> branch -M main
+
+<span class="comment"># Crear rama para nueva funcionalidad</span>
+<span class="tag">git</span> checkout -b feature/item-service
+
+<span class="comment"># Trabajar, hacer cambios...</span>
+<span class="tag">git</span> add .
+<span class="tag">git</span> commit -m <span class="string">"Add Item entity and repository"</span>
+
+<span class="comment"># Otro cambio</span>
+<span class="tag">git</span> add .
+<span class="tag">git</span> commit -m <span class="string">"Add API Gateway configuration"</span>
+
+<span class="comment"># Ver historial</span>
+<span class="tag">git</span> log --oneline --graph
+
+<span class="comment"># Volver a main y mergear</span>
+<span class="tag">git</span> checkout main
+<span class="tag">git</span> merge feature/item-service
+
+<span class="comment"># Ver todas las ramas</span>
+<span class="tag">git</span> branch -a</code>
+                        </div>
+                        <div class="alert-box alert-warning mt-4">
+                            <div class="alert-title"><span class="alert-icon">&#9888;&#65039;</span> Buenas Practicas</div>
+                            <div class="alert-body">
+                                <ul class="list-disc list-inside space-y-2 ml-4">
+                                    <li><strong class="text-neon-green">Commits atomicos:</strong> Cada commit = un cambio logico unico.</li>
+                                    <li><strong class="text-neon-yellow">Mensajes en imperativo:</strong> "Add feature", "Fix bug", no "Added", "Fixed".</li>
+                                    <li><strong class="text-neon-red">Nunca subas .env:</strong> Contiene credenciales.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- MODULO 2: DOCKER -->
+        <section id="modulo2" class="mt-24">
+            <div class="module-header">
+                <p class="module-number">Modulo 2</p>
+                <h2 class="module-title">Docker: Contenedores, PostgreSQL y Redes</h2>
+                <p class="text-slate-400 mt-3 text-sm">Construir los cimientos con aislamiento completo.</p>
+            </div>
+
+            <section id="m2-contenedores" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                    <span class="text-accent">2.1</span> Contenedor vs Maquina Virtual
+                </h3>
+                <p class="text-slate-300 leading-relaxed mb-4">
+                    Un contenedor es un <strong class="text-white">proceso aislado del SO</strong>. No tiene su propio kernel (comparte el del host), pero tiene su propio sistema de archivos, red y procesos.
+                </p>
+                <div class="diagram-container">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <p class="text-center font-bold text-neon-red mb-4">Maquina Virtual (VM)</p>
+                            <pre class="text-xs font-mono text-slate-400 leading-relaxed text-center">
++----------+ +----------+
+| App      | | App      |
+| Bins/Libs| | Bins/Libs|
+| Guest OS | | Guest OS |  &lt;- OS completo
++----------+-+----------+
+|     Hypervisor       |  &lt;- Pesado
++----------------------+
+|      Host OS         |
++----------------------+</pre>
+                        </div>
+                        <div>
+                            <p class="text-center font-bold text-neon-green mb-4">Contenedor Docker</p>
+                            <pre class="text-xs font-mono text-slate-400 leading-relaxed text-center">
++----------+ +----------+
+| App      | | App      |
+| Bins/Libs| | Bins/Libs|  &lt;- Solo necesario
++----------+-+----------+
+|    Docker Engine     |  &lt;- Ligero
++----------------------+
+|   Host OS Kernel     |  &lt;- Compartido
++----------------------+</pre>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-slate-300 leading-relaxed mb-4">
+                    Contenedor: arranca en <strong class="text-neon-green">&lt;1 segundo</strong>, consume ~50MB RAM. PostgreSQL Alpine pesa solo <strong class="text-neon-green">~80MB</strong>.
+                </p>
+            </section>
+
+            <section id="m2-compose" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                    <span class="text-accent">2.2</span> Docker Compose: Los 3 Servicios
+                </h3>
+                <p class="text-slate-300 leading-relaxed mb-4">Crea <code class="text-accent">.env</code> en la raiz (NO se sube a Git):</p>
+                <div class="code-block" data-lang=".env">
+                    <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                    <code><span class="comment"># Credenciales PostgreSQL</span>
+POSTGRES_USER=admin
+POSTGRES_PASSWORD=secret123
+POSTGRES_DB=crud_db</code>
+                </div>
+
+                <p class="text-slate-300 leading-relaxed mb-4 mt-6">Crea <code class="text-accent">docker-compose.yml</code> en la raiz:</p>
+                <div class="code-block" data-lang="docker-compose.yml">
+                    <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                    <code><span class="property">services</span>:
+
+  <span class="comment"># SERVICIO 1: PostgreSQL 16</span>
+  <span class="property">postgres</span>:
+    <span class="property">image</span>: <span class="string">postgres:16-alpine</span>
+    <span class="property">container_name</span>: <span class="string">crud-postgres</span>
+    <span class="property">restart</span>: <span class="string">unless-stopped</span>
+    <span class="property">environment</span>:
+      <span class="property">POSTGRES_USER</span>: <span class="string"></span>
+      <span class="property">POSTGRES_PASSWORD</span>: <span class="string"></span>
+      <span class="property">POSTGRES_DB</span>: <span class="string"></span>
+    <span class="property">ports</span>:
+      - <span class="string">"5432:5432"</span>
+    <span class="property">volumes</span>:
+      - <span class="string">crud_pgdata:/var/lib/postgresql/data</span>
+    <span class="property">healthcheck</span>:
+      <span class="property">test</span>: [<span class="string">"CMD-SHELL"</span>, <span class="string">"pg_isready -U  -d "</span>]
+      <span class="property">interval</span>: <span class="string">10s</span>
+      <span class="property">timeout</span>: <span class="string">5s</span>
+      <span class="property">retries</span>: <span class="number">5</span>
+      <span class="property">start_period</span>: <span class="string">30s</span>
+    <span class="property">networks</span>:
+      - <span class="string">crud-network</span>
+
+  <span class="comment"># SERVICIO 2: Item Service (Spring Boot)</span>
+  <span class="property">item-service</span>:
+    <span class="property">build</span>:
+      <span class="property">context</span>: <span class="string">./item-service</span>
+      <span class="property">dockerfile</span>: <span class="string">Dockerfile</span>
+    <span class="property">container_name</span>: <span class="string">crud-item-service</span>
+    <span class="property">restart</span>: <span class="string">unless-stopped</span>
+    <span class="property">depends_on</span>:
+      <span class="property">postgres</span>:
+        <span class="property">condition</span>: <span class="string">service_healthy</span>
+    <span class="property">environment</span>:
+      <span class="property">SPRING_DATASOURCE_URL</span>: <span class="string">jdbc:postgresql://crud-postgres:5432/</span>
+      <span class="property">SPRING_DATASOURCE_USERNAME</span>: <span class="string"></span>
+      <span class="property">SPRING_DATASOURCE_PASSWORD</span>: <span class="string"></span>
+    <span class="property">ports</span>:
+      - <span class="string">"8081:8081"</span>
+      - <span class="string">"5005:5005"</span>
+    <span class="property">volumes</span>:
+      - <span class="string">./item-service/src:/app/src</span>
+      - <span class="string">./item-service/pom.xml:/app/pom.xml</span>
+      - <span class="string">maven_cache:/root/.m2</span>
+    <span class="property">networks</span>:
+      - <span class="string">crud-network</span>
+
+  <span class="comment"># SERVICIO 3: API Gateway</span>
+  <span class="property">api-gateway</span>:
+    <span class="property">build</span>:
+      <span class="property">context</span>: <span class="string">./api-gateway</span>
+      <span class="property">dockerfile</span>: <span class="string">Dockerfile</span>
+    <span class="property">container_name</span>: <span class="string">crud-api-gateway</span>
+    <span class="property">restart</span>: <span class="string">unless-stopped</span>
+    <span class="property">depends_on</span>:
+      - <span class="string">item-service</span>
+    <span class="property">ports</span>:
+      - <span class="string">"8080:8080"</span>
+    <span class="property">volumes</span>:
+      - <span class="string">./api-gateway/src:/app/src</span>
+      - <span class="string">./api-gateway/pom.xml:/app/pom.xml</span>
+      - <span class="string">gateway_maven_cache:/root/.m2</span>
+    <span class="property">networks</span>:
+      - <span class="string">crud-network</span>
+
+<span class="property">volumes</span>:
+  <span class="property">crud_pgdata</span>:
+    <span class="property">driver</span>: <span class="string">local</span>
+  <span class="property">maven_cache</span>:
+    <span class="property">driver</span>: <span class="string">local</span>
+  <span class="property">gateway_maven_cache</span>:
+    <span class="property">driver</span>: <span class="string">local</span>
+
+<span class="property">networks</span>:
+  <span class="property">crud-network</span>:
+    <span class="property">driver</span>: <span class="string">bridge</span></code>
+                </div>
+            </section>
+
+            <section id="m2-redes" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                    <span class="text-accent">2.3</span> Las 3 Reglas de Oro de las IPs en Docker
+                </h3>
+                <div class="alert-box alert-warning">
+                    <div class="alert-title"><span class="alert-icon">&#9888;&#65039;</span> REGLAS FUNDAMENTALES</div>
+                    <div class="alert-body">
+                        <div class="space-y-4">
+                            <div class="border-l-2 border-neon-red pl-4">
+                                <p class="font-bold text-neon-red mb-1">Regla 1: "localhost" es egosta</p>
+                                <p>Dentro de un contenedor, <code>localhost</code> = el mismo contenedor. Si Item Service dice <code>localhost:5432</code>, busca PostgreSQL dentro de SI MISMO (y falla).</p>
+                            </div>
+                            <div class="border-l-2 border-neon-yellow pl-4">
+                                <p class="font-bold text-neon-yellow mb-1">Regla 2: Los contenedores se llaman por nombre</p>
+                                <p>Las IPs (172.17.0.x) son efimeras. El nombre (<code>crud-postgres</code>) es estable. Docker DNS resuelve nombres a IPs.</p>
+                            </div>
+                            <div class="border-l-2 border-neon-green pl-4">
+                                <p class="font-bold text-neon-green mb-1">Regla 3: El Host ve contenedores por puertos mapeados</p>
+                                <p>Desde tu navegador, accedes con <code>localhost:PUERTO_HOST</code>. El mapeo <code>-p 8080:8080</code> crea un tunel.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="m2-volumenes" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                    <span class="text-accent">2.4</span> Volumenes: Persistencia de Datos
+                </h3>
+                <p class="text-slate-300 leading-relaxed mb-4">Sin volumen = datos efimeros. Con volumen = datos sobreviven a la destruccion del contenedor.</p>
+                <div class="alert-box alert-console">
+                    <div class="alert-title"><span class="alert-icon">&#128187;</span> CONSOLA - Comandos de Volumenes</div>
+                    <div class="alert-body">
+                        <div class="code-block mt-3" data-lang="bash">
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                            <code><span class="comment"># Levantar todo</span>
+<span class="tag">docker</span> compose up -d
+
+<span class="comment"># Ver estado</span>
+<span class="tag">docker</span> compose ps
+
+<span class="comment"># Ver volumenes</span>
+<span class="tag">docker</span> volume ls
+
+<span class="comment"># Ver logs en tiempo real</span>
+<span class="tag">docker</span> compose logs -f
+
+<span class="comment"># Detener (conserva volumenes/datos)</span>
+<span class="tag">docker</span> compose down
+
+<span class="comment"># Detener y BORRAR TODO (incluye datos!)</span>
+<span class="tag">docker</span> compose down -v</code>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- MODULO 3: DEV EN VIVO -->
+        <section id="modulo3" class="mt-24">
+            <div class="module-header">
+                <p class="module-number">Modulo 3</p>
+                <h2 class="module-title">Desarrollo en Vivo: Dockerfiles y Bind Mounts</h2>
+                <p class="text-slate-400 mt-3 text-sm">Cada Ctrl+S se refleja automaticamente en el contenedor.</p>
+            </div>
+            <section id="m3-dockerfile" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">3.1</span> Dockerfile del Item Service</h3>
+                <p class="text-slate-300 leading-relaxed mb-4">Crea <code class="text-accent">item-service/Dockerfile</code>:</p>
+                <div class="code-block" data-lang="item-service/Dockerfile"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="keyword">FROM</span> maven:3.9-eclipse-temurin-21-alpine
+<span class="keyword">RUN</span> apk add --no-cache bash curl
+<span class="keyword">WORKDIR</span> /app
+<span class="keyword">COPY</span> pom.xml ./pom.xml
+<span class="keyword">RUN</span> mvn dependency:go-offline -B
+<span class="keyword">ENV</span> SPRING_PROFILES_ACTIVE=dev
+<span class="keyword">EXPOSE</span> <span class="number">8081</span>
+<span class="keyword">EXPOSE</span> <span class="number">5005</span>
+<span class="keyword">CMD</span> [<span class="string">"mvn"</span>,<span class="string">"spring-boot:run"</span>,<span class="string">"-Dspring-boot.run.fork=true"</span>,<span class="string">"-Dspring-boot.run.jvmArguments=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=*:5005"</span>]</code></div>
+                <p class="text-slate-300 leading-relaxed mb-4 mt-6">Crea <code class="text-accent">api-gateway/Dockerfile</code>:</p>
+                <div class="code-block" data-lang="api-gateway/Dockerfile"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="keyword">FROM</span> maven:3.9-eclipse-temurin-21-alpine
+<span class="keyword">RUN</span> apk add --no-cache bash curl
+<span class="keyword">WORKDIR</span> /app
+<span class="keyword">COPY</span> pom.xml ./pom.xml
+<span class="keyword">RUN</span> mvn dependency:go-offline -B
+<span class="keyword">EXPOSE</span> <span class="number">8080</span>
+<span class="keyword">CMD</span> [<span class="string">"mvn"</span>,<span class="string">"spring-boot:run"</span>]</code></div>
+            </section>
+            <section id="m3-compose-update" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">3.2</span> Construir y Arrancar</h3>
+                <div class="alert-box alert-console"><div class="alert-title"><span class="alert-icon">&#128187;</span> CONSOLA</div><div class="alert-body">
+                    <div class="code-block mt-3" data-lang="bash"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment"># Construir imagenes (primera vez: 5-10 min)</span>
+<span class="tag">docker</span> compose build
+<span class="comment"># Arrancar los 3 servicios</span>
+<span class="tag">docker</span> compose up -d
+<span class="comment"># Ver estado</span>
+<span class="tag">docker</span> compose ps
+<span class="comment"># Ver logs (espera "Started ...Application")</span>
+<span class="tag">docker</span> compose logs -f item-service
+<span class="tag">docker</span> compose logs -f api-gateway</code></div>
+                </div></div>
+            </section>
+            <section id="m3-env" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">3.3</span> Archivo .dockerignore</h3>
+                <p class="text-slate-300 leading-relaxed mb-4">Crea <code class="text-accent">.dockerignore</code> en la raiz:</p>
+                <div class="code-block" data-lang=".dockerignore"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code>.git .gitignore .vscode .idea *.iml .DS_Store Thumbs.db
+Dockerfile docker-compose.yml .dockerignore *.md .env
+target/ *.class *.jar node_modules/</code></div>
+            </section>
+        </section>
+
+        <!-- MODULO 4: ITEM SERVICE -->
+        <section id="modulo4" class="mt-24">
+            <div class="module-header">
+                <p class="module-number">Modulo 4</p>
+                <h2 class="module-title">Item Service: Microservicio Spring Boot</h2>
+                <p class="text-slate-400 mt-3 text-sm">4 capas con DTOs y manejo global de errores.</p>
+            </div>
+            <section id="m4-pom" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">4.1</span> pom.xml</h3>
+                <p class="text-slate-300 leading-relaxed mb-4">Crea <code class="text-accent">item-service/pom.xml</code>:</p>
+                <div class="code-block" data-lang="item-service/pom.xml"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="tag">&lt;?xml</span> <span class="attr">version</span>=<span class="value">"1.0"</span> <span class="attr">encoding</span>=<span class="value">"UTF-8"</span><span class="tag">?&gt;</span>
+<span class="tag">&lt;project</span> <span class="attr">xmlns</span>=<span class="value">"http://maven.apache.org/POM/4.0.0"</span>
+         <span class="attr">xmlns:xsi</span>=<span class="value">"http://www.w3.org/2001/XMLSchema-instance"</span>
+         <span class="attr">xsi:schemaLocation</span>=<span class="value">"http://maven.apache.org/POM/4.0.0
+         https://maven.apache.org/xsd/maven-4.0.0.xsd"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;modelVersion&gt;</span><span class="string">4.0.0</span><span class="tag">&lt;/modelVersion&gt;</span>
+    <span class="tag">&lt;parent&gt;</span>
+        <span class="tag">&lt;groupId&gt;</span><span class="string">org.springframework.boot</span><span class="tag">&lt;/groupId&gt;</span>
+        <span class="tag">&lt;artifactId&gt;</span><span class="string">spring-boot-starter-parent</span><span class="tag">&lt;/artifactId&gt;</span>
+        <span class="tag">&lt;version&gt;</span><span class="string">3.3.4</span><span class="tag">&lt;/version&gt;</span>
+        <span class="tag">&lt;relativePath/&gt;</span>
+    <span class="tag">&lt;/parent&gt;</span>
+    <span class="tag">&lt;groupId&gt;</span><span class="string">com.singleinput</span><span class="tag">&lt;/groupId&gt;</span>
+    <span class="tag">&lt;artifactId&gt;</span><span class="string">item-service</span><span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;version&gt;</span><span class="string">0.0.1-SNAPSHOT</span><span class="tag">&lt;/version&gt;</span>
+    <span class="tag">&lt;properties&gt;</span>
+        <span class="tag">&lt;java.version&gt;</span><span class="string">21</span><span class="tag">&lt;/java.version&gt;</span>
+    <span class="tag">&lt;/properties&gt;</span>
+    <span class="tag">&lt;dependencies&gt;</span>
+        <span class="tag">&lt;dependency&gt;</span>
+            <span class="tag">&lt;groupId&gt;</span><span class="string">org.springframework.boot</span><span class="tag">&lt;/groupId&gt;</span>
+            <span class="tag">&lt;artifactId&gt;</span><span class="string">spring-boot-starter-web</span><span class="tag">&lt;/artifactId&gt;</span>
+        <span class="tag">&lt;/dependency&gt;</span>
+        <span class="tag">&lt;dependency&gt;</span>
+            <span class="tag">&lt;groupId&gt;</span><span class="string">org.springframework.boot</span><span class="tag">&lt;/groupId&gt;</span>
+            <span class="tag">&lt;artifactId&gt;</span><span class="string">spring-boot-starter-data-jpa</span><span class="tag">&lt;/artifactId&gt;</span>
+        <span class="tag">&lt;/dependency&gt;</span>
+        <span class="tag">&lt;dependency&gt;</span>
+            <span class="tag">&lt;groupId&gt;</span><span class="string">org.springframework.boot</span><span class="tag">&lt;/groupId&gt;</span>
+            <span class="tag">&lt;artifactId&gt;</span><span class="string">spring-boot-starter-validation</span><span class="tag">&lt;/artifactId&gt;</span>
+        <span class="tag">&lt;/dependency&gt;</span>
+        <span class="tag">&lt;dependency&gt;</span>
+            <span class="tag">&lt;groupId&gt;</span><span class="string">org.postgresql</span><span class="tag">&lt;/groupId&gt;</span>
+            <span class="tag">&lt;artifactId&gt;</span><span class="string">postgresql</span><span class="tag">&lt;/artifactId&gt;</span>
+            <span class="tag">&lt;scope&gt;</span><span class="string">runtime</span><span class="tag">&lt;/scope&gt;</span>
+        <span class="tag">&lt;/dependency&gt;</span>
+        <span class="tag">&lt;dependency&gt;</span>
+            <span class="tag">&lt;groupId&gt;</span><span class="string">org.springframework.boot</span><span class="tag">&lt;/groupId&gt;</span>
+            <span class="tag">&lt;artifactId&gt;</span><span class="string">spring-boot-devtools</span><span class="tag">&lt;/artifactId&gt;</span>
+            <span class="tag">&lt;scope&gt;</span><span class="string">runtime</span><span class="tag">&lt;/scope&gt;</span>
+            <span class="tag">&lt;optional&gt;</span><span class="string">true</span><span class="tag">&lt;/optional&gt;</span>
+        <span class="tag">&lt;/dependency&gt;</span>
+        <span class="tag">&lt;dependency&gt;</span>
+            <span class="tag">&lt;groupId&gt;</span><span class="string">org.projectlombok</span><span class="tag">&lt;/groupId&gt;</span>
+            <span class="tag">&lt;artifactId&gt;</span><span class="string">lombok</span><span class="tag">&lt;/artifactId&gt;</span>
+            <span class="tag">&lt;optional&gt;</span><span class="string">true</span><span class="tag">&lt;/optional&gt;</span>
+        <span class="tag">&lt;/dependency&gt;</span>
+        <span class="tag">&lt;dependency&gt;</span>
+            <span class="tag">&lt;groupId&gt;</span><span class="string">org.springframework.boot</span><span class="tag">&lt;/groupId&gt;</span>
+            <span class="tag">&lt;artifactId&gt;</span><span class="string">spring-boot-starter-test</span><span class="tag">&lt;/artifactId&gt;</span>
+            <span class="tag">&lt;scope&gt;</span><span class="string">test</span><span class="tag">&lt;/scope&gt;</span>
+        <span class="tag">&lt;/dependency&gt;</span>
+    <span class="tag">&lt;/dependencies&gt;</span>
+    <span class="tag">&lt;build&gt;</span>
+        <span class="tag">&lt;plugins&gt;</span>
+            <span class="tag">&lt;plugin&gt;</span>
+                <span class="tag">&lt;groupId&gt;</span><span class="string">org.springframework.boot</span><span class="tag">&lt;/groupId&gt;</span>
+                <span class="tag">&lt;artifactId&gt;</span><span class="string">spring-boot-maven-plugin</span><span class="tag">&lt;/artifactId&gt;</span>
+                <span class="tag">&lt;configuration&gt;</span>
+                    <span class="tag">&lt;excludes&gt;</span>
+                        <span class="tag">&lt;exclude&gt;</span>
+                            <span class="tag">&lt;groupId&gt;</span><span class="string">org.projectlombok</span><span class="tag">&lt;/groupId&gt;</span>
+                            <span class="tag">&lt;artifactId&gt;</span><span class="string">lombok</span><span class="tag">&lt;/artifactId&gt;</span>
+                        <span class="tag">&lt;/exclude&gt;</span>
+                    <span class="tag">&lt;/excludes&gt;</span>
+                <span class="tag">&lt;/configuration&gt;</span>
+            <span class="tag">&lt;/plugin&gt;</span>
+        <span class="tag">&lt;/plugins&gt;</span>
+    <span class="tag">&lt;/build&gt;</span>
+<span class="tag">&lt;/project&gt;</span></code></div>
+            </section>
+            <section id="m4-yml" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">4.2</span> application.yml</h3>
+                <p class="text-slate-300 leading-relaxed mb-4">Crea <code class="text-accent">item-service/src/main/resources/application.yml</code>:</p>
+                <div class="code-block" data-lang="application.yml"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="property">spring</span>:
+  <span class="property">application</span>:
+    <span class="property">name</span>: <span class="string">item-service</span>
+  <span class="property">datasource</span>:
+    <span class="property">url</span>: <span class="string">jdbc:postgresql://crud-postgres:5432/crud_db</span>
+    <span class="property">username</span>: <span class="string"></span>
+    <span class="property">password</span>: <span class="string"></span>
+    <span class="property">driver-class-name</span>: <span class="string">org.postgresql.Driver</span>
+    <span class="property">hikari</span>:
+      <span class="property">maximum-pool-size</span>: <span class="number">10</span>
+      <span class="property">minimum-idle</span>: <span class="number">5</span>
+      <span class="property">idle-timeout</span>: <span class="number">30000</span>
+      <span class="property">connection-timeout</span>: <span class="number">20000</span>
+      <span class="property">max-lifetime</span>: <span class="number">1800000</span>
+  <span class="property">jpa</span>:
+    <span class="property">hibernate</span>:
+      <span class="property">ddl-auto</span>: <span class="string">update</span>
+    <span class="property">show-sql</span>: <span class="string">true</span>
+    <span class="property">properties</span>:
+      <span class="property">hibernate</span>:
+        <span class="property">format_sql</span>: <span class="string">true</span>
+        <span class="property">dialect</span>: <span class="string">org.hibernate.dialect.PostgreSQLDialect</span>
+  <span class="property">devtools</span>:
+    <span class="property">restart</span>:
+      <span class="property">enabled</span>: <span class="string">true</span>
+      <span class="property">poll-interval</span>: <span class="string">1s</span>
+    <span class="property">livereload</span>:
+      <span class="property">enabled</span>: <span class="string">true</span>
+<span class="property">server</span>:
+  <span class="property">port</span>: <span class="number">8081</span>
+<span class="property">logging</span>:
+  <span class="property">level</span>:
+    <span class="property">root</span>: <span class="string">INFO</span>
+    <span class="property">com.singleinput</span>: <span class="string">DEBUG</span>
+    <span class="property">org.hibernate.SQL</span>: <span class="string">DEBUG</span></code></div>
+            </section>
+            <section id="m4-entity" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">4.3</span> Entity + DTO</h3>
+                <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">item-service/src/main/java/com/singleinput/domain/Item.java</code>:</p>
+                <div class="code-block" data-lang="Item.java"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="keyword">package</span> com.singleinput.domain;
+<span class="keyword">import</span> jakarta.persistence.*;
+<span class="keyword">import</span> lombok.*;
+
+<span class="annotation">@Entity</span>
+<span class="annotation">@Table</span>(name = <span class="string">"items"</span>)
+<span class="annotation">@Data</span> <span class="annotation">@NoArgsConstructor</span> <span class="annotation">@AllArgsConstructor</span>
+<span class="keyword">public class</span> <span class="type">Item</span> {
+    <span class="annotation">@Id</span>
+    <span class="annotation">@GeneratedValue</span>(strategy = <span class="type">GenerationType</span>.IDENTITY)
+    <span class="keyword">private</span> <span class="type">Long</span> id;
+    <span class="annotation">@Column</span>(name = <span class="string">"texto"</span>, nullable = <span class="keyword">false</span>, length = <span class="number">255</span>)
+    <span class="keyword">private</span> <span class="type">String</span> texto;
+    <span class="keyword">public</span> <span class="type">Item</span>(<span class="type">String</span> texto) { <span class="keyword">this</span>.texto = texto; }
+}</code></div>
+                <p class="text-slate-300 leading-relaxed mb-4 mt-6"><code class="text-accent">item-service/src/main/java/com/singleinput/dto/ItemDTO.java</code>:</p>
+                <div class="code-block" data-lang="ItemDTO.java"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="keyword">package</span> com.singleinput.dto;
+<span class="keyword">import</span> jakarta.validation.constraints.*;
+<span class="keyword">import</span> lombok.*;
+
+<span class="annotation">@Data</span> <span class="annotation">@NoArgsConstructor</span> <span class="annotation">@AllArgsConstructor</span>
+<span class="keyword">public class</span> <span class="type">ItemDTO</span> {
+    <span class="keyword">private</span> <span class="type">Long</span> id;
+    <span class="annotation">@NotBlank</span>(message = <span class="string">"El texto no puede estar vacio"</span>)
+    <span class="annotation">@Size</span>(max = <span class="number">255</span>, message = <span class="string">"Maximo 255 caracteres"</span>)
+    <span class="keyword">private</span> <span class="type">String</span> texto;
+}</code></div>
+            </section>
+            <section id="m4-repository" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">4.4</span> Repository</h3>
+                <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">item-service/src/main/java/com/singleinput/persistence/ItemRepository.java</code>:</p>
+                <div class="code-block" data-lang="ItemRepository.java"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="keyword">package</span> com.singleinput.persistence;
+<span class="keyword">import</span> com.singleinput.domain.Item;
+<span class="keyword">import</span> org.springframework.data.jpa.repository.JpaRepository;
+<span class="keyword">import</span> java.util.List;
+
+<span class="keyword">public interface</span> <span class="type">ItemRepository</span> <span class="keyword">extends</span> <span class="type">JpaRepository</span>&lt;<span class="type">Item</span>, <span class="type">Long</span>&gt; {
+    <span class="type">List</span>&lt;<span class="type">Item</span>&gt; findByTextoContainingIgnoreCase(<span class="type">String</span> texto);
+}</code></div>
+            </section>
+            <section id="m4-service" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">4.5</span> Service</h3>
+                <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">service/ItemService.java</code> (interface):</p>
+                <div class="code-block" data-lang="ItemService.java"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="keyword">package</span> com.singleinput.service;
+<span class="keyword">import</span> com.singleinput.dto.ItemDTO;
+<span class="keyword">import</span> java.util.List;
+
+<span class="keyword">public interface</span> <span class="type">ItemService</span> {
+    <span class="type">List</span>&lt;<span class="type">ItemDTO</span>&gt; findAll();
+    <span class="type">ItemDTO</span> findById(<span class="type">Long</span> id);
+    <span class="type">ItemDTO</span> create(<span class="type">ItemDTO</span> dto);
+    <span class="type">ItemDTO</span> update(<span class="type">Long</span> id, <span class="type">ItemDTO</span> dto);
+    <span class="keyword">void</span> delete(<span class="type">Long</span> id);
+    <span class="type">List</span>&lt;<span class="type">ItemDTO</span>&gt; search(<span class="type">String</span> texto);
+}</code></div>
+                <p class="text-slate-300 leading-relaxed mb-4 mt-6"><code class="text-accent">service/ItemServiceImpl.java</code> (implementacion):</p>
+                <div class="code-block" data-lang="ItemServiceImpl.java"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="keyword">package</span> com.singleinput.service;
+<span class="keyword">import</span> com.singleinput.domain.Item;
+<span class="keyword">import</span> com.singleinput.dto.ItemDTO;
+<span class="keyword">import</span> com.singleinput.exception.ItemNotFoundException;
+<span class="keyword">import</span> com.singleinput.persistence.ItemRepository;
+<span class="keyword">import</span> org.springframework.stereotype.Service;
+<span class="keyword">import</span> org.springframework.transaction.annotation.Transactional;
+<span class="keyword">import</span> java.util.List;
+<span class="keyword">import</span> java.util.stream.Collectors;
+
+<span class="annotation">@Service</span>
+<span class="keyword">public class</span> <span class="type">ItemServiceImpl</span> <span class="keyword">implements</span> <span class="type">ItemService</span> {
+    <span class="keyword">private final</span> <span class="type">ItemRepository</span> repo;
+    <span class="keyword">public</span> <span class="type">ItemServiceImpl</span>(<span class="type">ItemRepository</span> repo) { <span class="keyword">this</span>.repo = repo; }
+
+    <span class="annotation">@Override</span> <span class="annotation">@Transactional</span>(readOnly = <span class="keyword">true</span>)
+    <span class="keyword">public</span> <span class="type">List</span>&lt;<span class="type">ItemDTO</span>&gt; findAll() {
+        <span class="keyword">return</span> repo.findAll().stream().map(<span class="keyword">this</span>::toDTO).collect(Collectors.toList());
+    }
+    <span class="annotation">@Override</span> <span class="annotation">@Transactional</span>(readOnly = <span class="keyword">true</span>)
+    <span class="keyword">public</span> <span class="type">ItemDTO</span> findById(<span class="type">Long</span> id) {
+        <span class="keyword">return</span> toDTO(repo.findById(id).orElseThrow(() -> <span class="keyword">new</span> <span class="type">ItemNotFoundException</span>(id)));
+    }
+    <span class="annotation">@Override</span> <span class="annotation">@Transactional</span>
+    <span class="keyword">public</span> <span class="type">ItemDTO</span> create(<span class="type">ItemDTO</span> dto) {
+        <span class="type">Item</span> e = <span class="keyword">new</span> <span class="type">Item</span>(); e.setTexto(dto.getTexto());
+        <span class="keyword">return</span> toDTO(repo.save(e));
+    }
+    <span class="annotation">@Override</span> <span class="annotation">@Transactional</span>
+    <span class="keyword">public</span> <span class="type">ItemDTO</span> update(<span class="type">Long</span> id, <span class="type">ItemDTO</span> dto) {
+        <span class="type">Item</span> ex = repo.findById(id).orElseThrow(() -> <span class="keyword">new</span> <span class="type">ItemNotFoundException</span>(id));
+        ex.setTexto(dto.getTexto());
+        <span class="keyword">return</span> toDTO(repo.save(ex));
+    }
+    <span class="annotation">@Override</span> <span class="annotation">@Transactional</span>
+    <span class="keyword">public void</span> delete(<span class="type">Long</span> id) {
+        <span class="keyword">if</span> (!repo.existsById(id)) <span class="keyword">throw new</span> <span class="type">ItemNotFoundException</span>(id);
+        repo.deleteById(id);
+    }
+    <span class="annotation">@Override</span> <span class="annotation">@Transactional</span>(readOnly = <span class="keyword">true</span>)
+    <span class="keyword">public</span> <span class="type">List</span>&lt;<span class="type">ItemDTO</span>&gt; search(<span class="type">String</span> texto) {
+        <span class="keyword">return</span> repo.findByTextoContainingIgnoreCase(texto).stream().map(<span class="keyword">this</span>::toDTO).collect(Collectors.toList());
+    }
+    <span class="keyword">private</span> <span class="type">ItemDTO</span> toDTO(<span class="type">Item</span> i) {
+        <span class="type">ItemDTO</span> d = <span class="keyword">new</span> <span class="type">ItemDTO</span>(); d.setId(i.getId()); d.setTexto(i.getTexto()); <span class="keyword">return</span> d;
+    }
+}</code></div>
+            </section>
+
+            <section id="m4-controller" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">4.6</span> Controller</h3>
+                <p class="text-slate-300 leading-relaxed mb-4">El controlador REST expone 6 endpoints. <strong class="text-neon-yellow">No tiene <code class="text-accent">@CrossOrigin</code></strong> porque CORS se maneja exclusivamente en el API Gateway.</p>
+                <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">controller/ItemController.java</code>:</p>
+                <div class="code-block" data-lang="ItemController.java"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="keyword">package</span> com.singleinput.controller;
+<span class="keyword">import</span> com.singleinput.dto.ItemDTO;
+<span class="keyword">import</span> com.singleinput.service.ItemService;
+<span class="keyword">import</span> jakarta.validation.Valid;
+<span class="keyword">import</span> org.springframework.http.ResponseEntity;
+<span class="keyword">import</span> org.springframework.web.bind.annotation.*;
+<span class="keyword">import</span> java.util.List;
+
+<span class="annotation">@RestController</span>
+<span class="annotation">@RequestMapping</span>(<span class="string">"/api/items"</span>)
+<span class="keyword">public class</span> <span class="type">ItemController</span> {
+    <span class="keyword">private final</span> <span class="type">ItemService</span> service;
+    <span class="keyword">public</span> <span class="type">ItemController</span>(<span class="type">ItemService</span> service) { <span class="keyword">this</span>.service = service; }
+
+    <span class="annotation">@GetMapping</span>
+    <span class="keyword">public</span> <span class="type">ResponseEntity</span>&lt;<span class="type">List</span>&lt;<span class="type">ItemDTO</span>&gt;&gt; findAll() {
+        <span class="keyword">return</span> ResponseEntity.ok(service.findAll());
+    }
+
+    <span class="annotation">@GetMapping</span>(<span class="string">"/{id}"</span>)
+    <span class="keyword">public</span> <span class="type">ResponseEntity</span>&lt;<span class="type">ItemDTO</span>&gt; findById(<span class="annotation">@PathVariable</span> <span class="type">Long</span> id) {
+        <span class="keyword">return</span> ResponseEntity.ok(service.findById(id));
+    }
+    <span class="annotation">@GetMapping</span>(<span class="string">"/search"</span>)
+    <span class="keyword">public</span> <span class="type">ResponseEntity</span>&lt;<span class="type">List</span>&lt;<span class="type">ItemDTO</span>&gt;&gt; search(<span class="annotation">@RequestParam</span> <span class="type">String</span> texto) {
+        <span class="keyword">return</span> ResponseEntity.ok(service.search(texto));
+    }
+    <span class="annotation">@PostMapping</span>
+    <span class="keyword">public</span> <span class="type">ResponseEntity</span>&lt;<span class="type">ItemDTO</span>&gt; create(<span class="annotation">@Valid</span> <span class="annotation">@RequestBody</span> <span class="type">ItemDTO</span> dto) {
+        <span class="keyword">return</span> ResponseEntity.ok(service.create(dto));
+    }
+    <span class="annotation">@PutMapping</span>(<span class="string">"/{id}"</span>)
+    <span class="keyword">public</span> <span class="type">ResponseEntity</span>&lt;<span class="type">ItemDTO</span>&gt; update(<span class="annotation">@PathVariable</span> <span class="type">Long</span> id, <span class="annotation">@Valid</span> <span class="annotation">@RequestBody</span> <span class="type">ItemDTO</span> dto) {
+        <span class="keyword">return</span> ResponseEntity.ok(service.update(id, dto));
+    }
+    <span class="annotation">@DeleteMapping</span>(<span class="string">"/{id}"</span>)
+    <span class="keyword">public</span> <span class="type">ResponseEntity</span>&lt;<span class="type">Void</span>&gt; delete(<span class="annotation">@PathVariable</span> <span class="type">Long</span> id) {
+        service.delete(id);
+        <span class="keyword">return</span> ResponseEntity.noContent().build();
+    }
+}</code></div>
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#9432;</span> Analisis de Endpoints</div>
+                    <div class="alert-body">
+                        <table>
+                            <tr><th>Metodo</th><th>Ruta</th><th>Accion</th></tr>
+                            <tr><td><code>GET</code></td><td><code>/api/items</code></td><td>Listar todos los items</td></tr>
+                            <tr><td><code>GET</code></td><td><code>/api/items/{id}</code></td><td>Buscar por ID</td></tr>
+                            <tr><td><code>GET</code></td><td><code>/api/items/search?texto=...</code></td><td>Buscar por texto</td></tr>
+                            <tr><td><code>POST</code></td><td><code>/api/items</code></td><td>Crear nuevo item</td></tr>
+                            <tr><td><code>PUT</code></td><td><code>/api/items/{id}</code></td><td>Actualizar item</td></tr>
+                            <tr><td><code>DELETE</code></td><td><code>/api/items/{id}</code></td><td>Eliminar item</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="m4-exception" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">4.7</span> Manejo de Excepciones</h3>
+                <p class="text-slate-300 leading-relaxed mb-4">Creamos una excepcion personalizada y un manejador global con <code class="text-accent">@ControllerAdvice</code> para devolver respuestas HTTP correctas.</p>
+                <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">exception/ItemNotFoundException.java</code>:</p>
+                <div class="code-block" data-lang="ItemNotFoundException.java"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="keyword">package</span> com.singleinput.exception;
+
+<span class="keyword">public class</span> <span class="type">ItemNotFoundException</span> <span class="keyword">extends</span> <span class="type">RuntimeException</span> {
+    <span class="keyword">public</span> <span class="type">ItemNotFoundException</span>(<span class="type">Long</span> id) {
+        <span class="keyword">super</span>(<span class="string">"Item no encontrado con id: "</span> + id);
+    }
+}</code></div>
+                <p class="text-slate-300 leading-relaxed mb-4 mt-6"><code class="text-accent">exception/GlobalExceptionHandler.java</code>:</p>
+                <div class="code-block" data-lang="GlobalExceptionHandler.java"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="keyword">package</span> com.singleinput.exception;
+<span class="keyword">import</span> org.springframework.http.HttpStatus;
+<span class="keyword">import</span> org.springframework.http.ResponseEntity;
+<span class="keyword">import</span> org.springframework.web.bind.MethodArgumentNotValidException;
+<span class="keyword">import</span> org.springframework.web.bind.annotation.*;
+<span class="keyword">import</span> java.util.Map;
+
+<span class="annotation">@RestControllerAdvice</span>
+<span class="keyword">public class</span> <span class="type">GlobalExceptionHandler</span> {
+
+    <span class="annotation">@ExceptionHandler</span>(<span class="type">ItemNotFoundException</span>.class)
+    <span class="keyword">public</span> <span class="type">ResponseEntity</span>&lt;<span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">String</span>&gt;&gt; handleNotFound(<span class="type">ItemNotFoundException</span> ex) {
+        <span class="keyword">return</span> ResponseEntity.status(<span class="type">HttpStatus</span>.NOT_FOUND)
+                .body(Map.of(<span class="string">"error"</span>, ex.getMessage()));
+    }
+
+    <span class="annotation">@ExceptionHandler</span>(<span class="type">MethodArgumentNotValidException</span>.class)
+    <span class="keyword">public</span> <span class="type">ResponseEntity</span>&lt;<span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">String</span>&gt;&gt; handleValidation(<span class="type">MethodArgumentNotValidException</span> ex) {
+        <span class="type">String</span> msg = ex.getBindingResult().getFieldErrors().stream()
+                .map(e -&gt; e.getField() + <span class="string">": "</span> + e.getDefaultMessage())
+                .reduce(<span class="string">""</span>, (a, b) -&gt; a + b);
+        <span class="keyword">return</span> ResponseEntity.badRequest().body(Map.of(<span class="string">"error"</span>, msg));
+    }
+}</code></div>
+            </section>
+
+            <section id="m4-main" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">4.8</span> Punto de Entrada</h3>
+                <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">ItemServiceApplication.java</code> - La clase que arranca Spring Boot:</p>
+                <div class="code-block" data-lang="ItemServiceApplication.java"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="keyword">package</span> com.singleinput;
+<span class="keyword">import</span> org.springframework.boot.SpringApplication;
+<span class="keyword">import</span> org.springframework.boot.autoconfigure.SpringBootApplication;
+
+<span class="annotation">@SpringBootApplication</span>
+<span class="keyword">public class</span> <span class="type">ItemServiceApplication</span> {
+    <span class="keyword">public static void</span> main(<span class="type">String</span>[] args) {
+        SpringApplication.run(<span class="type">ItemServiceApplication</span>.class, args);
+    }
+}</code></div>
+                <div class="alert-box alert-console">
+                    <div class="alert-title"><span class="alert-icon">&#10003;</span> Microservicio Completo</div>
+                    <div class="alert-body">Con esto, <code>item-service</code> esta listo. Tiene Entity, DTO, Repository, Service, Controller, Exception Handler y punto de entrada. Corre en el puerto <code>8081</code> y solo responde a peticiones que lleguen a traves del Gateway.</div>
+                </div>
+            </section>
+        </section>
+
+        <!-- MODULO 5: API GATEWAY -->
+        <section id="modulo5">
+            <div class="module-header">
+                <p class="module-number">Modulo 5</p>
+                <h2 class="module-title">API Gateway con Spring Cloud Gateway</h2>
+                <p class="text-slate-400 mt-3 text-sm">El punto de entrada unico para todas las peticiones del cliente.</p>
+            </div>
+
+            <section id="m5-que-es" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">5.1</span> Que es un API Gateway?</h3>
+                <p class="text-slate-300 leading-relaxed mb-4">Un <strong class="text-white">API Gateway</strong> es un servidor que actua como <strong class="text-accent">puerta de entrada unica</strong> a todos los microservicios. El cliente (navegador) no sabe cuantos microservicios existen ni en que puertos corren; solo conoce la direccion del Gateway.</p>
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#9432;</span> Responsabilidades del Gateway</div>
+                    <div class="alert-body">
+                        <strong>Enrutamiento:</strong> Redirige <code>/api/items/**</code> al microservicio <code>item-service:8081</code>.<br>
+                        <strong>CORS:</strong> Maneja los headers de Cross-Origin para permitir peticiones desde el frontend.<br>
+                        <strong>Seguridad:</strong> Punto centralizado para autenticacion, rate limiting, logging.<br>
+                        <strong>WebFlux:</strong> Spring Cloud Gateway usa programacion reactiva (NO MVC), lo que lo hace muy eficiente.
+                    </div>
+                </div>
+            </section>
+
+            <section id="m5-pom" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">5.2</span> pom.xml del Gateway</h3>
+                <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">api-gateway/pom.xml</code> - Spring Boot 3.3.4 + Spring Cloud 2023.0.3:</p>
+                <div class="code-block" data-lang="pom.xml"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="tag">&lt;?xml</span> <span class="attr">version</span>=<span class="value">"1.0"</span> <span class="attr">encoding</span>=<span class="value">"UTF-8"</span><span class="tag">?&gt;</span>
+<span class="tag">&lt;project</span> <span class="attr">xmlns</span>=<span class="value">"http://maven.apache.org/POM/4.0.0"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;modelVersion&gt;</span>4.0.0<span class="tag">&lt;/modelVersion&gt;</span>
+    <span class="tag">&lt;parent&gt;</span>
+        <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
+        <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-parent<span class="tag">&lt;/artifactId&gt;</span>
+        <span class="tag">&lt;version&gt;</span>3.3.4<span class="tag">&lt;/version&gt;</span>
+    <span class="tag">&lt;/parent&gt;</span>
+    <span class="tag">&lt;groupId&gt;</span>com.singleinput<span class="tag">&lt;/groupId&gt;</span>
+    <span class="tag">&lt;artifactId&gt;</span>api-gateway<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;version&gt;</span>0.0.1-SNAPSHOT<span class="tag">&lt;/version&gt;</span>
+    <span class="tag">&lt;name&gt;</span>api-gateway<span class="tag">&lt;/name&gt;</span>
+
+    <span class="tag">&lt;properties&gt;</span>
+        <span class="tag">&lt;java.version&gt;</span>21<span class="tag">&lt;/java.version&gt;</span>
+        <span class="tag">&lt;spring-cloud.version&gt;</span>2023.0.3<span class="tag">&lt;/spring-cloud.version&gt;</span>
+    <span class="tag">&lt;/properties&gt;</span>
+
+    <span class="tag">&lt;dependencies&gt;</span>
+        <span class="tag">&lt;dependency&gt;</span>
+            <span class="tag">&lt;groupId&gt;</span>org.springframework.cloud<span class="tag">&lt;/groupId&gt;</span>
+            <span class="tag">&lt;artifactId&gt;</span>spring-cloud-starter-gateway<span class="tag">&lt;/artifactId&gt;</span>
+        <span class="tag">&lt;/dependency&gt;</span>
+    <span class="tag">&lt;/dependencies&gt;</span>
+
+    <span class="tag">&lt;dependencyManagement&gt;</span>
+        <span class="tag">&lt;dependencies&gt;</span>
+            <span class="tag">&lt;dependency&gt;</span>
+                <span class="tag">&lt;groupId&gt;</span>org.springframework.cloud<span class="tag">&lt;/groupId&gt;</span>
+                <span class="tag">&lt;artifactId&gt;</span>spring-cloud-dependencies<span class="tag">&lt;/artifactId&gt;</span>
+                <span class="tag">&lt;version&gt;</span>${spring-cloud.version}<span class="tag">&lt;/version&gt;</span>
+                <span class="tag">&lt;type&gt;</span>pom<span class="tag">&lt;/type&gt;</span>
+                <span class="tag">&lt;scope&gt;</span>import<span class="tag">&lt;/scope&gt;</span>
+            <span class="tag">&lt;/dependency&gt;</span>
+        <span class="tag">&lt;/dependencies&gt;</span>
+    <span class="tag">&lt;/dependencyManagement&gt;</span>
+
+    <span class="tag">&lt;build&gt;</span>
+        <span class="tag">&lt;plugins&gt;</span>
+            <span class="tag">&lt;plugin&gt;</span>
+                <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
+                <span class="tag">&lt;artifactId&gt;</span>spring-boot-maven-plugin<span class="tag">&lt;/artifactId&gt;</span>
+            <span class="tag">&lt;/plugin&gt;</span>
+        <span class="tag">&lt;/plugins&gt;</span>
+    <span class="tag">&lt;/build&gt;</span>
+<span class="tag">&lt;/project&gt;</span></code></div>
+            </section>
+
+            <section id="m5-config" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">5.3</span> Configuracion del Gateway</h3>
+                <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">api-gateway/src/main/resources/application.yml</code> - Rutas y CORS:</p>
+                <div class="code-block" data-lang="application.yml"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="property">server</span>:
+  <span class="property">port</span>: <span class="number">8080</span>
+
+<span class="property">spring</span>:
+  <span class="property">application</span>:
+    <span class="property">name</span>: <span class="string">api-gateway</span>
+  <span class="property">cloud</span>:
+    <span class="property">gateway</span>:
+      <span class="property">routes</span>:
+        - <span class="property">id</span>: <span class="string">item-service</span>
+          <span class="property">uri</span>: <span class="string">http://item-service:8081</span>
+          <span class="property">predicates</span>:
+            - <span class="string">Path=/api/items/**</span>
+      <span class="property">globalcors</span>:
+        <span class="property">corsConfigurations</span>:
+          <span class="string">'[/**]'</span>:
+            <span class="property">allowedOrigins</span>: <span class="string">"http://localhost:5500"</span>
+            <span class="property">allowedMethods</span>:
+              - <span class="string">GET</span>
+              - <span class="string">POST</span>
+              - <span class="string">PUT</span>
+              - <span class="string">DELETE</span>
+            <span class="property">allowedHeaders</span>: <span class="string">"*"</span></code></div>
+                <div class="alert-box alert-warning">
+                    <div class="alert-title"><span class="alert-icon">&#9888;</span> Punto Clave</div>
+                    <div class="alert-body">El Gateway corre en <code>puerto 8080</code>. Redirige todo lo que empiece con <code>/api/items/**</code> hacia <code>http://item-service:8081</code>. El nombre <code>item-service</code> se resuelve automaticamente gracias a la red Docker <code>single-input-network</code>. CORS permite solo peticiones desde <code>localhost:5500</code> (el frontend servido por Live Server).</div>
+                </div>
+
+                <h3 class="text-2xl font-bold text-white mb-6 mt-12 flex items-center gap-3"><span class="text-accent">5.4</span> Clase Principal del Gateway</h3>
+                <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">api-gateway/src/main/java/com/singleinput/gateway/ApiGatewayApplication.java</code>:</p>
+                <div class="code-block" data-lang="ApiGatewayApplication.java"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="keyword">package</span> com.singleinput.gateway;
+<span class="keyword">import</span> org.springframework.boot.SpringApplication;
+<span class="keyword">import</span> org.springframework.boot.autoconfigure.SpringBootApplication;
+
+<span class="annotation">@SpringBootApplication</span>
+<span class="keyword">public class</span> <span class="type">ApiGatewayApplication</span> {
+    <span class="keyword">public static void</span> main(<span class="type">String</span>[] args) {
+        SpringApplication.run(<span class="type">ApiGatewayApplication</span>.class, args);
+    }
+}</code></div>
+                <div class="alert-box alert-console">
+                    <div class="alert-title"><span class="alert-icon">&#10003;</span> Gateway Listo</div>
+                    <div class="alert-body">El API Gateway esta configurado. Escucha en <code>puerto 8080</code>, enruta a <code>item-service</code> y maneja CORS. No necesita <code>@CrossOrigin</code> en el microservicio porque el Gateway ya agrega los headers necesarios.</div>
+                </div>
+            </section>
+        </section>
+
+        <!-- MODULO 6: POSTMAN -->
+        <section id="modulo6">
+            <div class="module-header">
+                <p class="module-number">Modulo 6</p>
+                <h2 class="module-title">Probando con Postman</h2>
+                <p class="text-slate-400 mt-3 text-sm">Verificar que todos los endpoints funcionan a traves del Gateway.</p>
+            </div>
+
+            <section id="m6-endpoints" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">6.1</span> Probar Endpoints</h3>
+                <p class="text-slate-300 leading-relaxed mb-4">Todas las peticiones se hacen al <strong class="text-white">Gateway</strong> en <code class="text-accent">http://localhost:8080</code>, nunca directamente al microservicio.</p>
+                <table class="mb-6">
+                    <tr><th>Metodo</th><th>URL</th><th>Body (JSON)</th><th>Descripcion</th></tr>
+                    <tr><td><code>POST</code></td><td><code>localhost:8080/api/items</code></td><td><code>{"texto": "Hola mundo"}</code></td><td>Crear item</td></tr>
+                    <tr><td><code>GET</code></td><td><code>localhost:8080/api/items</code></td><td>-</td><td>Listar todos</td></tr>
+                    <tr><td><code>GET</code></td><td><code>localhost:8080/api/items/1</code></td><td>-</td><td>Buscar por ID</td></tr>
+                    <tr><td><code>GET</code></td><td><code>localhost:8080/api/items/search?texto=Hola</code></td><td>-</td><td>Buscar por texto</td></tr>
+                    <tr><td><code>PUT</code></td><td><code>localhost:8080/api/items/1</code></td><td><code>{"texto": "Actualizado"}</code></td><td>Actualizar item</td></tr>
+                    <tr><td><code>DELETE</code></td><td><code>localhost:8080/api/items/1</code></td><td>-</td><td>Eliminar item</td></tr>
+                </table>
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#9432;</span> Flujo de una Peticion</div>
+                    <div class="alert-body">
+                        <strong>1.</strong> Postman envia <code>POST http://localhost:8080/api/items</code><br>
+                        <strong>2.</strong> El Gateway recibe la peticion y verifica que la ruta coincida con <code>/api/items/**</code><br>
+                        <strong>3.</strong> El Gateway reenvia la peticion a <code>http://item-service:8081/api/items</code> (resolucion DNS de Docker)<br>
+                        <strong>4.</strong> El microservicio procesa, guarda en PostgreSQL y devuelve la respuesta<br>
+                        <strong>5.</strong> El Gateway agrega headers CORS y devuelve la respuesta a Postman
+                    </div>
+                </div>
+            </section>
+
+            <section id="m6-variables" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">6.2</span> Variables Dinamicas en Postman</h3>
+                <p class="text-slate-300 leading-relaxed mb-4">Para no repetir URLs, crea una <strong class="text-white">variable de entorno</strong> en Postman:</p>
+                <div class="code-block" data-lang="Postman"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code>Variable: baseUrl
+Valor:    http://localhost:8080/api/items
+
+Usar en requests:
+{{baseUrl}}           -- GET all, POST
+{{baseUrl}}/1         -- GET by ID, PUT, DELETE
+{{baseUrl}}/search?texto=Hola  -- Search</code></div>
+            </section>
+        </section>
+
+        <!-- MODULO 7: FRONTEND -->
+        <section id="modulo7">
+            <div class="module-header">
+                <p class="module-number">Modulo 7</p>
+                <h2 class="module-title">Frontend - Single Input CRUD</h2>
+                <p class="text-slate-400 mt-3 text-sm">Una pagina HTML con un input y 4 botones. Toda la logica via Fetch API.</p>
+            </div>
+
+            <section id="m7-html" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">7.1</span> index.html</h3>
+                <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">frontend/index.html</code> - Un solo input, cuatro botones, una lista de resultados:</p>
+                <div class="code-block" data-lang="index.html"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="tag">&lt;!DOCTYPE html&gt;</span>
+<span class="tag">&lt;html</span> <span class="attr">lang</span>=<span class="value">"es"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;head&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attr">charset</span>=<span class="value">"UTF-8"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;meta</span> <span class="attr">name</span>=<span class="value">"viewport"</span> <span class="attr">content</span>=<span class="value">"width=device-width, initial-scale=1.0"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;title&gt;</span>Single Input CRUD<span class="tag">&lt;/title&gt;</span>
+    <span class="tag">&lt;link</span> <span class="attr">rel</span>=<span class="value">"stylesheet"</span> <span class="attr">href</span>=<span class="value">"style.css"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/head&gt;</span>
+<span class="tag">&lt;body&gt;</span>
+    <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="value">"container"</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;h1&gt;</span>Single Input CRUD<span class="tag">&lt;/h1&gt;</span>
+        <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="value">"input-group"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="value">"text"</span> <span class="attr">id</span>=<span class="value">"itemInput"</span> <span class="attr">placeholder</span>=<span class="value">"Escribe algo..."</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="value">"hidden"</span> <span class="attr">id</span>=<span class="value">"itemId"</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;/div&gt;</span>
+        <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="value">"buttons"</span><span class="tag">&gt;</span>
+            <span class="tag">&lt;button</span> <span class="attr">id</span>=<span class="value">"btnCreate"</span> <span class="attr">class</span>=<span class="value">"btn btn-create"</span><span class="tag">&gt;</span>Crear<span class="tag">&lt;/button&gt;</span>
+            <span class="tag">&lt;button</span> <span class="attr">id</span>=<span class="value">"btnUpdate"</span> <span class="attr">class</span>=<span class="value">"btn btn-update"</span><span class="tag">&gt;</span>Actualizar<span class="tag">&lt;/button&gt;</span>
+            <span class="tag">&lt;button</span> <span class="attr">id</span>=<span class="value">"btnDelete"</span> <span class="attr">class</span>=<span class="value">"btn btn-delete"</span><span class="tag">&gt;</span>Eliminar<span class="tag">&lt;/button&gt;</span>
+            <span class="tag">&lt;button</span> <span class="attr">id</span>=<span class="value">"btnSearch"</span> <span class="attr">class</span>=<span class="value">"btn btn-search"</span><span class="tag">&gt;</span>Buscar<span class="tag">&lt;/button&gt;</span>
+        <span class="tag">&lt;/div&gt;</span>
+        <span class="tag">&lt;ul</span> <span class="attr">id</span>=<span class="value">"itemList"</span><span class="tag">&gt;&lt;/ul&gt;</span>
+    <span class="tag">&lt;/div&gt;</span>
+    <span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="value">"app.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
+<span class="tag">&lt;/body&gt;</span>
+<span class="tag">&lt;/html&gt;</span></code></div>
+            </section>
+
+            <section id="m7-css" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">7.2</span> style.css</h3>
+                <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">frontend/style.css</code> - Modo oscuro, responsive, minimalista:</p>
+                <div class="code-block" data-lang="style.css"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code>* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #0a0f1a;
+    color: #e2e8f0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding-top: 60px;
+}
+.container { width: 90%; max-width: 600px; }
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    background: linear-gradient(to right, #38bdf8, #c084fc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 2rem;
+}
+.input-group { display: flex; gap: 8px; margin-bottom: 16px; }
+input[type="text"] {
+    flex: 1;
+    padding: 12px 16px;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    color: #e2e8f0;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+input[type="text"]:focus { border-color: #38bdf8; }
+.buttons { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+    font-size: 0.9rem;
+}
+.btn:hover { opacity: 0.85; }
+.btn-create { background: #4ade80; color: #0a0f1a; }
+.btn-update { background: #facc15; color: #0a0f1a; }
+.btn-delete { background: #f87171; color: #0a0f1a; }
+.btn-search { background: #38bdf8; color: #0a0f1a; }
+#itemList { list-style: none; }
+#itemList li {
+    background: #1e293b;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+#itemList li:hover { background: #334155; }
+#itemList li .item-id { color: #64748b; font-size: 0.8rem; }</code></div>
+            </section>
+
+            <section id="m7-js" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">7.3</span> app.js</h3>
+                <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">frontend/app.js</code> - Fetch API con async/await, renderizado seguro con <code class="text-accent">textContent</code> (previene XSS):</p>
+                <div class="code-block" data-lang="app.js"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code>const API = 'http://localhost:8080/api/items';
+const input = document.getElementById('itemInput');
+const hiddenId = document.getElementById('itemId');
+const list = document.getElementById('itemList');
+
+document.getElementById('btnCreate').addEventListener('click', createItem);
+document.getElementById('btnUpdate').addEventListener('click', updateItem);
+document.getElementById('btnDelete').addEventListener('click', deleteItem);
+document.getElementById('btnSearch').addEventListener('click', searchItems);
+
+async function loadAll() {
+    const res = await fetch(API);
+    const data = await res.json();
+    render(data);
+}
+
+async function createItem() {
+    const texto = input.value.trim();
+    if (!texto) return;
+    await fetch(API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ texto })
+    });
+    input.value = '';
+    loadAll();
+}
+
+async function updateItem() {
+    const id = hiddenId.value;
+    const texto = input.value.trim();
+    if (!id || !texto) return;
+    await fetch(`${API}/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ texto })
+    });
+    input.value = '';
+    hiddenId.value = '';
+    loadAll();
+}
+
+async function deleteItem() {
+    const id = hiddenId.value;
+    if (!id) return;
+    await fetch(`${API}/${id}`, { method: 'DELETE' });
+    input.value = '';
+    hiddenId.value = '';
+    loadAll();
+}
+
+async function searchItems() {
+    const texto = input.value.trim();
+    if (!texto) { loadAll(); return; }
+    const res = await fetch(`${API}/search?texto=${encodeURIComponent(texto)}`);
+    const data = await res.json();
+    render(data);
+}
+
+function render(items) {
+    list.innerHTML = '';
+    items.forEach(item =&gt; {
+        const li = document.createElement('li');
+        const span = document.createElement('span');
+        span.textContent = item.texto;
+        const idSpan = document.createElement('span');
+        idSpan.className = 'item-id';
+        idSpan.textContent = '#' + item.id;
+        li.appendChild(span);
+        li.appendChild(idSpan);
+        li.addEventListener('click', () =&gt; {
+            input.value = item.texto;
+            hiddenId.value = item.id;
+        });
+        list.appendChild(li);
+    });
+}
+
+loadAll();</code></div>
+                <div class="alert-box alert-warning">
+                    <div class="alert-title"><span class="alert-icon">&#9888;</span> Seguridad XSS</div>
+                    <div class="alert-body">Nunca uses <code>innerHTML</code> para renderizar datos del servidor. Usamos <code>textContent</code> para que cualquier intento de inyectar HTML/JavaScript sea tratado como texto plano. El campo <code>input type="hidden"</code> guarda el ID del item seleccionado para las operaciones de Update y Delete.</div>
+                </div>
+            </section>
+        </section>
+
+        <!-- MODULO 8: TROUBLESHOOTING -->
+        <section id="modulo8">
+            <div class="module-header">
+                <p class="module-number">Modulo 8</p>
+                <h2 class="module-title">Troubleshooting</h2>
+                <p class="text-slate-400 mt-3 text-sm">Problemas comunes y como resolverlos.</p>
+            </div>
+
+            <section class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">8.1</span> Conflictos de Puertos</h3>
+                <div class="alert-box alert-warning">
+                    <div class="alert-title"><span class="alert-icon">&#9888;</span> Error: Port already in use</div>
+                    <div class="alert-body">
+                        Si el puerto <code>8080</code>, <code>8081</code> o <code>5432</code> esta ocupado:<br><br>
+                        <strong>Solucion:</strong> Identifica el proceso con <code>netstat -ano | findstr :8080</code> (Windows) o <code>lsof -i :8080</code> (Linux/Mac) y termimalo, o cambia el puerto en <code>application.yml</code> y <code>docker-compose.yml</code>.
+                    </div>
+                </div>
+
+                <h3 class="text-2xl font-bold text-white mb-6 mt-8 flex items-center gap-3"><span class="text-accent">8.2</span> Connection Refused</h3>
+                <div class="alert-box alert-warning">
+                    <div class="alert-title"><span class="alert-icon">&#9888;</span> Error: Connection refused to item-service:8081</div>
+                    <div class="alert-body">
+                        El Gateway no puede conectar con el microservicio. Causas posibles:<br><br>
+                        <strong>1.</strong> El contenedor <code>item-service</code> no esta corriendo. Verifica con <code>docker ps</code>.<br>
+                        <strong>2.</strong> El microservicio aun no termino de arrancar. Espera 20-30 segundos y revisa los logs: <code>docker logs item-service</code>.<br>
+                        <strong>3.</strong> No estan en la misma red Docker. Verifica que ambos servicios esten en <code>single-input-network</code>.
+                    </div>
+                </div>
+
+                <h3 class="text-2xl font-bold text-white mb-6 mt-8 flex items-center gap-3"><span class="text-accent">8.3</span> Errores de Routing del Gateway</h3>
+                <div class="alert-box alert-warning">
+                    <div class="alert-title"><span class="alert-icon">&#9888;</span> Error: 404 Not Found en /api/items</div>
+                    <div class="alert-body">
+                        El Gateway no encuentra la ruta. Verifica:<br><br>
+                        <strong>1.</strong> El <code>predicates</code> en <code>application.yml</code> del Gateway sea <code>Path=/api/items/**</code>.<br>
+                        <strong>2.</strong> La <code>uri</code> apunte a <code>http://item-service:8081</code> (no localhost dentro de Docker).<br>
+                        <strong>3.</strong> El microservicio escuche realmente en el puerto <code>8081</code>.
+                    </div>
+                </div>
+
+                <h3 class="text-2xl font-bold text-white mb-6 mt-8 flex items-center gap-3"><span class="text-accent">8.4</span> Problemas de CORS</h3>
+                <div class="alert-box alert-warning">
+                    <div class="alert-title"><span class="alert-icon">&#9888;</span> Error: No 'Access-Control-Allow-Origin' header</div>
+                    <div class="alert-body">
+                        El navegador bloquea la peticion por politica CORS. Soluciones:<br><br>
+                        <strong>1.</strong> Verifica que el Gateway tenga <code>globalcors</code> configurado con <code>allowedOrigins: "http://localhost:5500"</code>.<br>
+                        <strong>2.</strong> Asegurate de que el frontend se sirva desde <code>localhost:5500</code> (Live Server de VS Code).<br>
+                        <strong>3.</strong> NO agregues <code>@CrossOrigin</code> en el microservicio; eso causaria conflictos con el Gateway.<br>
+                        <strong>4.</strong> Si usas otro puerto para el frontend, actualiza <code>allowedOrigins</code> en el Gateway.
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <!-- MODULO 9: SIGUIENTES PASOS Y GLOSARIO -->
+        <section id="modulo9">
+            <div class="module-header">
+                <p class="module-number">Modulo 9</p>
+                <h2 class="module-title">Siguientes Pasos y Glosario</h2>
+                <p class="text-slate-400 mt-3 text-sm">Hacia donde llevar esta arquitectura y conceptos clave.</p>
+            </div>
+
+            <section class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">9.1</span> Siguientes Pasos</h3>
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#9432;</span> Extensiones Recomendadas</div>
+                    <div class="alert-body">
+                        <strong>1. Service Discovery:</strong> Agregar Eureka o Consul para que los servicios se descubran automaticamente sin hardcodear URLs.<br>
+                        <strong>2. Circuit Breaker:</strong> Implementar Resilience4j para manejar fallos entre servicios gracefully.<br>
+                        <strong>3. Config Server:</strong> Centralizar configuraciones con Spring Cloud Config Server.<br>
+                        <strong>4. Autenticacion:</strong> Agregar Spring Security + JWT en el Gateway.<br>
+                        <strong>5. Logging Centralizado:</strong> Usar ELK Stack (Elasticsearch, Logstash, Kibana) o Loki.<br>
+                        <strong>6. Monitoring:</strong> Integrar Prometheus + Grafana para metricas en tiempo real.<br>
+                        <strong>7. CI/CD:</strong> Automatizar build, test y deploy con GitHub Actions o Jenkins.<br>
+                        <strong>8. Kubernetes:</strong> Migrar de Docker Compose a Kubernetes para orquestacion en produccion.
+                    </div>
+                </div>
+
+                <h3 class="text-2xl font-bold text-white mb-6 mt-12 flex items-center gap-3"><span class="text-accent">9.2</span> Glosario</h3>
+                <table>
+                    <tr><th>Termino</th><th>Definicion</th></tr>
+                    <tr><td><code>Microservicio</code></td><td>Aplicacion pequena e independiente que cumple una funcion especifica.</td></tr>
+                    <tr><td><code>API Gateway</code></td><td>Servidor que actua como punto de entrada unico a todos los microservicios.</td></tr>
+                    <tr><td><code>Docker</code></td><td>Plataforma de contenedores que empaqueta aplicaciones con sus dependencias.</td></tr>
+                    <tr><td><code>Docker Compose</code></td><td>Herramienta para definir y ejecutar aplicaciones multi-contenedor.</td></tr>
+                    <tr><td><code>Spring Boot</code></td><td>Framework Java que simplifica la creacion de aplicaciones standalone.</td></tr>
+                    <tr><td><code>Spring Cloud Gateway</code></td><td>Gateway basado en WebFlux para enrutar peticiones en arquitecturas reactivas.</td></tr>
+                    <tr><td><code>JPA / Hibernate</code></td><td>API de persistencia que mapea objetos Java a tablas de base de datos.</td></tr>
+                    <tr><td><code>DTO</code></td><td>Data Transfer Object - objeto para transportar datos entre capas.</td></tr>
+                    <tr><td><code>CORS</code></td><td>Cross-Origin Resource Sharing - mecanismo de seguridad del navegador.</td></tr>
+                    <tr><td><code>WebFlux</code></td><td>Framework reactivo de Spring para programacion no bloqueante.</td></tr>
+                    <tr><td><code>Fetch API</code></td><td>Interfaz JavaScript moderna para hacer peticiones HTTP.</td></tr>
+                    <tr><td><code>XSS</code></td><td>Cross-Site Scripting - ataque que inyecta scripts maliciosos en paginas web.</td></tr>
+                </table>
+            </section>
+        </section>
+
+    </main>
+</div>
+
+<button id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" style="position:fixed;bottom:30px;right:30px;background:#38bdf8;color:#0a0f1a;border:none;border-radius:50%;width:48px;height:48px;font-size:1.2rem;cursor:pointer;opacity:0;transition:opacity 0.3s;z-index:1000;display:flex;align-items:center;justify-content:center;">&#8593;</button>
+
+<div id="progressBar" style="position:fixed;top:0;left:0;height:3px;background:linear-gradient(to right,#38bdf8,#c084fc);z-index:9999;transition:width 0.1s;width:0%;"></div>
+
+<script>
+function copyCode(btn) {
+    const code = btn.parentElement.querySelector('code');
+    const text = code.innerText;
+    navigator.clipboard.writeText(text).then(() => {
+        btn.textContent = 'Copiado!';
+        setTimeout(() => { btn.textContent = 'Copiar'; }, 2000);
+    });
+}
+
+document.addEventListener('scroll', () => {
+    const backBtn = document.getElementById('backToTop');
+    if (window.scrollY > 400) { backBtn.style.opacity = '1'; }
+    else { backBtn.style.opacity = '0'; }
+
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = (scrollTop / docHeight) * 100;
+    document.getElementById('progressBar').style.width = progress + '%';
+
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+    let current = '';
+    sections.forEach(section => {
+        const top = section.offsetTop - 100;
+        if (scrollTop >= top) current = section.getAttribute('id');
+    });
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) link.classList.add('active');
+    });
+});
+</script>
+</body>
+</html>
