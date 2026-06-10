@@ -169,6 +169,8 @@
             <a href="#m9-intro" class="nav-link pl-8 text-xs">Que es CI/CD?</a>
             <a href="#m9-github" class="nav-link pl-8 text-xs">GitHub Actions</a>
             <a href="#m9-pipeline" class="nav-link pl-8 text-xs">Pipeline YAML</a>
+            <a href="#m9-jenkins" class="nav-link pl-8 text-xs">Jenkins Local</a>
+            <a href="#m9-frontend-container" class="nav-link pl-8 text-xs">Frontend en Contenedor (Opcional)</a>
             <div class="border-t border-dark-100 my-4"></div>
             <a href="#modulo10" class="nav-link">Modulo 10 - Troubleshooting</a>
             <a href="#modulo11" class="nav-link">Modulo 11 - Siguientes Pasos</a>
@@ -221,6 +223,8 @@
             <option value="#m9-intro">-- Que es CI/CD?</option>
             <option value="#m9-github">-- GitHub Actions</option>
             <option value="#m9-pipeline">-- Pipeline YAML</option>
+            <option value="#m9-jenkins">-- Jenkins Local</option>
+            <option value="#m9-frontend-container">-- Frontend en Contenedor (Opcional)</option>
             <option value="#modulo10">Modulo 10 - Troubleshooting</option>
             <option value="#modulo11">Modulo 11 - Siguientes Pasos</option>
         </select>
@@ -234,9 +238,9 @@
             </h1>
             <p class="text-base sm:text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
                 De un simple input a una arquitectura profesional de microservicios con API Gateway.<br class="hidden sm:inline">
-                <span class="text-slate-500">Docker &bull; Spring Boot &bull; API Gateway &bull; PostgreSQL &bull; Git &bull; Postman &bull; JWT &bull; CI/CD</span>
+                <span class="text-slate-500">Docker &bull; Spring Boot &bull; API Gateway &bull; PostgreSQL &bull; Git &bull; Postman &bull; JWT &bull; CI/CD &bull; Nginx &bull; Jenkins</span>
             </p>
-            <div class="flex justify-center gap-4 mt-8 flex-wrap">
+            <div class="flex justify-center gap-3 mt-8 flex-wrap">
                 <span class="px-3 py-1 bg-sky-500/10 border border-sky-500/20 rounded-full text-sky-400 text-xs font-medium">Java 21</span>
                 <span class="px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 text-xs font-medium">Spring Boot 3.3.4</span>
                 <span class="px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400 text-xs font-medium">Spring Cloud 2023.0.3</span>
@@ -245,6 +249,8 @@
                 <span class="px-3 py-1 bg-violet-500/10 border border-violet-500/20 rounded-full text-violet-400 text-xs font-medium">Git</span>
                 <span class="px-3 py-1 bg-green-500/10 border border-green-500/20 rounded-full text-green-400 text-xs font-medium">JWT</span>
                 <span class="px-3 py-1 bg-orange-500/10 border border-orange-500/20 rounded-full text-orange-400 text-xs font-medium">CI/CD</span>
+                <span class="px-3 py-1 bg-teal-500/10 border border-teal-500/20 rounded-full text-teal-400 text-xs font-medium">Nginx</span>
+                <span class="px-3 py-1 bg-red-500/10 border border-red-500/20 rounded-full text-red-400 text-xs font-medium">Jenkins</span>
             </div>
         </header>
 
@@ -282,6 +288,111 @@
             </ul>
             <p class="text-slate-400 text-xs mt-3 italic">
                 Este libro te ensena los fundamentos y la arquitectura. La capacidad de resolver errores buscando informacion es una habilidad esencial de todo desarrollador profesional.
+            </p>
+        </div>
+
+        <div class="mb-12 p-5 rounded-xl border border-purple-500/30 bg-purple-500/5">
+            <p class="text-purple-400 font-bold text-sm mb-2 flex items-center gap-2">
+                <span>&#128187;</span> Nota sobre el Frontend y los Contenedores
+            </p>
+            <p class="text-slate-300 text-sm leading-relaxed">
+                A lo largo de este libro, <strong class="text-white">todos los servicios backend corren en contenedores Docker</strong>: PostgreSQL, Item Service, API Gateway y Jenkins. Sin embargo, el <strong class="text-white">frontend se trabaja de forma local</strong> usando Live Server de VS Code (puerto 5500), no en un contenedor.
+            </p>
+            <p class="text-slate-300 text-sm leading-relaxed mt-3">
+                <strong class="text-accent">¿Por qué?</strong> Es una decisión pedagógica deliberada. Live Server ofrece <strong class="text-neon-green">hot reload automático</strong>: cuando editas HTML, CSS o JavaScript, el navegador se actualiza instantáneamente sin necesidad de reconstruir contenedores. Esto acelera enormemente el desarrollo y te permite concentrarte en aprender la arquitectura de microservicios sin fricciones innecesarias.
+            </p>
+            <p class="text-slate-300 text-sm leading-relaxed mt-3">
+                <strong class="text-accent">¿Quieres todo 100% contenedorizado?</strong> Si prefieres una arquitectura completamente consistente donde el frontend también corra en un contenedor (como se hace en producción), el <strong class="text-white"><a href="#m9-frontend-container" class="text-accent hover:underline">Módulo 9, Sección 9.5: Frontend en Contenedor con Nginx (Opcional)</a></strong> te enseña paso a paso cómo lograrlo. Allí aprenderás a:
+            </p>
+            <ul class="text-slate-400 text-xs mt-3 ml-4 space-y-2 list-disc">
+                <li>Crear un Dockerfile para el frontend usando Nginx Alpine</li>
+                <li>Configurar Nginx como reverse proxy para las peticiones a la API</li>
+                <li>Agregar el servicio frontend al docker-compose.yml</li>
+                <li>Entender las ventajas y desventajas frente a Live Server</li>
+            </ul>
+            <p class="text-slate-400 text-xs mt-3 italic">
+                Esta sección es completamente opcional. Puedes seguir todo el libro con Live Server y, si más adelante necesitas contenerizar el frontend para producción, volver al Módulo 9 cuando lo necesites.
+            </p>
+        </div>
+
+        <div class="mb-12 p-5 rounded-xl border border-red-500/30 bg-red-500/5">
+            <p class="text-red-400 font-bold text-sm mb-2 flex items-center gap-2">
+                <span>&#9881;</span> Nota sobre Jenkins y el Flujo de Desarrollo
+            </p>
+            <p class="text-slate-300 text-sm leading-relaxed">
+                Durante el desarrollo normal de este libro, <strong class="text-white">NO necesitas Jenkins</strong>. El flujo de trabajo principal es simple y automático:
+            </p>
+            <div class="mt-3 p-3 bg-slate-800/50 rounded-lg">
+                <p class="text-neon-green font-bold text-xs mb-2">Flujo Principal de Desarrollo (sin Jenkins):</p>
+                <ol class="text-slate-300 text-xs space-y-1 ml-4 list-decimal">
+                    <li>Editas código Java en VS Code (ej: ItemController.java)</li>
+                    <li>Guardas el archivo (Ctrl+S)</li>
+                    <li>Spring Boot DevTools detecta el cambio automáticamente</li>
+                    <li>El contenedor se recarga en ~2 segundos (hot reload)</li>
+                    <li>Pruebas los cambios en el navegador o Postman</li>
+                </ol>
+                <p class="text-slate-400 text-xs mt-2 italic">Este flujo es automático, rápido y funciona perfectamente para todo el libro.</p>
+            </div>
+            <p class="text-slate-300 text-sm leading-relaxed mt-3">
+                <strong class="text-accent">¿Qué es Jenkins entonces?</strong> Jenkins es un servidor de <strong class="text-white">CI/CD (Integración Continua/Despliegue Continuo)</strong> que automatiza tareas como: compilar el código, ejecutar tests, construir imágenes Docker y desplegar actualizaciones. Es útil para:
+            </p>
+            <ul class="text-slate-400 text-xs mt-3 ml-4 space-y-2 list-disc">
+                <li>Automatizar el proceso de build y test cuando haces push a Git</li>
+                <li>Construir imágenes Docker automáticamente</li>
+                <li>Desplegar nuevas versiones sin intervención manual</li>
+                <li>Entornos de producción donde necesitas pipelines de despliegue</li>
+            </ul>
+            <p class="text-slate-300 text-sm leading-relaxed mt-3">
+                <strong class="text-accent">¿Cuándo usar Jenkins?</strong> Si quieres aprender sobre CI/CD y automatización avanzada, el <strong class="text-white"><a href="#m9-jenkins" class="text-accent hover:underline">Módulo 9, Sección 9.4: CI/CD Local con Jenkins</a></strong> te enseña paso a paso cómo configurarlo. Pero <strong class="text-neon-green">no es necesario para seguir el resto del libro</strong>.
+            </p>
+            <p class="text-slate-400 text-xs mt-3 italic">
+                Recomendación: Sigue el libro normalmente con el flujo de hot reload automático. Cuando termines y quieras aprender sobre automatización CI/CD, vuelve al Módulo 9.
+            </p>
+        </div>
+
+        <div class="mb-12 p-5 rounded-xl border border-green-500/30 bg-green-500/5">
+            <p class="text-green-400 font-bold text-sm mb-2 flex items-center gap-2">
+                <span>&#128640;</span> Los Dos Flujos de Trabajo del Libro
+            </p>
+            <p class="text-slate-300 text-sm leading-relaxed mb-3">
+                Este libro te enseña <strong class="text-white">dos formas de trabajar</strong>. Ambas son válidas, pero tienen propósitos diferentes:
+            </p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                <div class="border-2 border-neon-green/40 rounded-lg p-4 bg-neon-green/5">
+                    <p class="text-neon-green font-bold text-sm mb-2">✓ FLUJO BÁSICO (Recomendado para el curso)</p>
+                    <ul class="text-xs text-slate-300 space-y-1 ml-4 list-disc">
+                        <li><strong>Frontend:</strong> Live Server en localhost:5500 (host, no contenedor)</li>
+                        <li><strong>Backend:</strong> Contenedores Docker con hot reload automático</li>
+                        <li><strong>Flujo:</strong> VS Code → Ctrl+S → código se sincroniza al contenedor → DevTools recarga automáticamente (~2s)</li>
+                        <li><strong>Ventaja:</strong> Rápido, simple, ideal para aprender</li>
+                        <li><strong>API en app.js:</strong> <code class="text-neon-green">const API = 'http://localhost:8080/api/items';</code></li>
+                    </ul>
+                </div>
+                
+                <div class="border-2 border-red-500/40 rounded-lg p-4 bg-red-500/5">
+                    <p class="text-red-400 font-bold text-sm mb-2">⚙ FLUJO AVANZADO (Opcional - Módulo 9)</p>
+                    <ul class="text-xs text-slate-300 space-y-1 ml-4 list-disc">
+                        <li><strong>Frontend:</strong> Nginx en contenedor (localhost:3000)</li>
+                        <li><strong>Backend:</strong> Contenedores Docker + Jenkins CI/CD</li>
+                        <li><strong>Flujo:</strong> Git push → Jenkins detecta → build → test → deploy automático</li>
+                        <li><strong>Ventaja:</strong> 100% contenedorizado, automatizado, profesional</li>
+                        <li><strong>API en app.js:</strong> <code class="text-red-400">const API = '/api/items';</code></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="mt-4 p-3 bg-slate-800/50 rounded-lg">
+                <p class="text-slate-300 text-sm"><strong class="text-accent">¿Cuál usar?</strong></p>
+                <ul class="text-xs text-slate-400 space-y-1 ml-4 list-disc mt-2">
+                    <li><strong class="text-neon-green">Para seguir el libro:</strong> Usa el Flujo Básico. Todo el código está configurado para este flujo.</li>
+                    <li><strong class="text-red-400">Para producción o aprendizaje avanzado:</strong> Implementa el Flujo Avanzado siguiendo el Módulo 9.</li>
+                    <li><strong class="text-accent">Ambos son complementarios:</strong> Puedes usar hot reload para desarrollo y Jenkins para CI/CD.</li>
+                </ul>
+            </div>
+            
+            <p class="text-slate-400 text-xs mt-3 italic">
+                <strong>Nota importante:</strong> Si usas el Flujo Básico (recomendado), NO necesitas implementar Jenkins ni Nginx. El hot reload automático funciona perfectamente para todo el libro. Jenkins y Nginx son solo para cuando quieras aprender sobre CI/CD y arquitecturas 100% contenerizadas.
             </p>
         </div>
 
@@ -455,6 +566,201 @@
 </pre>
                 </div>
 
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Dos Arquitecturas: Básica vs Avanzada</h4>
+                <p class="text-slate-300 leading-relaxed mb-4">El libro te enseña <strong class="text-white">dos formas de trabajar</strong>. La arquitectura básica es la que usarás durante todo el curso. La arquitectura avanzada es opcional y la aprenderás en el Módulo 9 si quieres profundizar en CI/CD y contenerización completa.</p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <div class="border-2 border-neon-green/40 rounded-xl p-4 bg-neon-green/5">
+                        <p class="text-neon-green font-bold text-sm mb-3 flex items-center gap-2">
+                            <span>&#10004;</span> ARQUITECTURA BÁSICA (Flujo Principal)
+                        </p>
+                        <pre class="text-xs font-mono text-slate-300 leading-relaxed overflow-x-auto">
+<span class="text-slate-500">┌─────────────────────────────────────┐</span>
+<span class="text-slate-500">│</span>  <span class="text-accent font-bold">TU COMPUTADORA</span>                     <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>                                     <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">┌───────────────────────────────┐</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-neon-green font-bold">Docker Network</span>               <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>                               <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">┌─────────┐  ┌─────────┐</span>   <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span> <span class="text-neon-purple">Gateway</span> <span class="text-slate-500">│</span>→<span class="text-slate-500">│</span> <span class="text-accent">Item</span>    <span class="text-slate-500">│</span>   <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span> <span class="text-accent">:8080</span>   <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span> <span class="text-accent">:8081</span>   <span class="text-slate-500">│</span>   <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">└─────────┘  └────┬────┘</span>   <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>                    <span class="text-slate-500">│</span>        <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>               <span class="text-slate-500">┌────┴────┐</span>   <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>               <span class="text-slate-500">│</span> <span class="text-accent">Postgres</span><span class="text-slate-500">│</span>   <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>               <span class="text-slate-500">│</span> <span class="text-accent">:5432</span>  <span class="text-slate-500">│</span>   <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>               <span class="text-slate-500">└─────────┘</span>   <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">└───────────────────────────────┘</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>                                     <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">┌───────────────────────────────┐</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-accent">VS Code + Live Server</span>        <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-accent">:5500</span> (Frontend)             <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">└───────────────────────────────┘</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">└─────────────────────────────────────┘</span>
+
+<span class="text-neon-green">✓ Hot reload automático</span>
+<span class="text-neon-green">✓ Ctrl+S → Recarga en 2s</span>
+<span class="text-neon-green">✓ Simple y rápido</span>
+</pre>
+                        <p class="text-slate-400 text-xs mt-3"><strong class="text-white">Cuándo usar:</strong> Durante todo el desarrollo del libro. Es el flujo principal.</p>
+                    </div>
+
+                    <div class="border-2 border-red-500/40 rounded-xl p-4 bg-red-500/5">
+                        <p class="text-red-400 font-bold text-sm mb-3 flex items-center gap-2">
+                            <span>&#9881;</span> ARQUITECTURA AVANZADA (Opcional - Módulo 9)
+                        </p>
+                        <pre class="text-xs font-mono text-slate-300 leading-relaxed overflow-x-auto">
+<span class="text-slate-500">┌─────────────────────────────────────┐</span>
+<span class="text-slate-500">│</span>  <span class="text-accent font-bold">TU COMPUTADORA</span>                     <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>                                     <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">┌───────────────────────────────┐</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-neon-green font-bold">Docker Network</span>               <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>                               <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">┌─────────┐  ┌─────────┐</span>   <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span> <span class="text-neon-purple">Gateway</span> <span class="text-slate-500">│</span>→<span class="text-slate-500">│</span> <span class="text-accent">Item</span>    <span class="text-slate-500">│</span>   <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span> <span class="text-accent">:8080</span>   <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span> <span class="text-accent">:8081</span>   <span class="text-slate-500">│</span>   <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">└─────────┘  └────┬────┘</span>   <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>                    <span class="text-slate-500">│</span>        <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">┌─────────┐  ┌────┴────┐</span>   <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span> <span class="text-red-400">Jenkins</span> <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span> <span class="text-accent">Postgres</span><span class="text-slate-500">│</span>   <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span> <span class="text-red-400">:8082</span>   <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span> <span class="text-accent">:5432</span>  <span class="text-slate-500">│</span>   <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">└─────────┘  └─────────┘</span>   <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>                               <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">┌─────────┐</span>                 <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span> <span class="text-teal-400">Nginx</span>   <span class="text-slate-500">│</span>                 <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span> <span class="text-teal-400">:3000</span>   <span class="text-slate-500">│</span>                 <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">└─────────┘</span>                 <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">└───────────────────────────────┘</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">└─────────────────────────────────────┘</span>
+
+<span class="text-red-400">⚙ CI/CD automatizado</span>
+<span class="text-red-400">⚙ Build + Test + Deploy</span>
+<span class="text-red-400">⚙ 100% contenedorizado</span>
+</pre>
+                        <p class="text-slate-400 text-xs mt-3"><strong class="text-white">Cuándo usar:</strong> Para producción o cuando quieras aprender CI/CD avanzado. Opcional.</p>
+                    </div>
+                </div>
+
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#128300;</span> Diferencias Clave</div>
+                    <div class="alert-body">
+                        <table class="mt-2">
+                            <thead>
+                                <tr>
+                                    <th>Característica</th>
+                                    <th>Arquitectura Básica</th>
+                                    <th>Arquitectura Avanzada</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Frontend</strong></td>
+                                    <td>Live Server (host, puerto 5500)</td>
+                                    <td>Nginx en contenedor (puerto 3000)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Hot reload</strong></td>
+                                    <td><span class="text-neon-green">Automático</span> (Ctrl+S → 2s)</td>
+                                    <td><span class="text-neon-red">Manual</span> (reconstruir contenedor)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>CI/CD</strong></td>
+                                    <td><span class="text-neon-red">No</span> (desarrollo manual)</td>
+                                    <td><span class="text-neon-green">Jenkins</span> (automatizado)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Contenedores</strong></td>
+                                    <td>3 (PostgreSQL, Item Service, Gateway)</td>
+                                    <td>5 (+ Jenkins + Nginx)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Complejidad</strong></td>
+                                    <td><span class="text-neon-green">Baja</span> (simple y rápido)</td>
+                                    <td><span class="text-neon-yellow">Media</span> (más configuración)</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Ideal para</strong></td>
+                                    <td>Desarrollo y aprendizaje</td>
+                                    <td>Producción y CI/CD profesional</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p class="mt-3 text-slate-400 text-sm"><strong class="text-white">Recomendación:</strong> Usa la arquitectura básica durante todo el libro. Cuando termines, si quieres aprender CI/CD y contenerización completa, estudia el Módulo 9.</p>
+                    </div>
+                </div>
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Flujo de Trabajo: Desarrollo vs CI/CD</h4>
+                <p class="text-slate-300 leading-relaxed mb-4">Este diagrama muestra los dos flujos de trabajo. El <strong class="text-neon-green">flujo principal</strong> (verde) es el que usarás durante todo el libro. El <strong class="text-red-400">flujo avanzado</strong> (rojo) es opcional y lo aprenderás en el Módulo 9.</p>
+                
+                <div class="diagram-container">
+                    <pre class="text-xs sm:text-sm font-mono text-slate-300 leading-relaxed overflow-x-auto">
+<span class="text-slate-500">┌─────────────────────────────────────────────────────────────────────────────────────────┐</span>
+<span class="text-slate-500">│</span>  <span class="text-accent font-bold">DOS FLUJOS DE TRABAJO</span>                                                                  <span class="text-slate-500">│</span>
+<span class="text-slate-500">└─────────────────────────────────────────────────────────────────────────────────────────┘</span>
+
+<span class="text-neon-green font-bold">FLUJO PRINCIPAL: Desarrollo con Hot Reload (sin Jenkins)</span>
+<span class="text-slate-500">┌───────────────────────────────────────────────────────────────────────────────────────┐</span>
+<span class="text-slate-500">│</span>  <span class="text-accent">1. VS Code</span>                                                                          <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">└─ Editas ItemController.java</span>                                                       <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>                                                                                       <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-accent">2. Guardas (Ctrl+S)</span>                                                                  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">└─ Bind Mount sincroniza archivo al contenedor instantáneamente</span>                      <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>                                                                                       <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-accent">3. Spring Boot DevTools</span>                                                              <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">├─ Detecta cambio en archivo .java</span>                                                  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">├─ Recompila solo la clase modificada</span>                                               <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">└─ Recarga el contexto de Spring (~2 segundos)</span>                                      <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>                                                                                       <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-accent">4. Pruebas</span>                                                                           <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">├─ Navegador: http://localhost:5500 (Frontend)</span>                                       <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">└─ Postman: http://localhost:8080/api/items (API)</span>                                    <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>                                                                                       <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-neon-green font-bold">✓ Ciclo completo: Editar → Guardar → Recargar → Probar (5-10 segundos)</span>               <span class="text-slate-500">│</span>
+<span class="text-slate-500">└───────────────────────────────────────────────────────────────────────────────────────┘</span>
+
+<span class="text-red-400 font-bold">FLUJO AVANZADO: CI/CD con Jenkins (Opcional - Módulo 9)</span>
+<span class="text-slate-500">┌───────────────────────────────────────────────────────────────────────────────────────┐</span>
+<span class="text-slate-500">│</span>  <span class="text-accent">1. VS Code + Git</span>                                                                     <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">├─ Editas código Java</span>                                                                <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">├─ Haces commit: git commit -m "Add new feature"</span>                                     <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">└─ Haces push: git push origin main</span>                                                  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>                                                                                       <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-red-400">2. Jenkins detecta el push</span>                                                           <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">├─ Poll SCM verifica cambios cada 5 minutos (o webhook inmediato)</span>                    <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">└─ Dispara el pipeline automáticamente</span>                                               <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>                                                                                       <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-red-400">3. Jenkins Pipeline (Jenkinsfile)</span>                                                    <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">├─ Stage 1: Checkout (descarga código del repositorio)</span>                               <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">├─ Stage 2: Build (mvn clean compile)</span>                                                <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">├─ Stage 3: Test (mvn test)</span>                                                          <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">├─ Stage 4: Package (mvn package - genera JAR)</span>                                       <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">├─ Stage 5: Docker Build (construye imagen Docker)</span>                                   <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">└─ Stage 6: Deploy (detiene contenedor viejo, arranca nuevo con imagen actualizada)</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>                                                                                       <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-red-400">4. Resultado</span>                                                                         <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">├─ Nueva imagen Docker construida y desplegada automáticamente</span>                         <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">├─ Tests ejecutados y reportados</span>                                                     <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">└─ Aplicación actualizada sin intervención manual</span>                                    <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>                                                                                       <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-red-400 font-bold">✓ Ciclo completo: Push → Build → Test → Deploy (2-5 minutos)</span>                         <span class="text-slate-500">│</span>
+<span class="text-slate-500">└───────────────────────────────────────────────────────────────────────────────────────┘</span>
+
+<span class="text-neon-green font-bold">CONCLUSIÓN:</span>
+<span class="text-slate-400">• Flujo Principal (verde): Rápido, simple, ideal para desarrollo diario</span>
+<span class="text-slate-400">• Flujo Avanzado (rojo): Automatizado, profesional, ideal para producción</span>
+<span class="text-slate-400">• Ambos flujos son complementarios, no excluyentes</span>
+</pre>
+                </div>
+
+                <div class="alert-box alert-warning">
+                    <div class="alert-title"><span class="alert-icon">&#9888;</span> ¿Cuál usar?</div>
+                    <div class="alert-body">
+                        <p class="mb-3"><strong class="text-neon-green">Para desarrollo (todo el libro):</strong> Usa el flujo principal con hot reload. Es rápido, simple y funciona perfectamente. No necesitas Jenkins.</p>
+                        <p class="mb-3"><strong class="text-red-400">Para producción o aprendizaje avanzado:</strong> Usa Jenkins CI/CD. Automatiza build, test y deploy. Ideal cuando quieres desplegar automáticamente cada vez que haces push a Git.</p>
+                        <p><strong class="text-accent">Ambos son válidos:</strong> Muchos equipos usan hot reload para desarrollo local y Jenkins para integración/despliegue continuo. No tienes que elegir uno u otro, puedes usar ambos según el contexto.</p>
+                    </div>
+                </div>
+
                 <div class="alert-box alert-analysis">
                     <div class="alert-title"><span class="alert-icon">&#128300;</span> Puntos Clave del Flujo</div>
                     <div class="alert-body">
@@ -489,6 +795,13 @@
                                 <td>Navegador → Gateway (localhost:8080)</td>
                             </tr>
                             <tr>
+                                <td><strong class="text-teal-400">Frontend (Nginx) [Opcional]</strong></td>
+                                <td><code>3000</code></td>
+                                <td>Sí</td>
+                                <td>HTTP</td>
+                                <td>Navegador → Nginx → Gateway (reverse proxy)</td>
+                            </tr>
+                            <tr>
                                 <td><strong class="text-neon-purple">API Gateway</strong></td>
                                 <td><code>8080</code></td>
                                 <td>Sí</td>
@@ -508,6 +821,13 @@
                                 <td>Sí (para debugging)</td>
                                 <td>JDBC/TCP</td>
                                 <td>Item Service → PostgreSQL (crud-postgres:5432)</td>
+                            </tr>
+                            <tr>
+                                <td><strong class="text-red-400">Jenkins</strong></td>
+                                <td><code>8082</code></td>
+                                <td>Sí</td>
+                                <td>HTTP</td>
+                                <td>Navegador → Jenkins UI → ejecuta comandos en contenedores</td>
                             </tr>
                         </tbody>
                     </table>
@@ -596,9 +916,11 @@
                             <tr><td><code>Spring Boot</code></td><td>3.3.4</td><td>Framework para microservicios. Configuracion automatica.</td><td>Contenedores</td></tr>
                             <tr><td><code>Spring Cloud</code></td><td>2023.0.3</td><td>API Gateway, service discovery, config server.</td><td>Contenedor Gateway</td></tr>
                             <tr><td><code>PostgreSQL</code></td><td>16 Alpine</td><td>Base de datos relacional. "Alpine" = imagen ultra-ligera (~80MB).</td><td>Contenedor DB</td></tr>
+                            <tr><td><code>Nginx</code></td><td>Alpine</td><td>Servidor web para el frontend. Reverse proxy para /api/*. Ultra-ligero (~5MB).</td><td>Contenedor Frontend</td></tr>
+                            <tr><td><code>Jenkins</code></td><td>LTS JDK 21</td><td>Servidor de CI/CD local. Automatiza build, test y deploy.</td><td>Contenedor Jenkins</td></tr>
                             <tr><td><code>Postman</code></td><td>Ultima</td><td>Cliente HTTP para probar APIs sin necesidad de frontend.</td><td>Host</td></tr>
-                            <tr><td><code>VS Code + Live Server</code></td><td>Ultima</td><td>Editor + servidor estatico para el frontend.</td><td>Host</td></tr>
-                            <tr><td><code>GitHub Actions</code></td><td>-</td><td>CI/CD. Automatiza build, test y deploy en cada push.</td><td>Cloud (GitHub)</td></tr>
+                            <tr><td><code>VS Code + Live Server</code></td><td>Ultima</td><td>Editor + servidor estatico para el frontend (desarrollo).</td><td>Host</td></tr>
+                            <tr><td><code>GitHub Actions</code></td><td>-</td><td>CI/CD en la nube. Automatiza build, test y deploy en cada push.</td><td>Cloud (GitHub)</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -611,7 +933,8 @@
                 <p class="text-slate-300 leading-relaxed mb-4">Esta es la estructura completa que tendras al final del libro. Cada archivo tiene un proposito especifico que iremos descubriendo modulo a modulo.</p>
                 <div class="code-block" data-lang="Estructura"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code>estudio-docker-microserv/
 |
-+-- docker-compose.yml          # Orquesta los 3 servicios (postgres, item-service, api-gateway)
++-- docker-compose.yml          # Orquesta los 5 servicios (postgres, item-service, api-gateway, jenkins, frontend)
++-- Jenkinsfile                 # Pipeline de CI/CD para Jenkins (build, test, package, deploy)
 +-- .env                        # Variables de entorno (credenciales). NO se sube a Git.
 +-- .gitignore                  # Archivos que Git ignora
 +-- .dockerignore               # Archivos que Docker ignora al construir imagenes
@@ -641,10 +964,15 @@
 |       |   +-- exception/GlobalExceptionHandler.java  # @RestControllerAdvice
 |       +-- resources/application.yml  # Configuracion: BD, puertos, logging
 |
++-- jenkins/                    # Jenkins CI/CD Server (contenedor)
+|   +-- Dockerfile              # Imagen personalizada: Jenkins LTS + JDK 21 + Docker CLI
+|
 +-- frontend/                   # Frontend estatico (Vanilla JS)
 |   +-- index.html              # Un input + 4 botones
 |   +-- style.css               # Modo oscuro, responsive
 |   +-- app.js                  # Fetch API, async/await, XSS-safe
+|   +-- Dockerfile              # (Opcional) Nginx Alpine para servir el frontend
+|   +-- nginx.conf              # (Opcional) Configuracion de Nginx + reverse proxy
 |
 +-- .github/
     +-- workflows/
@@ -2895,9 +3223,12 @@ node_modules/</code>
           <span class="comment"># '[/**]' = aplicar estas reglas a TODAS las rutas del Gateway</span>
           <span class="string">'[/**]'</span>:
             <span class="comment"># allowedOrigins: Desde que URLs se aceptan peticiones</span>
-            <span class="comment"># "http://localhost:5500" = VS Code Live Server (donde corre el frontend)</span>
-            <span class="comment"># Si cambias el puerto del frontend, actualiza esto</span>
-            <span class="property">allowedOrigins</span>: <span class="string">"http://localhost:5500"</span>
+            <span class="comment"># Permitimos ambos flujos de trabajo:</span>
+            <span class="comment"># - http://localhost:5500 = Live Server (flujo básico - desarrollo)</span>
+            <span class="comment"># - http://localhost:3000 = Nginx (flujo avanzado - producción)</span>
+            <span class="property">allowedOrigins</span>:
+              - <span class="string">"http://localhost:5500"</span>
+              - <span class="string">"http://localhost:3000"</span>
             <span class="comment"># allowedMethods: Que verbos HTTP se permiten</span>
             <span class="property">allowedMethods</span>:
               - <span class="string">GET</span>
@@ -3066,16 +3397,65 @@ input[type="text"]:focus { border-color: #38bdf8; }
                     </div>
                 </div>
 
+            <section id="m6-js" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">7.3</span> app.js</h3>
+
+                <div class="alert-box alert-warning mb-4">
+                    <div class="alert-title"><span class="alert-icon">&#9888;</span> IMPORTANTE: Configuración según tu Flujo de Trabajo</div>
+                    <div class="alert-body">
+                        <p class="mb-3">El código de app.js tiene <strong class="text-white">dos configuraciones posibles</strong> según el flujo de trabajo que estés usando:</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                            <div class="border-2 border-neon-green/40 rounded-lg p-3 bg-neon-green/5">
+                                <p class="text-neon-green font-bold text-sm mb-2">✓ FLUJO BÁSICO (Recomendado)</p>
+                                <p class="text-xs text-slate-300 mb-2">Frontend con Live Server (puerto 5500)</p>
+                                <code class="text-xs bg-black/30 px-2 py-1 rounded text-neon-green">const API = 'http://localhost:8080/api/items';</code>
+                                <p class="text-xs text-slate-400 mt-2">Usa esta configuración durante todo el libro.</p>
+                            </div>
+                            
+                            <div class="border-2 border-red-500/40 rounded-lg p-3 bg-red-500/5">
+                                <p class="text-red-400 font-bold text-sm mb-2">⚙ FLUJO AVANZADO (Opcional)</p>
+                                <p class="text-xs text-slate-300 mb-2">Frontend con Nginx (puerto 3000)</p>
+                                <code class="text-xs bg-black/30 px-2 py-1 rounded text-red-400">const API = '/api/items';</code>
+                                <p class="text-xs text-slate-400 mt-2">Solo si implementaste el Módulo 9.5 (Nginx).</p>
+                            </div>
+                        </div>
+                        
+                        <p class="text-sm text-slate-300 mt-4"><strong class="text-accent">¿Cuál usar?</strong> Si estás siguiendo el libro normalmente, usa la configuración del <strong class="text-neon-green">Flujo Básico</strong> (URL completa con localhost:8080). Si implementaste Nginx en el Módulo 9.5, cambia a la configuración del <strong class="text-red-400">Flujo Avanzado</strong> (ruta relativa).</p>
+                    </div>
+                </div>
+
+                <div class="alert-box alert-analysis mb-4">
+                    <div class="alert-title"><span class="alert-icon">&#128300;</span> Por que este archivo?</div>
+                    <div class="alert-body">
+                        <p><strong class="text-white">Es el "cerebro" del frontend.</strong> Contiene toda la logica de la aplicacion: que hacer cuando el usuario hace clic en un boton, como comunicarse con el API Gateway (fetch API), como renderizar los datos en la lista, y como manejar los errores. Sin app.js, los botones no harian nada y la lista estaria vacia.</p>
+                    </div>
+                </div>
+
                 <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">frontend/app.js</code>:</p>
-                <div class="code-block" data-lang="app.js"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment">// URL base del API Gateway. Todas las peticiones van al puerto 8080</span>
+                <div class="code-block" data-lang="app.js"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment">// ═══════════════════════════════════════════════════════════</span>
+<span class="comment">// CONFIGURACIÓN DE LA API</span>
+<span class="comment">// ═══════════════════════════════════════════════════════════</span>
+
+<span class="comment">// FLUJO BÁSICO (Live Server - puerto 5500):</span>
+<span class="comment">// URL completa al API Gateway. Todas las peticiones van al puerto 8080</span>
 <span class="comment">// NUNCA al Item Service directamente (8081). El Gateway es la unica puerta.</span>
-const API = 'http://localhost:8080/api/items';
+<span class="keyword">const</span> API = <span class="string">'http://localhost:8080/api/items'</span>;
+
+<span class="comment">// FLUJO AVANZADO (Nginx - puerto 3000) - Opcional:</span>
+<span class="comment">// Si usas Nginx (Modulo 9.5), cambia la linea anterior por:</span>
+<span class="comment">// const API = '/api/items';</span>
+<span class="comment">// Nginx actua como reverse proxy y redirige /api/* al Gateway automaticamente</span>
+
+<span class="comment">// ═══════════════════════════════════════════════════════════</span>
+<span class="comment">// REFERENCIAS AL DOM</span>
+<span class="comment">// ═══════════════════════════════════════════════════════════</span>
 
 <span class="comment">// Obtener referencias a los elementos del DOM (HTML)</span>
 <span class="comment">// document.getElementById() busca un elemento por su atributo "id"</span>
-const input = document.getElementById('itemInput');     <span class="comment">// Input de texto visible</span>
-const hiddenId = document.getElementById('itemId');     <span class="comment">// Input oculto (guarda el ID del item seleccionado)</span>
-const list = document.getElementById('itemList');       <span class="comment">// Lista &lt;ul&gt; donde se renderizan los items</span>
+<span class="keyword">const</span> input = document.getElementById(<span class="string">'itemInput'</span>);     <span class="comment">// Input de texto visible</span>
+<span class="keyword">const</span> hiddenId = document.getElementById(<span class="string">'itemId'</span>);     <span class="comment">// Input oculto (guarda el ID del item seleccionado)</span>
+<span class="keyword">const</span> list = document.getElementById(<span class="string">'itemList'</span>);       <span class="comment">// Lista &lt;ul&gt; donde se renderizan los items</span>
 
 <span class="comment">// ═══════════════════════════════════════════════════════════</span>
 <span class="comment">// EVENT LISTENERS: Conectar botones con funciones</span>
@@ -3493,6 +3873,1037 @@ Headers: Authorization: Bearer eyJhbGciOiJIUzI1NiJ9...</code></div>
                         <strong>mvn clean package:</strong> Compila el proyecto.<br>
                         <strong>mvn test:</strong> Ejecuta todos los tests unitarios.<br>
                         <strong>Upload artifact:</strong> Guarda los resultados de tests (util para debug).
+                    </div>
+                </div>
+            </section>
+
+            <section id="m9-jenkins" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">9.4</span> CI/CD Local con Jenkins</h3>
+
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#128300;</span> Por que estamos creando esto?</div>
+                    <div class="alert-body">
+                        <p class="mb-3"><strong class="text-white">Que es Jenkins?</strong> Jenkins es un servidor de automatizacion open-source que puedes ejecutar en TU computadora. A diferencia de GitHub Actions (que corre en servidores de GitHub), Jenkins corre 100% localmente en un contenedor Docker. Es como tener tu propio "GitHub Actions privado" en casa.</p>
+
+                        <p class="mb-3"><strong class="text-white">Por que usar Jenkins en localhost?</strong> GitHub Actions requiere internet y un repositorio en GitHub. Jenkins funciona completamente offline, es ideal para: empresas con codigo privado que no puede salir de su red, desarrollo sin internet, control total del pipeline, y automatizacion de tareas locales (no solo CI/CD).</p>
+
+                        <p class="mb-3"><strong class="text-white">Que problema resuelve?</strong> Si trabajas en una empresa con politicas de seguridad estrictas que prohiben subir codigo a GitHub, o si necesitas automatizar tareas locales (como generar reportes, hacer backups, o desplegar en servidores internos), Jenkins es la solucion.</p>
+
+                        <p><strong class="text-white">Analogia:</strong> Si GitHub Actions es como usar Uber (servicio en la nube, pagas por uso), Jenkins es como tener tu propio auto (lo compras una vez, lo usas cuando quieras, sin depender de nadie).</p>
+                    </div>
+                </div>
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Arquitectura: Jenkins en Docker</h4>
+                <div class="diagram-container">
+                    <pre class="text-xs sm:text-sm font-mono text-slate-300 leading-relaxed overflow-x-auto">
+<span class="text-slate-500">┌─────────────────────────────────────────────────────────────────────────┐</span>
+<span class="text-slate-500">│</span>  <span class="text-accent font-bold">TU COMPUTADORA - CI/CD COMPLETAMENTE LOCAL</span>                             <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>                                                                         <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">┌───────────────────────────────────────────────────────────────────┐</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-neon-green font-bold">Docker Network: crud-network</span>                                     <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>                                                                     <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">┌──────────────┐</span>                                                 <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span> <span class="text-neon-purple">Jenkins</span>      <span class="text-slate-500">│</span><span class="text-neon-green">&lt;────┐</span>                                         <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span> <span class="text-accent">localhost:8082</span><span class="text-slate-500">│</span>     <span class="text-slate-500">│</span>                                         <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">└──────────────┘</span>     <span class="text-slate-500">│</span>                                         <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>         <span class="text-slate-500">│</span>               <span class="text-slate-500">│</span>                                         <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>         <span class="text-slate-500">│</span> <span class="text-neon-yellow">Ejecuta comandos</span><span class="text-slate-500">│</span>                                       <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>         <span class="text-slate-500">│</span> <span class="text-neon-yellow">en otros contenedores</span><span class="text-slate-500">│</span>                                 <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>         <span class="text-slate-500">▼</span>               <span class="text-slate-500">│</span>                                         <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">┌──────────────┐</span>       <span class="text-slate-500">│</span>                                         <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span> <span class="text-accent">Item Service</span> <span class="text-slate-500">│</span>       <span class="text-slate-500">│</span>                                         <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span> <span class="text-accent">:8081</span>        <span class="text-slate-500">│</span>       <span class="text-slate-500">│</span>                                         <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">└──────────────┘</span>       <span class="text-slate-500">│</span>                                         <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>                         <span class="text-slate-500">│</span>                                         <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">└─────────────────────────┼───────────────────────────────────────────┘</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>                            <span class="text-slate-500">│</span>                                         <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">┌──────────────┐</span>         <span class="text-slate-500">│</span>                                         <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-accent">Navegador</span>   <span class="text-slate-500">│</span><span class="text-neon-green">─────────┘</span>                                         <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span> <span class="text-accent">localhost:8082</span><span class="text-slate-500">│</span>                                                   <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span> <span class="text-slate-400">(Jenkins UI)</span> <span class="text-slate-500">│</span>                                                   <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">└──────────────┘</span>                                                   <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>                                                                         <span class="text-slate-500">│</span>
+<span class="text-slate-500">└─────────────────────────────────────────────────────────────────────────┘</span>
+
+<span class="text-neon-green font-bold">✓ TODO ESTO ES 100% LOCAL - NO REQUIERE INTERNET NI GITHUB</span>
+</pre>
+                </div>
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Paso 1: Agregar Jenkins a docker-compose.yml</h4>
+                <p class="text-slate-300 leading-relaxed mb-4">Abre <code class="text-accent">docker-compose.yml</code> y agrega este nuevo servicio al final de la seccion <code>services:</code>:</p>
+                <div class="code-block" data-lang="docker-compose.yml (agregar al final de services:)">
+                    <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                    <code>  <span class="comment"># ═══════════════════════════════════════════════════════</span>
+  <span class="comment"># SERVICIO 4: Jenkins CI/CD Server</span>
+  <span class="comment"># Servidor de automatizacion que corre 100% localmente</span>
+  <span class="comment"># ═══════════════════════════════════════════════════════</span>
+  <span class="property">jenkins</span>:
+    <span class="comment"># build: Construir imagen personalizada de Jenkins</span>
+    <span class="comment"># (la imagen oficial no tiene JDK 21 ni Docker CLI)</span>
+    <span class="property">build</span>:
+      <span class="property">context</span>: <span class="string">./jenkins</span>
+      <span class="property">dockerfile</span>: <span class="string">Dockerfile</span>
+    <span class="property">container_name</span>: <span class="string">crud-jenkins</span>
+    <span class="property">restart</span>: <span class="string">unless-stopped</span>
+    
+    <span class="comment"># ports: Mapear puerto 8082 del host al 8080 del contenedor</span>
+    <span class="comment"># Usamos 8082 porque 8080 ya lo usa el API Gateway</span>
+    <span class="comment"># Accedes a Jenkins UI en http://localhost:8082</span>
+    <span class="property">ports</span>:
+      - <span class="string">"8082:8080"</span>
+      - <span class="string">"50000:50000"</span>
+    
+    <span class="comment"># volumes: Persistir configuracion de Jenkins</span>
+    <span class="comment"># Sin esto, si recreas el contenedor, pierdes todos los jobs</span>
+    <span class="property">volumes</span>:
+      - <span class="string">jenkins_home:/var/jenkins_home</span>
+      - <span class="string">/var/run/docker.sock:/var/run/docker.sock</span>
+    
+    <span class="comment"># networks: Conectar a la misma red que los otros servicios</span>
+    <span class="comment"># Asi Jenkins puede ejecutar comandos en item-service</span>
+    <span class="property">networks</span>:
+      - <span class="string">crud-network</span>
+
+<span class="comment"># Agregar este volumen en la seccion volumes: (al final del archivo)</span>
+<span class="property">volumes</span>:
+  <span class="property">crud_pgdata</span>:
+    <span class="property">driver</span>: <span class="string">local</span>
+  <span class="property">maven_cache</span>:
+    <span class="property">driver</span>: <span class="string">local</span>
+  <span class="property">gateway_maven_cache</span>:
+    <span class="property">driver</span>: <span class="string">local</span>
+  <span class="property">jenkins_home</span>:
+    <span class="property">driver</span>: <span class="string">local</span></code>
+                </div>
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Paso 2: Crear Dockerfile personalizado de Jenkins</h4>
+                <p class="text-slate-300 leading-relaxed mb-4">Crea la carpeta <code class="text-accent">jenkins/</code> en la raiz del proyecto y dentro crea el archivo <code class="text-accent">jenkins/Dockerfile</code>:</p>
+                <div class="code-block" data-lang="jenkins/Dockerfile">
+                    <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                    <code><span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+<span class="comment"># Dockerfile personalizado de Jenkins</span>
+<span class="comment"># La imagen oficial de Jenkins no tiene JDK 21 ni Docker CLI</span>
+<span class="comment"># Por eso necesitamos una imagen personalizada</span>
+<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="comment"># Imagen base: Jenkins LTS (Long Term Support) con JDK 21</span>
+<span class="comment"># jenkins/jenkins:lts-jdk21 = version estable con Java 21 preinstalado</span>
+<span class="keyword">FROM</span> jenkins/jenkins:lts-jdk21
+
+<span class="comment"># Cambiar a usuario root para instalar paquetes adicionales</span>
+<span class="comment"># Jenkins por defecto corre como usuario "jenkins" (no root)</span>
+<span class="comment"># Pero necesitamos root para instalar Docker CLI</span>
+<span class="keyword">USER</span> root
+
+<span class="comment"># Instalar Docker CLI dentro del contenedor de Jenkins</span>
+<span class="comment"># Esto permite que Jenkins ejecute comandos "docker" en sus pipelines</span>
+<span class="comment"># Sin esto, Jenkins no podria construir imagenes Docker</span>
+<span class="keyword">RUN</span> apt-get update && \
+    apt-get install -y \
+        apt-transport-https \
+        ca-certificates \
+        curl \
+        gnupg \
+        lsb-release && \
+    curl -fsSL https://download.docker.com/linux/debian/gpg | \
+        gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg && \
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] \
+        https://download.docker.com/linux/debian $(lsb_release -cs) stable" | \
+        tee /etc/apt/sources.list.d/docker.list > /dev/null && \
+    apt-get update && \
+    apt-get install -y docker-ce-cli && \
+    rm -rf /var/lib/apt/lists/*
+
+<span class="comment"># Volver al usuario jenkins (seguridad: no correr como root)</span>
+<span class="keyword">USER</span> jenkins
+
+<span class="comment"># Plugins de Jenkins que se instalaran automaticamente al arrancar</span>
+<span class="comment"># Cada plugin añade funcionalidad a Jenkins</span>
+<span class="comment"># Formato: plugin-name:version</span>
+<span class="keyword">RUN</span> jenkins-plugin-cli --plugins \
+    workflow-aggregator \
+    git \
+    docker-workflow \
+    blue-ocean \
+    pipeline-stage-view \
+    credentials-binding \
+    mailer</code>
+                </div>
+
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#128300;</span> Analisis del Dockerfile de Jenkins</div>
+                    <div class="alert-body">
+                        <p class="mb-3"><strong class="text-white">FROM jenkins/jenkins:lts-jdk21:</strong> Imagen base oficial de Jenkins con JDK 21 preinstalado. "LTS" significa Long Term Support (version estable).</p>
+                        
+                        <p class="mb-3"><strong class="text-white">USER root:</strong> Cambiamos a root temporalmente para instalar Docker CLI. Despues volvemos a usuario jenkins por seguridad.</p>
+                        
+                        <p class="mb-3"><strong class="text-white">Instalacion de Docker CLI:</strong> Permite que Jenkins ejecute comandos <code>docker build</code>, <code>docker run</code>, etc. dentro de sus pipelines. Sin esto, Jenkins no podria construir imagenes Docker.</p>
+                        
+                        <p class="mb-3"><strong class="text-white">jenkins-plugin-cli --plugins:</strong> Instala plugins esenciales automaticamente. Los plugins son como "extensiones" que añaden funcionalidad a Jenkins.</p>
+                        
+                        <p><strong class="text-white">Plugins instalados:</strong></p>
+                        <ul class="list-disc list-inside ml-4 space-y-1">
+                            <li><code>workflow-aggregator</code>: Soporte para pipelines declarativos (Jenkinsfile)</li>
+                            <li><code>git</code>: Integracion con Git (checkout de codigo)</li>
+                            <li><code>docker-workflow</code>: Soporte para comandos Docker en pipelines</li>
+                            <li><code>blue-ocean</code>: Interfaz moderna y visual de Jenkins</li>
+                            <li><code>pipeline-stage-view</code>: Visualizacion grafica de stages del pipeline</li>
+                            <li><code>credentials-binding</code>: Gestion segura de credenciales</li>
+                            <li><code>mailer</code>: Envio de notificaciones por email</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Paso 3: Construir y Arrancar Jenkins</h4>
+                <div class="alert-box alert-console">
+                    <div class="alert-title"><span class="alert-icon">&#128187;</span> CONSOLA - Construir imagen de Jenkins</div>
+                    <div class="alert-body">
+                        <div class="code-block mt-3" data-lang="bash">
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                            <code><span class="comment"># Construir la imagen personalizada de Jenkins</span>
+<span class="comment"># Primera vez: 3-5 minutos (descarga imagen base + instala Docker CLI)</span>
+<span class="tag">docker</span> compose build jenkins
+
+<span class="comment"># Arrancar Jenkins (junto con los otros servicios)</span>
+<span class="tag">docker</span> compose up -d
+
+<span class="comment"># Ver que Jenkins esta corriendo</span>
+<span class="tag">docker</span> compose ps
+<span class="comment"># Debes ver: crud-jenkins  Up  0.0.0.0:8082->8080/tcp</span>
+
+<span class="comment"># Ver logs de Jenkins (buscar el token de desbloqueo)</span>
+<span class="tag">docker</span> compose logs jenkins | grep <span class="string">"Jenkins initial setup is required"</span>
+<span class="comment"># Copia el token que aparece (lo necesitaras en el siguiente paso)</span></code>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Paso 4: Configuracion Inicial de Jenkins</h4>
+                <p class="text-slate-300 leading-relaxed mb-4">Abre tu navegador en <code class="text-accent">http://localhost:8082</code> y sigue estos pasos:</p>
+                
+                <div class="space-y-6">
+                    <div class="border-l-2 border-accent pl-4">
+                        <p class="font-bold text-accent mb-2">4.1 - Desbloquear Jenkins</p>
+                        <p class="text-slate-300 text-sm mb-2">Jenkins te pedira un token de desbloqueo. Obténlo con:</p>
+                        <div class="code-block mt-2" data-lang="bash">
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                            <code><span class="comment"># Obtener el token de desbloqueo</span>
+<span class="tag">docker</span> exec crud-jenkins cat /var/jenkins_home/secrets/initialAdminPassword
+
+<span class="comment"># Copia el token que aparece (algo como: a1b2c3d4e5f6...)</span></code>
+                        </div>
+                        <p class="text-slate-300 text-sm mt-2">Pega el token en el campo de la pagina web y haz clic en "Continue".</p>
+                    </div>
+
+                    <div class="border-l-2 border-neon-green pl-4">
+                        <p class="font-bold text-neon-green mb-2">4.2 - Instalar Plugins Sugeridos</p>
+                        <p class="text-slate-300 text-sm">Jenkins te preguntara que plugins instalar. Selecciona <strong class="text-white">"Install suggested plugins"</strong>. Esto instalara los plugins basicos recomendados. Los plugins adicionales ya los instalamos en el Dockerfile.</p>
+                    </div>
+
+                    <div class="border-l-2 border-neon-yellow pl-4">
+                        <p class="font-bold text-neon-yellow mb-2">4.3 - Crear Primer Usuario Admin</p>
+                        <p class="text-slate-300 text-sm">Jenkins te pedira crear un usuario administrador. Llena los campos:</p>
+                        <ul class="list-disc list-inside ml-4 text-sm text-slate-400 mt-2 space-y-1">
+                            <li><strong>Username:</strong> admin (o tu nombre)</li>
+                            <li><strong>Password:</strong> admin123 (o una contraseña segura)</li>
+                            <li><strong>Full name:</strong> Tu nombre completo</li>
+                            <li><strong>E-mail:</strong> tu@email.com</li>
+                        </ul>
+                        <p class="text-slate-300 text-sm mt-2">Haz clic en "Save and Continue".</p>
+                    </div>
+
+                    <div class="border-l-2 border-neon-purple pl-4">
+                        <p class="font-bold text-neon-purple mb-2">4.4 - Configurar URL de Jenkins</p>
+                        <p class="text-slate-300 text-sm">Jenkins te pedira confirmar la URL. Deja el valor por defecto (<code>http://localhost:8082/</code>) y haz clic en "Save and Finish".</p>
+                    </div>
+
+                    <div class="border-l-2 border-accent pl-4">
+                        <p class="font-bold text-accent mb-2">4.5 - Jenkins esta listo!</p>
+                        <p class="text-slate-300 text-sm">Haz clic en "Start using Jenkins". Ahora veras el dashboard principal de Jenkins. ¡Felicidades, tienes tu propio servidor de CI/CD local!</p>
+                    </div>
+                </div>
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Paso 5: Crear el Primer Pipeline (Build + Test)</h4>
+                <p class="text-slate-300 leading-relaxed mb-4">Crea el archivo <code class="text-accent">Jenkinsfile</code> en la raiz del proyecto (al mismo nivel que docker-compose.yml):</p>
+                <div class="code-block" data-lang="Jenkinsfile">
+                    <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                    <code><span class="comment">// ═══════════════════════════════════════════════════════════════</span>
+<span class="comment">// Jenkinsfile: Define el pipeline de CI/CD para el Item Service</span>
+<span class="comment">// Este archivo le dice a Jenkins QUE hacer y EN QUE ORDEN</span>
+<span class="comment">// ═══════════════════════════════════════════════════════════════</span>
+
+<span class="comment">// pipeline: Bloque principal que define todo el pipeline</span>
+<span class="comment">// Usamos sintaxis declarativa (mas legible que la antigua scripted)</span>
+pipeline {
+    <span class="comment">// agent: Donde se ejecuta el pipeline</span>
+    <span class="comment">// 'any' = ejecutar en cualquier agente disponible</span>
+    <span class="comment">// En nuestro caso, el agente es el propio contenedor de Jenkins</span>
+    agent any
+    
+    <span class="comment">// stages: Secuencia de etapas que se ejecutan en orden</span>
+    <span class="comment">// Cada stage es un grupo de pasos relacionados</span>
+    stages {
+        
+        <span class="comment">// ═══════════════════════════════════════════════════════</span>
+        <span class="comment">// STAGE 1: Checkout - Descargar el codigo del repositorio</span>
+        <span class="comment">// ═══════════════════════════════════════════════════════</span>
+        stage('Checkout') {
+            steps {
+                <span class="comment">// checkout scm: Descarga el codigo del repositorio Git</span>
+                <span class="comment">// "scm" = Source Control Management (Git en nuestro caso)</span>
+                <span class="comment">// Jenkins usa la configuracion del job para saber de donde clonar</span>
+                checkout scm
+            }
+        }
+        
+        <span class="comment">// ═══════════════════════════════════════════════════════</span>
+        <span class="comment">// STAGE 2: Build - Compilar el proyecto Java</span>
+        <span class="comment">// ═══════════════════════════════════════════════════════</span>
+        stage('Build') {
+            steps {
+                <span class="comment">// dir: Cambiar al directorio item-service/</span>
+                <span class="comment">// Todos los comandos dentro de este bloque</span>
+                <span class="comment">// se ejecutan desde item-service/</span>
+                dir('item-service') {
+                    <span class="comment">// sh: Ejecutar comando de shell</span>
+                    <span class="comment">// mvn clean compile:</span>
+                    <span class="comment">//   clean = borra la carpeta target/ (compilaciones anteriores)</span>
+                    <span class="comment">//   compile = compila el codigo Java (.java -> .class)</span>
+                    <span class="comment">// Si la compilacion falla, el pipeline se detiene aqui</span>
+                    sh 'mvn clean compile'
+                }
+            }
+        }
+        
+        <span class="comment">// ═══════════════════════════════════════════════════════</span>
+        <span class="comment">// STAGE 3: Test - Ejecutar tests unitarios</span>
+        <span class="comment">// ═══════════════════════════════════════════════════════</span>
+        stage('Test') {
+            steps {
+                dir('item-service') {
+                    <span class="comment">// mvn test: Ejecuta todos los tests unitarios</span>
+                    <span class="comment">// Si algun test falla, el pipeline se marca como "failed"</span>
+                    <span class="comment">// y Jenkins te notifica (si configuraste notificaciones)</span>
+                    sh 'mvn test'
+                }
+            }
+        }
+    }
+    
+    <span class="comment">// post: Acciones que se ejecutan DESPUES del pipeline</span>
+    <span class="comment">// "always" = ejecutar siempre, sin importar si el pipeline fallo o no</span>
+    post {
+        always {
+            <span class="comment">// echo: Imprimir mensaje en la consola de Jenkins</span>
+            <span class="comment">// Util para saber cuando termino el pipeline</span>
+            echo 'Pipeline completado. Revisa los resultados arriba.'
+        }
+        success {
+            echo '✓ Pipeline exitoso: Build y tests pasaron correctamente'
+        }
+        failure {
+            echo '✗ Pipeline fallo: Revisa los logs para ver que salio mal'
+        }
+    }
+}</code>
+                </div>
+
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#128300;</span> Analisis del Jenkinsfile</div>
+                    <div class="alert-body">
+                        <p class="mb-3"><strong class="text-white">pipeline { }:</strong> Bloque principal que define todo el pipeline. Usamos sintaxis declarativa (mas legible que la antigua sintaxis scripted).</p>
+                        
+                        <p class="mb-3"><strong class="text-white">agent any:</strong> Indica donde se ejecuta el pipeline. "any" significa "en cualquier agente disponible". En nuestro caso, el agente es el propio contenedor de Jenkins.</p>
+                        
+                        <p class="mb-3"><strong class="text-white">stages { }:</strong> Contiene todas las etapas del pipeline. Cada stage es un grupo de pasos relacionados.</p>
+                        
+                        <p class="mb-3"><strong class="text-white">stage('Checkout'):</strong> Primera etapa: descargar el codigo del repositorio Git. <code>checkout scm</code> usa la configuracion del job para saber de donde clonar.</p>
+                        
+                        <p class="mb-3"><strong class="text-white">stage('Build'):</strong> Segunda etapa: compilar el proyecto Java. <code>dir('item-service')</code> cambia al directorio del microservicio. <code>mvn clean compile</code> limpia compilaciones anteriores y compila el codigo.</p>
+                        
+                        <p class="mb-3"><strong class="text-white">stage('Test'):</strong> Tercera etapa: ejecutar tests unitarios. <code>mvn test</code> ejecuta todos los tests. Si alguno falla, el pipeline se detiene.</p>
+                        
+                        <p><strong class="text-white">post { }:</strong> Acciones que se ejecutan despues del pipeline, sin importar si fallo o no. "always" se ejecuta siempre, "success" solo si todo paso, "failure" solo si algo fallo.</p>
+                    </div>
+                </div>
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Paso 6: Crear el Job en Jenkins</h4>
+                <div class="space-y-6">
+                    <div class="border-l-2 border-accent pl-4">
+                        <p class="font-bold text-accent mb-2">6.1 - Crear Nuevo Job</p>
+                        <ol class="list-decimal list-inside ml-4 text-sm text-slate-300 space-y-2">
+                            <li>En el dashboard de Jenkins, haz clic en <strong class="text-white">"New Item"</strong> (o "Nueva Tarea")</li>
+                            <li>En "Enter an item name", escribe: <code class="text-accent">item-service-pipeline</code></li>
+                            <li>Selecciona <strong class="text-white">"Pipeline"</strong> (no "Freestyle project")</li>
+                            <li>Haz clic en <strong class="text-white">"OK"</strong></li>
+                        </ol>
+                    </div>
+
+                    <div class="border-l-2 border-neon-green pl-4">
+                        <p class="font-bold text-neon-green mb-2">6.2 - Configurar el Job</p>
+                        <p class="text-slate-300 text-sm mb-2">En la pagina de configuracion del job, llena estos campos:</p>
+                        <ul class="list-disc list-inside ml-4 text-sm text-slate-400 mt-2 space-y-2">
+                            <li><strong>General:</strong> Marca la casilla <strong class="text-white">"GitHub Project"</strong> (si usas Git local, puedes saltar esto)</li>
+                            <li><strong>Pipeline:</strong> En "Definition", selecciona <strong class="text-white">"Pipeline script from SCM"</strong></li>
+                            <li><strong>SCM:</strong> Selecciona <strong class="text-white">"Git"</strong></li>
+                            <li><strong>Repository URL:</strong> Si tu repositorio esta en GitHub, pega la URL (ej: <code>https://github.com/tu-usuario/estudio-docker-microserv.git</code>). Si es local, deja esto en blanco por ahora.</li>
+                            <li><strong>Branch Specifier:</strong> Deja <code>*/main</code> (o <code>*/master</code> si tu rama principal se llama asi)</li>
+                            <li><strong>Script Path:</strong> Escribe <code>Jenkinsfile</code> (el nombre del archivo que creamos en el paso anterior)</li>
+                        </ul>
+                        <p class="text-slate-300 text-sm mt-2">Haz clic en <strong class="text-white">"Save"</strong>.</p>
+                    </div>
+
+                    <div class="border-l-2 border-neon-yellow pl-4">
+                        <p class="font-bold text-neon-yellow mb-2">6.3 - Ejecutar el Pipeline Manualmente</p>
+                        <ol class="list-decimal list-inside ml-4 text-sm text-slate-300 space-y-2">
+                            <li>En la pagina del job, haz clic en <strong class="text-white">"Build Now"</strong> (o "Construir Ahora")</li>
+                            <li>Veras un numero aparecer en "Build History" (ej: #1)</li>
+                            <li>Haz clic en el numero para ver el progreso del pipeline</li>
+                            <li>Haz clic en <strong class="text-white">"Console Output"</strong> para ver los logs en tiempo real</li>
+                            <li>Espera a que termine (deberia tardar 1-2 minutos la primera vez)</li>
+                        </ol>
+                    </div>
+
+                    <div class="border-l-2 border-neon-purple pl-4">
+                        <p class="font-bold text-neon-purple mb-2">6.4 - Interpretar los Resultados</p>
+                        <p class="text-slate-300 text-sm mb-2">Si todo salio bien, veras:</p>
+                        <ul class="list-disc list-inside ml-4 text-sm text-slate-400 mt-2 space-y-1">
+                            <li><span class="text-neon-green">✓</span> Icono azul o verde en "Build History" (pipeline exitoso)</li>
+                            <li><span class="text-neon-green">✓</span> En "Console Output": <code>[INFO] BUILD SUCCESS</code></li>
+                            <li><span class="text-neon-green">✓</span> En "Console Output": <code>Tests run: X, Failures: 0, Errors: 0</code></li>
+                        </ul>
+                        <p class="text-slate-300 text-sm mt-2">Si algo fallo:</p>
+                        <ul class="list-disc list-inside ml-4 text-sm text-slate-400 mt-2 space-y-1">
+                            <li><span class="text-neon-red">✗</span> Icono rojo en "Build History" (pipeline fallo)</li>
+                            <li><span class="text-neon-red">✗</span> En "Console Output": busca la palabra <code>ERROR</code> o <code>FAILURE</code></li>
+                            <li><span class="text-neon-red">✗</span> Haz clic en el stage que fallo para ver que comando ejecuto</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Paso 7: Pipeline Avanzado (Build, Test, Package, Deploy)</h4>
+                <p class="text-slate-300 leading-relaxed mb-4">Ahora vamos a mejorar el Jenkinsfile para incluir empaquetado y despliegue automatico. Reemplaza el contenido de <code class="text-accent">Jenkinsfile</code> con esto:</p>
+                <div class="code-block" data-lang="Jenkinsfile (version avanzada)">
+                    <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                    <code>pipeline {
+    agent any
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                dir('item-service') {
+                    sh 'mvn clean compile'
+                }
+            }
+        }
+        
+        stage('Test') {
+            steps {
+                dir('item-service') {
+                    sh 'mvn test'
+                }
+            }
+        }
+        
+        <span class="comment">// ═══════════════════════════════════════════════════════</span>
+        <span class="comment">// STAGE 4: Package - Generar archivo JAR ejecutable</span>
+        <span class="comment">// ═══════════════════════════════════════════════════════</span>
+        stage('Package') {
+            steps {
+                dir('item-service') {
+                    <span class="comment">// mvn package: Compila + ejecuta tests + genera JAR</span>
+                    <span class="comment">// El JAR se genera en target/item-service-0.0.1-SNAPSHOT.jar</span>
+                    <span class="comment">// Este JAR contiene TODO: codigo + dependencias + configuracion</span>
+                    <span class="comment">// Es "auto-contenido" y se puede ejecutar con: java -jar archivo.jar</span>
+                    sh 'mvn package -DskipTests'
+                }
+            }
+        }
+        
+        <span class="comment">// ═══════════════════════════════════════════════════════</span>
+        <span class="comment">// STAGE 5: Docker Build - Construir imagen Docker del microservicio</span>
+        <span class="comment">// ═══════════════════════════════════════════════════════</span>
+        stage('Docker Build') {
+            steps {
+                <span class="comment">// sh: Ejecutar comando de shell</span>
+                <span class="comment">// docker build: Construir imagen Docker desde el Dockerfile</span>
+                <span class="comment">// -t item-service:jenkins = "taggear" la imagen con nombre:version</span>
+                <span class="comment">// ./item-service = contexto de build (carpeta donde esta el Dockerfile)</span>
+                sh 'docker build -t item-service:jenkins ./item-service'
+            }
+        }
+        
+        <span class="comment">// ═══════════════════════════════════════════════════════</span>
+        <span class="comment">// STAGE 6: Deploy - Desplegar la nueva imagen</span>
+        <span class="comment">// ═══════════════════════════════════════════════════════</span>
+        stage('Deploy') {
+            steps {
+                <span class="comment">// Detener el contenedor actual (si existe)</span>
+                <span class="comment">// || true = no fallar si el contenedor no existe</span>
+                sh 'docker stop crud-item-service || true'
+                sh 'docker rm crud-item-service || true'
+                
+                <span class="comment">// Arrancar nuevo contenedor con la imagen recien construida</span>
+                <span class="comment">// --name crud-item-service = nombre del contenedor</span>
+                <span class="comment">// --network crud-network = conectar a la red de Docker Compose</span>
+                <span class="comment">// -p 8081:8081 = mapear puerto 8081</span>
+                <span class="comment">// -e SPRING_DATASOURCE_URL = variable de entorno para la BD</span>
+                <span class="comment">// item-service:jenkins = imagen a usar</span>
+                sh '''
+                    docker run -d \
+                        --name crud-item-service \
+                        --network estudio-docker-microserv_crud-network \
+                        -p 8081:8081 \
+                        -e SPRING_DATASOURCE_URL=jdbc:postgresql://crud-postgres:5432/crud_db \
+                        -e SPRING_DATASOURCE_USERNAME=admin \
+                        -e SPRING_DATASOURCE_PASSWORD=secret123 \
+                        item-service:jenkins
+                '''
+            }
+        }
+    }
+    
+    post {
+        always {
+            echo 'Pipeline completado.'
+        }
+        success {
+            echo '✓ Pipeline exitoso: Microservicio desplegado correctamente'
+        }
+        failure {
+            echo '✗ Pipeline fallo: Revisa los logs'
+        }
+    }
+}</code>
+                </div>
+
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#128300;</span> Analisis de los Nuevos Stages</div>
+                    <div class="alert-body">
+                        <p class="mb-3"><strong class="text-white">stage('Package'):</strong> Genera el archivo JAR ejecutable. <code>mvn package -DskipTests</code> compila y empaqueta todo en un solo archivo .jar. El flag <code>-DskipTests</code> evita ejecutar tests de nuevo (ya los ejecutamos en el stage anterior).</p>
+                        
+                        <p class="mb-3"><strong class="text-white">stage('Docker Build'):</strong> Construye la imagen Docker del microservicio. <code>docker build -t item-service:jenkins</code> crea una imagen llamada "item-service" con tag "jenkins". Esta imagen contiene el JAR + JDK + todo lo necesario para correr.</p>
+                        
+                        <p class="mb-3"><strong class="text-white">stage('Deploy'):</strong> Despliega la nueva imagen. Primero detiene y elimina el contenedor anterior (<code>docker stop</code> + <code>docker rm</code>). Luego arranca un nuevo contenedor con la imagen recien construida (<code>docker run</code>). El flag <code>|| true</code> evita que el pipeline falle si el contenedor no existe (primera ejecucion).</p>
+                        
+                        <p><strong class="text-white">Resultado final:</strong> Despues de este pipeline, tienes un microservicio corriendo con la ultima version de tu codigo, completamente automatizado. Solo necesitas hacer clic en "Build Now" y Jenkins hace todo el trabajo.</p>
+                    </div>
+                </div>
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Paso 8: Automatizacion con Triggers</h4>
+                <p class="text-slate-300 leading-relaxed mb-4">Ahora vamos a configurar Jenkins para que ejecute el pipeline automaticamente cuando detecte cambios en el codigo. En la configuracion del job, agrega estos triggers:</p>
+                
+                <div class="space-y-6">
+                    <div class="border-l-2 border-accent pl-4">
+                        <p class="font-bold text-accent mb-2">8.1 - Poll SCM (Verificar cambios periodicamente)</p>
+                        <p class="text-slate-300 text-sm mb-2">En la configuracion del job, marca <strong class="text-white">"Poll SCM"</strong> y en "Schedule" escribe:</p>
+                        <div class="code-block mt-2" data-lang="cron">
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                            <code><span class="comment"># Verificar cambios cada 5 minutos</span>
+<span class="comment"># Formato: MINUTO HORA DIA MES DIA_SEMANA</span>
+<span class="comment"># H/5 = cada 5 minutos (H = hash para distribuir carga)</span>
+H/5 * * * *</code>
+                        </div>
+                        <p class="text-slate-300 text-sm mt-2">Jenkins verificara tu repositorio Git cada 5 minutos. Si detecta cambios, ejecutara el pipeline automaticamente.</p>
+                    </div>
+
+                    <div class="border-l-2 border-neon-green pl-4">
+                        <p class="font-bold text-neon-green mb-2">8.2 - Build Triggers (Disparadores adicionales)</p>
+                        <p class="text-slate-300 text-sm mb-2">Otras opciones utiles:</p>
+                        <ul class="list-disc list-inside ml-4 text-sm text-slate-400 mt-2 space-y-2">
+                            <li><strong>Build periodically:</strong> Ejecutar el pipeline en horarios especificos (ej: cada noche a las 2 AM para generar reportes)</li>
+                            <li><strong>Poll SCM:</strong> Verificar cambios en Git periodicamente (el que acabamos de configurar)</li>
+                            <li><strong>GitHub hook trigger:</strong> Si usas GitHub, puedes configurar un webhook para que GitHub notifique a Jenkins inmediatamente cuando hagas push (mas rapido que Poll SCM)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Paso 9: Comparacion GitHub Actions vs Jenkins</h4>
+                <div class="overflow-x-auto rounded-xl border border-dark-100">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="rounded-tl-xl">Caracteristica</th>
+                                <th>GitHub Actions</th>
+                                <th class="rounded-tr-xl">Jenkins</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Donde corre</strong></td>
+                                <td>Servidores de GitHub (nube)</td>
+                                <td>Tu computadora (local)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Requiere internet</strong></td>
+                                <td><span class="text-neon-red">Siempre</span></td>
+                                <td><span class="text-neon-green">No</span> (solo primera vez)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Requiere repositorio en GitHub</strong></td>
+                                <td><span class="text-neon-red">Si</span></td>
+                                <td><span class="text-neon-green">No</span> (puede usar Git local)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Costo</strong></td>
+                                <td>Gratis hasta 2,000 min/mes, despues pagas</td>
+                                <td>Gratis siempre (open-source)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Velocidad</strong></td>
+                                <td>Rapido (servidores potentes de GitHub)</td>
+                                <td>Depende de tu computadora</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Facilidad de configuracion</strong></td>
+                                <td><span class="text-neon-green">Muy facil</span> (solo YAML)</td>
+                                <td><span class="text-neon-yellow">Media</span> (UI + Jenkinsfile)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Flexibilidad</strong></td>
+                                <td>Limitada a lo que GitHub permite</td>
+                                <td><span class="text-neon-green">Total</span> (control completo)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Plugins</strong></td>
+                                <td>Miles de "actions" en el marketplace</td>
+                                <td>Miles de plugins (mas maduro)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Curva de aprendizaje</strong></td>
+                                <td><span class="text-neon-green">Baja</span> (YAML simple)</td>
+                                <td><span class="text-neon-yellow">Media</span> (Groovy + UI)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Ideal para</strong></td>
+                                <td>Proyectos open-source, equipos pequenos</td>
+                                <td>Empresas, codigo privado, entornos on-premise</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#128300;</span> Conclusion: Son Complementarios</div>
+                    <div class="alert-body">
+                        <p class="mb-3"><strong class="text-white">GitHub Actions y Jenkins no son excluyentes.</strong> Puedes usar ambos segun el contexto:</p>
+                        
+                        <ul class="list-disc list-inside ml-4 space-y-2 mb-3">
+                            <li><strong class="text-neon-green">Usa GitHub Actions cuando:</strong> Tu codigo esta en GitHub, trabajas en equipo, quieres CI/CD rapido y sin configuracion compleja, no te importa depender de internet.</li>
+                            <li><strong class="text-neon-green">Usa Jenkins cuando:</strong> Tu codigo es privado y no puede salir de tu red, trabajas offline, necesitas control total del pipeline, quieres automatizar tareas locales (no solo CI/CD).</li>
+                        </ul>
+                        
+                        <p><strong class="text-white">Ejemplo real:</strong> Muchas empresas usan GitHub Actions para CI (build + test en cada push) y Jenkins para CD (despliegue a servidores internos que no son accesibles desde internet).</p>
+                    </div>
+                </div>
+
+                <div class="alert-box alert-warning">
+                    <div class="alert-title"><span class="alert-icon">&#9888;</span> Consideraciones Importantes</div>
+                    <div class="alert-body">
+                        <p class="mb-3"><strong class="text-white">Recursos:</strong> Jenkins consume ~500MB-1GB de RAM. Si tu computadora tiene menos de 8GB de RAM, considera detener Jenkins cuando no lo uses: <code>docker compose stop jenkins</code>.</p>
+                        
+                        <p class="mb-3"><strong class="text-white">Persistencia:</strong> El volumen <code>jenkins_home</code> guarda toda la configuracion de Jenkins (jobs, plugins, credenciales). Si lo eliminas con <code>docker compose down -v</code>, perderas todo y tendras que configurar Jenkins desde cero.</p>
+                        
+                        <p><strong class="text-white">Seguridad:</strong> Jenkins en localhost no necesita autenticacion fuerte, pero si lo expones a internet (ej: con ngrok), configura autenticacion y HTTPS inmediatamente.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="m9-frontend-container" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">9.5</span> Frontend en Contenedor con Nginx (Opcional)</h3>
+
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#128300;</span> Por que esta seccion es opcional?</div>
+                    <div class="alert-body">
+                        <p class="mb-3"><strong class="text-white">Situacion actual:</strong> En el Modulo 7, enseñamos a servir el frontend con <strong>Live Server de VS Code</strong> (puerto 5500). Esto funciona perfectamente para desarrollo porque ofrece <strong class="text-neon-green">hot reload automatico</strong>: cuando editas HTML/CSS/JS, el navegador se actualiza instantaneamente sin necesidad de recargar manualmente.</p>
+
+                        <p class="mb-3"><strong class="text-white">El "problema":</strong> El frontend es el UNICO componente que no corre en un contenedor Docker. PostgreSQL, Item Service, API Gateway y Jenkins todos estan contenedorizados, pero el frontend corre directamente en tu host con Live Server. Esto rompe la consistencia de la arquitectura.</p>
+
+                        <p class="mb-3"><strong class="text-white">La solucion:</strong> Puedes contenerizar el frontend con <strong>Nginx</strong> (servidor web ultra-ligero y eficiente). Esto hace que TODO el sistema sea 100% contenedorizado, consistente con la arquitectura de microservicios profesional.</p>
+
+                        <p class="mb-3"><strong class="text-white">El trade-off:</strong> Pierdes el hot reload automatico. Cuando editas un archivo del frontend, necesitas reconstruir el contenedor para ver los cambios. Por eso esta seccion es <strong class="text-accent">opcional</strong>: para desarrollo rapido, Live Server es mejor; para produccion o arquitecturas consistentes, Nginx es mejor.</p>
+
+                        <p><strong class="text-white">Analogia:</strong> Live Server es como tener tu codigo en una carpeta compartida (rapido, facil, pero informal). Nginx en contenedor es como desplegar tu codigo en un servidor web real (mas formal, pero representa mejor el entorno de produccion).</p>
+                    </div>
+                </div>
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Comparacion: Live Server vs Nginx en Contenedor</h4>
+                <div class="overflow-x-auto rounded-xl border border-dark-100">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="rounded-tl-xl">Caracteristica</th>
+                                <th>Live Server (Actual)</th>
+                                <th class="rounded-tr-xl">Nginx en Contenedor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Donde corre</strong></td>
+                                <td>Tu computadora (host)</td>
+                                <td>Contenedor Docker</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Hot reload</strong></td>
+                                <td><span class="text-neon-green">Si (automatico)</span></td>
+                                <td><span class="text-neon-red">No (necesitas reconstruir)</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Consistencia</strong></td>
+                                <td><span class="text-neon-red">No (solo frontend fuera de Docker)</span></td>
+                                <td><span class="text-neon-green">Si (TODO en contenedores)</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Representa produccion</strong></td>
+                                <td><span class="text-neon-red">No</span></td>
+                                <td><span class="text-neon-green">Si</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Rendimiento</strong></td>
+                                <td>Adecuado para desarrollo</td>
+                                <td><span class="text-neon-green">Optimo (Nginx es muy eficiente)</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Configuracion</strong></td>
+                                <td><span class="text-neon-green">Muy simple (1 clic)</span></td>
+                                <td><span class="text-neon-yellow">Media (Dockerfile + nginx.conf)</span></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Ideal para</strong></td>
+                                <td>Desarrollo rapido, prototipos</td>
+                                <td>Produccion, arquitecturas consistentes</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="alert-box alert-console">
+                    <div class="alert-title"><span class="alert-icon">&#128161;</span> Mi recomendacion</div>
+                    <div class="alert-body">
+                        <p class="mb-3"><strong class="text-white">Para desarrollo:</strong> Usa Live Server (Modulo 7). El hot reload te ahorra mucho tiempo y es mas comodo.</p>
+                        <p><strong class="text-white">Para produccion o aprendizaje avanzado:</strong> Usa Nginx en contenedor (esta seccion). Te enseña como se despliega realmente un frontend en un entorno profesional.</p>
+                    </div>
+                </div>
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Arquitectura: Frontend en Contenedor con Nginx</h4>
+                <div class="diagram-container">
+                    <pre class="text-xs sm:text-sm font-mono text-slate-300 leading-relaxed overflow-x-auto">
+<span class="text-slate-500">┌─────────────────────────────────────────────────────────────────────────┐</span>
+<span class="text-slate-500">│</span>  <span class="text-accent font-bold">ARQUITECTURA 100% CONTENEDORIZADA</span>                                      <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>                                                                         <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">┌───────────────────────────────────────────────────────────────────┐</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-neon-green font-bold">Docker Network: crud-network</span>                                     <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>                                                                     <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">┌──────────────┐</span>                                                 <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span> <span class="text-accent">Frontend</span>     <span class="text-slate-500">│</span><span class="text-neon-green">&lt;────┐</span>                                         <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span> <span class="text-accent">(Nginx)</span>      <span class="text-slate-500">│</span>     <span class="text-slate-500">│</span>                                         <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span> <span class="text-accent">localhost:3000</span><span class="text-slate-500">│</span>     <span class="text-slate-500">│</span>                                         <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">└──────────────┘</span>     <span class="text-slate-500">│</span>                                         <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>         <span class="text-slate-500">│</span>               <span class="text-slate-500">│</span>                                         <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>         <span class="text-slate-500">│</span> <span class="text-neon-yellow">HTTP</span>          <span class="text-slate-500">│</span>                                         <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>         <span class="text-slate-500">▼</span>               <span class="text-slate-500">│</span>                                         <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">┌──────────────┐</span>       <span class="text-slate-500">│</span>                                         <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span> <span class="text-neon-purple">API Gateway</span>  <span class="text-slate-500">│</span>       <span class="text-slate-500">│</span>                                         <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span> <span class="text-accent">:8080</span>        <span class="text-slate-500">│</span>       <span class="text-slate-500">│</span>                                         <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">└──────────────┘</span>       <span class="text-slate-500">│</span>                                         <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>         <span class="text-slate-500">│</span>               <span class="text-slate-500">│</span>                                         <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>         <span class="text-slate-500">│</span> <span class="text-neon-yellow">/api/items/**</span> <span class="text-slate-500">│</span>                                         <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>         <span class="text-slate-500">▼</span>               <span class="text-slate-500">│</span>                                         <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">┌──────────────┐</span>       <span class="text-slate-500">│</span>                                         <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span> <span class="text-accent">Item Service</span> <span class="text-slate-500">│</span>       <span class="text-slate-500">│</span>                                         <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span> <span class="text-accent">:8081</span>        <span class="text-slate-500">│</span>       <span class="text-slate-500">│</span>                                         <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">└──────────────┘</span>       <span class="text-slate-500">│</span>                                         <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>         <span class="text-slate-500">│</span>               <span class="text-slate-500">│</span>                                         <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>         <span class="text-slate-500">│</span> <span class="text-neon-yellow">JDBC</span>          <span class="text-slate-500">│</span>                                         <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>         <span class="text-slate-500">▼</span>               <span class="text-slate-500">│</span>                                         <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">┌──────────────┐</span>       <span class="text-slate-500">│</span>                                         <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span> <span class="text-accent">PostgreSQL</span>   <span class="text-slate-500">│</span>       <span class="text-slate-500">│</span>                                         <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span> <span class="text-accent">:5432</span>        <span class="text-slate-500">│</span>       <span class="text-slate-500">│</span>                                         <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">└──────────────┘</span>       <span class="text-slate-500">│</span>                                         <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>                         <span class="text-slate-500">│</span>                                         <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">└─────────────────────────┼───────────────────────────────────────────┘</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>                            <span class="text-slate-500">│</span>                                         <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">┌──────────────┐</span>         <span class="text-slate-500">│</span>                                         <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-accent">Navegador</span>   <span class="text-slate-500">│</span><span class="text-neon-green">─────────┘</span>                                         <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span> <span class="text-accent">localhost:3000</span><span class="text-slate-500">│</span>                                                   <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">└──────────────┘</span>                                                   <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>                                                                         <span class="text-slate-500">│</span>
+<span class="text-slate-500">└─────────────────────────────────────────────────────────────────────────┘</span>
+
+<span class="text-neon-green font-bold">✓ TODO EL SISTEMA 100% CONTENEDORIZADO - CONSISTENCIA TOTAL</span>
+</pre>
+                </div>
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Paso 1: Crear Dockerfile para el Frontend</h4>
+                <p class="text-slate-300 leading-relaxed mb-4">Crea el archivo <code class="text-accent">frontend/Dockerfile</code>:</p>
+                <div class="code-block" data-lang="frontend/Dockerfile">
+                    <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                    <code><span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+<span class="comment"># Dockerfile para servir el frontend con Nginx</span>
+<span class="comment"># Nginx es un servidor web ultra-ligero y eficiente</span>
+<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="comment"># Imagen base: Nginx Alpine (version ultra-ligera, ~5MB)</span>
+<span class="comment"># nginx:alpine = Nginx sobre Alpine Linux (minimalista)</span>
+<span class="keyword">FROM</span> nginx:alpine
+
+<span class="comment"># Eliminar configuracion por defecto de Nginx</span>
+<span class="comment"># /usr/share/nginx/html es donde Nginx busca los archivos por defecto</span>
+<span class="keyword">RUN</span> rm -rf /usr/share/nginx/html/*
+
+<span class="comment"># Copiar nuestros archivos del frontend al directorio de Nginx</span>
+<span class="comment"># COPY origen destino</span>
+<span class="comment"># origen: ./ (carpeta actual, que contiene index.html, style.css, app.js)</span>
+<span class="comment"># destino: /usr/share/nginx/html/ (donde Nginx sirve archivos)</span>
+<span class="keyword">COPY</span> . /usr/share/nginx/html/
+
+<span class="comment"># Copiar configuracion personalizada de Nginx</span>
+<span class="comment"># nginx.conf define como Nginx debe comportarse</span>
+<span class="keyword">COPY</span> nginx.conf /etc/nginx/conf.d/default.conf
+
+<span class="comment"># Exponer puerto 80 (puerto estandar HTTP)</span>
+<span class="comment"># En docker-compose.yml mapearemos este puerto a 3000 del host</span>
+<span class="keyword">EXPOSE</span> <span class="number">80</span>
+
+<span class="comment"># Comando para arrancar Nginx</span>
+<span class="comment"># nginx -g "daemon off;" = ejecutar Nginx en primer plano (no como daemon)</span>
+<span class="comment"># Esto es necesario en Docker: el contenedor debe mantener un proceso en primer plano</span>
+<span class="keyword">CMD</span> [<span class="string">"nginx"</span>, <span class="string">"-g"</span>, <span class="string">"daemon off;"</span>]</code>
+                </div>
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Paso 2: Crear configuracion de Nginx</h4>
+                <p class="text-slate-300 leading-relaxed mb-4">Crea el archivo <code class="text-accent">frontend/nginx.conf</code>:</p>
+                <div class="code-block" data-lang="frontend/nginx.conf">
+                    <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                    <code><span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+<span class="comment"># Configuracion de Nginx para el frontend</span>
+<span class="comment"># Este archivo le dice a Nginx como manejar las peticiones HTTP</span>
+<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="comment"># server: Define un servidor virtual</span>
+<span class="comment"># Cada "server" block puede manejar diferentes dominios o puertos</span>
+<span class="keyword">server</span> {
+    <span class="comment"># listen: Puerto en el que Nginx escucha peticiones</span>
+    <span class="comment"># 80 = puerto estandar HTTP</span>
+    <span class="keyword">listen</span> <span class="number">80</span>;
+    
+    <span class="comment"># server_name: Nombre del dominio (para virtual hosts)</span>
+    <span class="comment"># "_" = cualquier dominio (comodin)</span>
+    <span class="comment"># Como solo tenemos un servidor, usamos "_" para aceptar todo</span>
+    <span class="keyword">server_name</span> _;
+    
+    <span class="comment"># root: Directorio raiz donde Nginx busca los archivos</span>
+    <span class="comment"># /usr/share/nginx/html es donde copiamos nuestros archivos en el Dockerfile</span>
+    <span class="keyword">root</span> /usr/share/nginx/html;
+    
+    <span class="comment"># index: Archivo por defecto cuando accedes a la raiz (/)</span>
+    <span class="comment"># Si accedes a http://localhost:3000/, Nginx busca index.html</span>
+    <span class="keyword">index</span> index.html;
+    
+    <span class="comment"># location /: Reglas para todas las peticiones</span>
+    <span class="keyword">location</span> / {
+        <span class="comment"># try_files: Intenta servir archivos en este orden:</span>
+        <span class="comment"># 1. $uri = la ruta exacta solicitada (ej: /style.css)</span>
+        <span class="comment"># 2. $uri/ = la ruta como directorio (ej: /images/)</span>
+        <span class="comment"># 3. /index.html = si no existe, sirve index.html (para SPAs)</span>
+        <span class="comment"># Esto es importante para aplicaciones de una sola pagina (SPA)</span>
+        <span class="keyword">try_files</span> $uri $uri/ /index.html;
+    }
+    
+    <span class="comment"># location /api/: Reglas para peticiones a la API</span>
+    <span class="comment"># Cuando el frontend hace fetch a /api/items, Nginx lo redirige al Gateway</span>
+    <span class="keyword">location</span> /api/ {
+        <span class="comment"># proxy_pass: Redirige la peticion a otro servidor</span>
+        <span class="comment"># http://api-gateway:8080 = nombre del servicio en Docker + puerto</span>
+        <span class="comment"># Docker DNS resuelve "api-gateway" a la IP del contenedor</span>
+        <span class="keyword">proxy_pass</span> http://api-gateway:8080;
+        
+        <span class="comment"># proxy_set_header: Pasa headers originales al backend</span>
+        <span class="comment"># $host = dominio original (ej: localhost:3000)</span>
+        <span class="keyword">proxy_set_header</span> Host $host;
+        
+        <span class="comment"># $remote_addr = IP del cliente (tu navegador)</span>
+        <span class="keyword">proxy_set_header</span> X-Real-IP $remote_addr;
+        
+        <span class="comment"># $http_x_forwarded_for = cadena de proxies (si hay multiples)</span>
+        <span class="keyword">proxy_set_header</span> X-Forwarded-For $proxy_add_x_forwarded_for;
+        
+        <span class="comment"># $scheme = protocolo (http o https)</span>
+        <span class="keyword">proxy_set_header</span> X-Forwarded-Proto $scheme;
+    }
+}</code>
+                </div>
+
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#128300;</span> Analisis de la configuracion de Nginx</div>
+                    <div class="alert-body">
+                        <p class="mb-3"><strong class="text-white">server { }:</strong> Define un servidor virtual. Cada bloque "server" puede manejar diferentes dominios o puertos.</p>
+                        
+                        <p class="mb-3"><strong class="text-white">listen 80:</strong> Nginx escucha en el puerto 80 (HTTP estandar). En docker-compose.yml mapearemos este puerto a 3000 del host.</p>
+                        
+                        <p class="mb-3"><strong class="text-white">root /usr/share/nginx/html:</strong> Directorio donde Nginx busca los archivos. En el Dockerfile copiamos nuestros archivos del frontend a esta ubicacion.</p>
+                        
+                        <p class="mb-3"><strong class="text-white">location / { }:</strong> Reglas para todas las peticiones. <code>try_files</code> intenta servir el archivo exacto, y si no existe, sirve index.html. Esto es importante para aplicaciones de una sola pagina (SPA).</p>
+                        
+                        <p class="mb-3"><strong class="text-white">location /api/ { }:</strong> Reglas para peticiones a la API. Cuando el frontend hace <code>fetch('/api/items')</code>, Nginx redirige la peticion al API Gateway usando <code>proxy_pass</code>.</p>
+                        
+                        <p><strong class="text-white">proxy_pass http://api-gateway:8080:</strong> Redirige la peticion al contenedor del API Gateway. Docker DNS resuelve "api-gateway" a la IP del contenedor automaticamente.</p>
+                    </div>
+                </div>
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Paso 3: Actualizar app.js para usar rutas relativas</h4>
+                <p class="text-slate-300 leading-relaxed mb-4">Abre <code class="text-accent">frontend/app.js</code> y cambia la constante <code>API</code>:</p>
+                <div class="code-block" data-lang="frontend/app.js (cambiar linea de configuracion)">
+                    <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                    <code><span class="comment">// ANTES (Flujo Básico - Live Server):</span>
+<span class="comment">// const API = 'http://localhost:8080/api/items';</span>
+
+<span class="comment">// AHORA (Flujo Avanzado - Nginx):</span>
+<span class="comment">// Usamos ruta relativa. Nginx redirige /api/* al Gateway automaticamente</span>
+<span class="keyword">const</span> API = <span class="string">'/api/items'</span>;</code>
+                </div>
+
+                <div class="alert-box alert-warning">
+                    <div class="alert-title"><span class="alert-icon">&#9888;</span> Importante: Cambios en app.js</div>
+                    <div class="alert-body">
+                        <p class="mb-3">Con Live Server (Flujo Básico), usas la URL completa <code>http://localhost:8080/api/items</code> porque el frontend (puerto 5500) y el Gateway (puerto 8080) están en puertos diferentes.</p>
+                        
+                        <p class="mb-3">Con Nginx (Flujo Avanzado), el frontend (puerto 3000) y el Gateway (puerto 8080) siguen estando en puertos diferentes, PERO Nginx actúa como <strong class="text-accent">reverse proxy</strong>: cuando el frontend hace <code>fetch('/api/items')</code>, Nginx intercepta la petición y la redirige al Gateway automáticamente.</p>
+                        
+                        <p><strong class="text-white">Ventaja:</strong> No necesitas URLs hardcodeadas. Si cambias el puerto del Gateway, solo actualizas <code>nginx.conf</code>, no necesitas tocar el código JavaScript.</p>
+                        
+                        <p class="mt-3 text-sm text-slate-400"><strong class="text-accent">Nota:</strong> El nombre de la variable es <code>API</code> (no <code>API_BASE</code>). Asegúrate de cambiar la línea correcta en app.js.</p>
+                    </div>
+                </div>
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Paso 4: Agregar servicio frontend a docker-compose.yml</h4>
+                <p class="text-slate-300 leading-relaxed mb-4">Abre <code class="text-accent">docker-compose.yml</code> y agrega este servicio al final de la seccion <code>services:</code>:</p>
+                <div class="code-block" data-lang="docker-compose.yml (agregar al final de services:)">
+                    <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                    <code>  <span class="comment"># ═══════════════════════════════════════════════════════</span>
+  <span class="comment"># SERVICIO 5: Frontend (Nginx)</span>
+  <span class="comment"># Opcional: Sirve el frontend en un contenedor</span>
+  <span class="comment"># Si prefieres usar Live Server (Modulo 7), comenta o elimina este servicio</span>
+  <span class="comment"># ═══════════════════════════════════════════════════════</span>
+  <span class="property">frontend</span>:
+    <span class="comment"># build: Construir imagen desde el Dockerfile en frontend/</span>
+    <span class="property">build</span>:
+      <span class="property">context</span>: <span class="string">./frontend</span>
+      <span class="property">dockerfile</span>: <span class="string">Dockerfile</span>
+    <span class="property">container_name</span>: <span class="string">crud-frontend</span>
+    <span class="property">restart</span>: <span class="string">unless-stopped</span>
+    
+    <span class="comment"># ports: Mapear puerto 3000 del host al 80 del contenedor</span>
+    <span class="comment"># Accedes al frontend en http://localhost:3000</span>
+    <span class="property">ports</span>:
+      - <span class="string">"3000:80"</span>
+    
+    <span class="comment"># depends_on: El frontend puede arrancar independientemente</span>
+    <span class="comment"># No depende de otros servicios (Nginx solo sirve archivos estaticos)</span>
+    <span class="comment"># Pero si usas proxy_pass a /api/*, el Gateway debe estar corriendo</span>
+    <span class="property">depends_on</span>:
+      - <span class="string">api-gateway</span>
+    
+    <span class="comment"># networks: Conectar a la misma red que los otros servicios</span>
+    <span class="comment"># Necesario para que Nginx pueda hacer proxy_pass al Gateway</span>
+    <span class="property">networks</span>:
+      - <span class="string">crud-network</span></code>
+                </div>
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Paso 5: Construir y Arrancar el Frontend</h4>
+                <div class="alert-box alert-console">
+                    <div class="alert-title"><span class="alert-icon">&#128187;</span> CONSOLA - Construir imagen del Frontend</div>
+                    <div class="alert-body">
+                        <div class="code-block mt-3" data-lang="bash">
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                            <code><span class="comment"># Construir la imagen del frontend</span>
+<span class="comment"># Primera vez: 10-20 segundos (descarga nginx:alpine ~5MB)</span>
+<span class="tag">docker</span> compose build frontend
+
+<span class="comment"># Arrancar el frontend (junto con los otros servicios)</span>
+<span class="tag">docker</span> compose up -d
+
+<span class="comment"># Ver que el frontend esta corriendo</span>
+<span class="tag">docker</span> compose ps
+<span class="comment"># Debes ver: crud-frontend  Up  0.0.0.0:3000->80/tcp</span>
+
+<span class="comment"># Abrir el navegador en http://localhost:3000</span>
+<span class="comment"># El frontend deberia cargar correctamente</span>
+
+<span class="comment"># Probar que las peticiones a la API funcionan</span>
+<span class="comment"># Abre la consola del navegador (F12) y verifica que las peticiones</span>
+<span class="comment"># a /api/items se redirigen correctamente al Gateway</span></code>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert-box alert-warning">
+                    <div class="alert-title"><span class="alert-icon">&#9888;</span> Nota sobre Hot Reload</div>
+                    <div class="alert-body">
+                        <p class="mb-3">Con Nginx en contenedor, <strong class="text-neon-red">no tienes hot reload automatico</strong>. Si editas un archivo del frontend (index.html, style.css, app.js), necesitas reconstruir el contenedor para ver los cambios:</p>
+                        
+                        <div class="code-block mt-3" data-lang="bash">
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                            <code><span class="comment"># Despues de editar archivos del frontend:</span>
+<span class="tag">docker</span> compose build frontend
+<span class="tag">docker</span> compose up -d frontend</code>
+                        </div>
+                        
+                        <p class="mt-3">Esto toma 5-10 segundos. Es mas lento que Live Server, pero representa mejor el entorno de produccion.</p>
+                    </div>
+                </div>
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Paso 6: Actualizar application.yml del Gateway (Opcional)</h4>
+                <p class="text-slate-300 leading-relaxed mb-4">Si usas Nginx como reverse proxy para el frontend, necesitas actualizar la configuracion de CORS del Gateway para permitir peticiones desde el puerto 3000:</p>
+                <div class="code-block" data-lang="api-gateway/src/main/resources/application.yml">
+                    <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                    <code><span class="property">spring</span>:
+  <span class="property">cloud</span>:
+    <span class="property">gateway</span>:
+      <span class="property">globalcors</span>:
+        <span class="property">corsConfigurations</span>:
+          <span class="string">'[/**]'</span>:
+            <span class="comment"># Permitir peticiones desde ambos puertos:</span>
+            <span class="comment"># 5500 = Live Server (desarrollo)</span>
+            <span class="comment"># 3000 = Nginx (produccion)</span>
+            <span class="property">allowedOrigins</span>:
+              - <span class="string">"http://localhost:5500"</span>
+              - <span class="string">"http://localhost:3000"</span>
+            <span class="property">allowedMethods</span>:
+              - <span class="string">GET</span>
+              - <span class="string">POST</span>
+              - <span class="string">PUT</span>
+              - <span class="string">DELETE</span>
+            <span class="property">allowedHeaders</span>: <span class="string">"*"</span></code>
+                </div>
+
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#128300;</span> Resumen: Live Server vs Nginx</div>
+                    <div class="alert-body">
+                        <p class="mb-3"><strong class="text-white">Live Server (Modulo 7):</strong></p>
+                        <ul class="list-disc list-inside ml-4 space-y-1 mb-3">
+                            <li>Frontend corre en <code>http://localhost:5500</code></li>
+                            <li>Hot reload automatico</li>
+                            <li>app.js usa URL completa: <code>http://localhost:8080/api/items</code></li>
+                            <li>Ideal para desarrollo rapido</li>
+                        </ul>
+                        
+                        <p class="mb-3"><strong class="text-white">Nginx en Contenedor (esta seccion):</strong></p>
+                        <ul class="list-disc list-inside ml-4 space-y-1 mb-3">
+                            <li>Frontend corre en <code>http://localhost:3000</code></li>
+                            <li>Sin hot reload (necesitas reconstruir contenedor)</li>
+                            <li>app.js usa ruta relativa: <code>/api/items</code></li>
+                            <li>Nginx actua como reverse proxy para /api/*</li>
+                            <li>Ideal para produccion y arquitecturas consistentes</li>
+                        </ul>
+                        
+                        <p><strong class="text-white">Puedes usar ambos:</strong> Live Server para desarrollo diario, Nginx para pruebas finales o despliegue. Solo recuerda cambiar <code>API_BASE</code> en app.js segun cual estes usando.</p>
                     </div>
                 </div>
             </section>
