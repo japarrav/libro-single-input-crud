@@ -136,6 +136,7 @@
             <div class="border-t border-dark-100 my-4"></div>
             <a href="#modulo3" class="nav-link">Modulo 3 - Docker</a>
             <a href="#m3-contenedores" class="nav-link pl-8 text-xs">Contenedores</a>
+            <a href="#m3-offline" class="nav-link pl-8 text-xs">Trabajo Offline</a>
             <a href="#m3-compose" class="nav-link pl-8 text-xs">Docker Compose</a>
             <a href="#m3-redes" class="nav-link pl-8 text-xs">Redes Docker</a>
             <a href="#m3-volumenes" class="nav-link pl-8 text-xs">Volumenes</a>
@@ -193,6 +194,7 @@
             <option value="#m2-exception">-- Exception Handler</option>
             <option value="#modulo3">Modulo 3 - Docker</option>
             <option value="#m3-contenedores">-- Contenedores</option>
+            <option value="#m3-offline">-- Trabajo Offline</option>
             <option value="#m3-compose">-- Docker Compose</option>
             <option value="#m3-redes">-- Redes Docker</option>
             <option value="#m3-volumenes">-- Volumenes</option>
@@ -1712,6 +1714,211 @@ feature:          C---D---</pre>
                 <p class="text-slate-300 leading-relaxed mb-4">
                     La consecuencia practica es brutal: un contenedor arranca en <strong class="text-neon-green">menos de 1 segundo</strong> (una VM tarda 30-60s), consume <strong class="text-neon-green">~50MB de RAM</strong> (una VM necesita 1-2GB), y la imagen de PostgreSQL Alpine pesa solo <strong class="text-neon-green">~80MB</strong> (una VM con Linux + PostgreSQL serian varios GB).
                 </p>
+            </section>
+
+            <section id="m3-offline" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                    <span class="text-accent">2.1b</span> ¿Necesito Internet para Trabajar con el API Gateway?
+                </h3>
+
+                <div class="alert-box alert-console">
+                    <div class="alert-title"><span class="alert-icon">✅</span> Respuesta Corta: NO (una vez configurado)</div>
+                    <div class="alert-body">
+                        <p class="mb-3"><strong class="text-white">El API Gateway funciona 100% localmente</strong> cuando trabajas en localhost. No requiere conexión a internet en absoluto una vez que todo está construido. Todos los servicios (Gateway, Item Service, PostgreSQL) se comunican entre sí dentro de una <strong class="text-accent">red interna privada de Docker</strong>.</p>
+                    </div>
+                </div>
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Diagrama: Comunicación 100% Local</h4>
+                <div class="diagram-container">
+                    <pre class="text-xs sm:text-sm font-mono text-slate-300 leading-relaxed overflow-x-auto">
+<span class="text-slate-500">┌─────────────────────────────────────────────────────────────────────────┐</span>
+<span class="text-slate-500">│</span>  <span class="text-accent font-bold">TU COMPUTADORA (localhost) - SIN INTERNET</span>                              <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>                                                                         <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">┌───────────────────────────────────────────────────────────────────┐</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-neon-green font-bold">Docker Network: crud-network (RED INTERNA PRIVADA)</span>              <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>                                                                   <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">┌──────────────┐</span>                                               <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span> <span class="text-neon-purple">API Gateway</span>  <span class="text-slate-500">│</span><span class="text-neon-green">&lt;──────┐</span>                                       <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span> <span class="text-accent">localhost:8080</span><span class="text-slate-500">│</span>       <span class="text-slate-500">│</span>                                       <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">└──────────────┘</span>       <span class="text-slate-500">│</span>                                       <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>         <span class="text-slate-500">│</span>               <span class="text-slate-500">│</span>                                       <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>         <span class="text-slate-500">│</span> <span class="text-neon-yellow">HTTP interno</span>  <span class="text-slate-500">│</span>                                       <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>         <span class="text-slate-500">▼</span>               <span class="text-slate-500">│</span>                                       <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">┌──────────────┐</span>       <span class="text-slate-500">│</span>                                       <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span> <span class="text-accent">Item Service</span> <span class="text-slate-500">│</span>       <span class="text-slate-500">│</span>                                       <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span> <span class="text-accent">:8081</span>        <span class="text-slate-500">│</span>       <span class="text-slate-500">│</span>                                       <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">└──────────────┘</span>       <span class="text-slate-500">│</span>                                       <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>         <span class="text-slate-500">│</span>               <span class="text-slate-500">│</span>                                       <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>         <span class="text-slate-500">│</span> <span class="text-neon-yellow">JDBC</span>          <span class="text-slate-500">│</span>                                       <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>         <span class="text-slate-500">▼</span>               <span class="text-slate-500">│</span>                                       <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">┌──────────────┐</span>       <span class="text-slate-500">│</span>                                       <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span> <span class="text-accent">PostgreSQL</span>   <span class="text-slate-500">│</span>       <span class="text-slate-500">│</span>                                       <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span> <span class="text-accent">:5432</span>        <span class="text-slate-500">│</span>       <span class="text-slate-500">│</span>                                       <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-slate-500">└──────────────┘</span>       <span class="text-slate-500">│</span>                                       <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>                         <span class="text-slate-500">│</span>                                       <span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">└─────────────────────────┼───────────────────────────────────────────┘</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>                            <span class="text-slate-500">│</span>                                       <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">┌──────────────┐</span>         <span class="text-slate-500">│</span>                                       <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span>  <span class="text-accent">Navegador</span>   <span class="text-slate-500">│</span><span class="text-neon-green">─────────┘</span>                                       <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">│</span> <span class="text-accent">localhost:5500</span><span class="text-slate-500">│</span>                                                 <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-500">└──────────────┘</span>                                                 <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>                                                                         <span class="text-slate-500">│</span>
+<span class="text-slate-500">└─────────────────────────────────────────────────────────────────────────┘</span>
+
+<span class="text-neon-green font-bold">✓ TODO ESTO ES 100% LOCAL - NO REQUIERE INTERNET</span>
+</pre>
+                </div>
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">¿Cuándo SÍ Necesitas Internet?</h4>
+                <div class="alert-box alert-warning">
+                    <div class="alert-title"><span class="alert-icon">⚠️</span> Solo la Primera Vez (Configuración Inicial)</div>
+                    <div class="alert-body">
+                        <p class="mb-3">Internet solo se necesita durante la <strong class="text-white">configuración inicial</strong>. Una vez que todo está descargado y cacheado, puedes trabajar offline indefinidamente.</p>
+                        
+                        <table class="mt-3 mb-3">
+                            <thead>
+                                <tr>
+                                    <th>Situación</th>
+                                    <th>¿Requiere Internet?</th>
+                                    <th>¿Cuántas veces?</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>docker compose build</code> (primera vez)</td>
+                                    <td><span class="text-neon-yellow font-bold">SÍ</span></td>
+                                    <td>1 vez (descarga imágenes base ~580MB)</td>
+                                </tr>
+                                <tr>
+                                    <td><code>mvn dependency:go-offline</code></td>
+                                    <td><span class="text-neon-yellow font-bold">SÍ</span></td>
+                                    <td>1 vez (descarga dependencias Maven)</td>
+                                </tr>
+                                <tr>
+                                    <td>Eliminar imágenes con <code>docker rmi</code></td>
+                                    <td><span class="text-neon-yellow font-bold">SÍ</span> (para reconstruir)</td>
+                                    <td>Solo si las eliminas manualmente</td>
+                                </tr>
+                                <tr>
+                                    <td>Eliminar volúmenes con <code>docker compose down -v</code></td>
+                                    <td><span class="text-neon-yellow font-bold">SÍ</span> (para reconstruir)</td>
+                                    <td>Solo si eliminas el caché de Maven</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">¿Cuándo NO Necesitas Internet?</h4>
+                <div class="alert-box alert-console">
+                    <div class="alert-title"><span class="alert-icon">✅</span> Uso Diario (100% Offline)</div>
+                    <div class="alert-body">
+                        <p class="mb-3">Una vez configurado, <strong class="text-white">todas estas operaciones funcionan sin internet</strong>:</p>
+                        
+                        <table class="mt-3 mb-3">
+                            <thead>
+                                <tr>
+                                    <th>Operación</th>
+                                    <th>Comando</th>
+                                    <th>¿Funciona Offline?</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Arrancar servicios</td>
+                                    <td><code>docker compose up -d</code></td>
+                                    <td><span class="text-neon-green font-bold">✓ SÍ</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Detener servicios</td>
+                                    <td><code>docker compose down</code></td>
+                                    <td><span class="text-neon-green font-bold">✓ SÍ</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Reiniciar servicios</td>
+                                    <td><code>docker compose restart</code></td>
+                                    <td><span class="text-neon-green font-bold">✓ SÍ</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Ver logs en tiempo real</td>
+                                    <td><code>docker compose logs -f</code></td>
+                                    <td><span class="text-neon-green font-bold">✓ SÍ</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Usar API Gateway</td>
+                                    <td><code>http://localhost:8080/api/items</code></td>
+                                    <td><span class="text-neon-green font-bold">✓ SÍ</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Usar Item Service</td>
+                                    <td><code>http://localhost:8081/api/items</code></td>
+                                    <td><span class="text-neon-green font-bold">✓ SÍ</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Conectar PostgreSQL</td>
+                                    <td><code>localhost:5432</code></td>
+                                    <td><span class="text-neon-green font-bold">✓ SÍ</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Usar frontend</td>
+                                    <td><code>http://localhost:5500</code></td>
+                                    <td><span class="text-neon-green font-bold">✓ SÍ</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Probar con Postman</td>
+                                    <td>Peticiones HTTP a localhost</td>
+                                    <td><span class="text-neon-green font-bold">✓ SÍ</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Editar código en VS Code</td>
+                                    <td>Hot reload con DevTools</td>
+                                    <td><span class="text-neon-green font-bold">✓ SÍ</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Analogía: Tu "Mini Data Center" Personal</h4>
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">💡</span> Piensa en Docker como Servidores Reales en tu Casa</div>
+                    <div class="alert-body">
+                        <p class="mb-3">Imagina que Docker es como tener tu propio <strong class="text-white">"mini data center"</strong> en tu computadora:</p>
+                        
+                        <ul class="list-disc list-inside ml-4 space-y-2 mb-3">
+                            <li><strong class="text-neon-green">Primera vez:</strong> Necesitas internet para "comprar los servidores" (descargar imágenes Docker) y "instalar el software" (descargar dependencias Maven).</li>
+                            <li><strong class="text-neon-green">Después:</strong> Una vez que tienes los servidores en tu casa, funcionan independientemente de internet. Tus servidores se comunican entre sí por tu red local.</li>
+                            <li><strong class="text-accent">Resultado:</strong> Puedes trabajar completamente offline, como si tuvieras servidores físicos en tu oficina.</li>
+                        </ul>
+
+                        <p class="mb-3"><strong class="text-white">¿Por qué funciona así?</strong></p>
+                        <ul class="list-disc list-inside ml-4 space-y-1">
+                            <li>Docker descarga las imágenes una vez y las guarda en <strong class="text-accent">caché local</strong> (<code>/var/lib/docker</code>)</li>
+                            <li>Maven descarga las dependencias una vez y las guarda en el volumen <code>maven_cache</code></li>
+                            <li>Los contenedores se comunican por la <strong class="text-accent">red interna de Docker</strong> (<code>crud-network</code>), no por internet</li>
+                            <li>Todo el tráfico HTTP entre servicios es <strong class="text-accent">local</strong> (localhost o nombres de servicio)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">¿Qué Pasa si Pierdo Internet a Mitad del Trabajo?</h4>
+                <div class="alert-box alert-console">
+                    <div class="alert-title"><span class="alert-icon">✅</span> No Pasa Nada - Todo Sigue Funcionando</div>
+                    <div class="alert-body">
+                        <p class="mb-3">Si ya construiste las imágenes y descargaste las dependencias, <strong class="text-white">puedes continuar trabajando normalmente</strong> aunque se caiga internet:</p>
+                        
+                        <ul class="list-disc list-inside ml-4 space-y-2">
+                            <li><span class="text-neon-green">✓</span> Los contenedores siguen corriendo</li>
+                            <li><span class="text-neon-green">✓</span> El API Gateway sigue enrutando peticiones</li>
+                            <li><span class="text-neon-green">✓</span> PostgreSQL sigue guardando datos</li>
+                            <li><span class="text-neon-green">✓</span> El frontend sigue funcionando</li>
+                            <li><span class="text-neon-green">✓</span> Puedes hacer commits en Git (localmente)</li>
+                            <li><span class="text-neon-yellow">⚠</span> Solo NO podrás hacer <code>git push</code> a GitHub (requiere internet)</li>
+                        </ul>
+
+                        <p class="mt-3"><strong class="text-white">Conclusión:</strong> Docker está diseñado para funcionar offline una vez configurado. Es una de sus mayores ventajas para desarrollo local.</p>
+                    </div>
+                </div>
             </section>
 
             <section id="m3-compose" class="mb-16">
