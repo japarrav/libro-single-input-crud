@@ -73,8 +73,6 @@
         .mobile-nav { position: fixed; top: 0; left: 0; right: 0; background: #0a0f1a; border-bottom: 1px solid #1e293b; padding: 0.75rem 1rem; z-index: 100; }
         .mobile-nav select { width: 100%; background: #1e293b; color: #e2e8f0; border: 1px solid #334155; border-radius: 6px; padding: 0.5rem; font-size: 0.85rem; }
         main { padding-top: 4rem !important; }
-
-        /* MOBILE FIRST: base styles above, enhancements for larger screens below */
         @media (min-width: 640px) {
             .code-block code { font-size: 0.8rem; padding: 1.25rem; }
             .alert-box { padding: 1.25rem 1.5rem; }
@@ -89,7 +87,6 @@
             .arch-node { padding: 1.25rem; }
             .step-number { width: 32px; height: 32px; font-size: 0.85rem; }
         }
-
         @media (min-width: 768px) {
             .code-block { font-size: 0.82rem; }
             .code-block code { padding: 1.5rem; }
@@ -98,7 +95,6 @@
             th, td { padding: 0.75rem 1rem; font-size: 0.88rem; }
             td code { font-size: 0.8rem; }
         }
-
         @media (min-width: 1024px) {
             .sidebar { display: block; }
             .mobile-nav { display: none; }
@@ -116,7 +112,7 @@
     <aside class="sidebar w-64 min-w-[256px] bg-dark-300 border-r border-dark-100 p-6 hidden lg:block">
         <div class="mb-8">
             <h2 class="text-accent font-bold text-sm tracking-widest uppercase">Single Input CRUD</h2>
-            <p class="text-xs text-slate-500 mt-1">Arquitectura de Microservicios v2.0</p>
+            <p class="text-xs text-slate-500 mt-1">Arquitectura de Microservicios v2.1</p>
         </div>
         <nav class="space-y-1">
             <a href="#modulo0" class="nav-link active">Mod 0 - Introduccion</a>
@@ -127,6 +123,7 @@
             <a href="#m1-bases" class="nav-link pl-8 text-xs">Bases de Git</a>
             <a href="#m1-init" class="nav-link pl-8 text-xs">Inicializar Repo</a>
             <a href="#m1-commits" class="nav-link pl-8 text-xs">Commits y Ramas</a>
+            <a href="#m1-clone" class="nav-link pl-8 text-xs">Clonar Repositorio</a>
             <div class="border-t border-dark-100 my-4"></div>
             <a href="#modulo2" class="nav-link">Mod 2 - Docker</a>
             <a href="#m2-contenedores" class="nav-link pl-8 text-xs">Contenedores</a>
@@ -162,11 +159,20 @@
             <a href="#m7-css" class="nav-link pl-8 text-xs">style.css</a>
             <a href="#m7-js" class="nav-link pl-8 text-xs">app.js</a>
             <div class="border-t border-dark-100 my-4"></div>
-            <a href="#modulo8" class="nav-link">Mod 8 - Troubleshooting</a>
-            <a href="#modulo9" class="nav-link">Mod 9 - Siguientes Pasos</a>
+            <a href="#modulo8" class="nav-link">Mod 8 - JWT (Opcional)</a>
+            <a href="#m8-intro" class="nav-link pl-8 text-xs">Intro JWT</a>
+            <a href="#m8-config" class="nav-link pl-8 text-xs">Config sin BD</a>
+            <a href="#m8-test" class="nav-link pl-8 text-xs">Probar Auth</a>
+            <div class="border-t border-dark-100 my-4"></div>
+            <a href="#modulo9" class="nav-link">Mod 9 - CI/CD</a>
+            <a href="#m9-intro" class="nav-link pl-8 text-xs">Que es CI/CD?</a>
+            <a href="#m9-github" class="nav-link pl-8 text-xs">GitHub Actions</a>
+            <a href="#m9-pipeline" class="nav-link pl-8 text-xs">Pipeline YAML</a>
+            <div class="border-t border-dark-100 my-4"></div>
+            <a href="#modulo10" class="nav-link">Mod 10 - Troubleshooting</a>
+            <a href="#modulo11" class="nav-link">Mod 11 - Siguientes Pasos</a>
         </nav>
     </aside>
-    <!-- NAVEGACION MOVIL -->
     <div class="mobile-nav">
         <select onchange="window.location.href=this.value">
             <option value="#modulo0">Mod 0 - Introduccion</option>
@@ -176,6 +182,7 @@
             <option value="#m1-bases">-- Bases de Git</option>
             <option value="#m1-init">-- Inicializar Repo</option>
             <option value="#m1-commits">-- Commits y Ramas</option>
+            <option value="#m1-clone">-- Clonar Repositorio</option>
             <option value="#modulo2">Mod 2 - Docker</option>
             <option value="#m2-contenedores">-- Contenedores</option>
             <option value="#m2-compose">-- Docker Compose</option>
@@ -204,8 +211,16 @@
             <option value="#m7-html">-- index.html</option>
             <option value="#m7-css">-- style.css</option>
             <option value="#m7-js">-- app.js</option>
-            <option value="#modulo8">Mod 8 - Troubleshooting</option>
-            <option value="#modulo9">Mod 9 - Siguientes Pasos</option>
+            <option value="#modulo8">Mod 8 - JWT (Opcional)</option>
+            <option value="#m8-intro">-- Intro JWT</option>
+            <option value="#m8-config">-- Config sin BD</option>
+            <option value="#m8-test">-- Probar Auth</option>
+            <option value="#modulo9">Mod 9 - CI/CD</option>
+            <option value="#m9-intro">-- Que es CI/CD?</option>
+            <option value="#m9-github">-- GitHub Actions</option>
+            <option value="#m9-pipeline">-- Pipeline YAML</option>
+            <option value="#modulo10">Mod 10 - Troubleshooting</option>
+            <option value="#modulo11">Mod 11 - Siguientes Pasos</option>
         </select>
     </div>
 
@@ -217,7 +232,7 @@
             </h1>
             <p class="text-base sm:text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
                 De un simple input a una arquitectura profesional de microservicios con API Gateway.<br class="hidden sm:inline">
-                <span class="text-slate-500">Docker &bull; Spring Boot &bull; API Gateway &bull; PostgreSQL &bull; Git &bull; Postman</span>
+                <span class="text-slate-500">Docker &bull; Spring Boot &bull; API Gateway &bull; PostgreSQL &bull; Git &bull; Postman &bull; JWT &bull; CI/CD</span>
             </p>
             <div class="flex justify-center gap-4 mt-8 flex-wrap">
                 <span class="px-3 py-1 bg-sky-500/10 border border-sky-500/20 rounded-full text-sky-400 text-xs font-medium">Java 21</span>
@@ -226,16 +241,17 @@
                 <span class="px-3 py-1 bg-indigo-500/10 border border-indigo-500/20 rounded-full text-indigo-400 text-xs font-medium">PostgreSQL 16</span>
                 <span class="px-3 py-1 bg-purple-500/10 border border-purple-500/20 rounded-full text-purple-400 text-xs font-medium">API Gateway</span>
                 <span class="px-3 py-1 bg-violet-500/10 border border-violet-500/20 rounded-full text-violet-400 text-xs font-medium">Git</span>
+                <span class="px-3 py-1 bg-green-500/10 border border-green-500/20 rounded-full text-green-400 text-xs font-medium">JWT</span>
+                <span class="px-3 py-1 bg-orange-500/10 border border-orange-500/20 rounded-full text-orange-400 text-xs font-medium">CI/CD</span>
             </div>
         </header>
 
-        <!-- DISCLAIMER -->
         <div class="mb-12 p-5 rounded-xl border border-amber-500/30 bg-amber-500/5">
             <p class="text-amber-400 font-bold text-sm mb-2 flex items-center gap-2">
                 <span>&#9888;&#65039;</span> Aviso importante
             </p>
             <p class="text-slate-300 text-sm leading-relaxed">
-                Este material tiene <strong class="text-white">fines educativos</strong> y busca facilitar la comprension de las tecnologias mencionadas (Docker, Spring Boot, API Gateway, PostgreSQL, Git, etc.). En ningun caso reemplaza ni esta por sobre la <strong class="text-white">documentacion oficial</strong> de cada herramienta. Para informacion definitiva, consultas tecnicas avanzadas o decisiones de produccion, consulta siempre las fuentes oficiales:
+                Este material tiene <strong class="text-white">fines educativos</strong> y busca facilitar la comprension de las tecnologias mencionadas. En ningun caso reemplaza ni esta por sobre la <strong class="text-white">documentacion oficial</strong> de cada herramienta. Para informacion definitiva, consulta siempre las fuentes oficiales:
             </p>
             <ul class="text-slate-400 text-xs mt-3 ml-4 space-y-1 list-disc">
                 <li><a href="https://docs.docker.com" class="text-accent hover:underline" target="_blank">docs.docker.com</a></li>
@@ -246,7 +262,6 @@
             </ul>
         </div>
 
-        <!-- MODULO 0: INTRODUCCION -->
         <section id="modulo0">
             <div class="module-header">
                 <p class="module-number">Modulo 0</p>
@@ -267,7 +282,6 @@
 
                 <div class="diagram-container">
                     <p class="text-center text-slate-500 text-xs uppercase tracking-widest mb-6">Arquitectura Completa del Sistema</p>
-                    <!-- Desktop: horizontal -->
                     <div class="hidden md:grid md:grid-cols-7 gap-4 items-center">
                         <div class="arch-node">
                             <div class="text-3xl mb-2">&#127760;</div>
@@ -297,7 +311,6 @@
                             <p class="text-xs text-accent mt-2 font-mono">:5432</p>
                         </div>
                     </div>
-                    <!-- Mobile: vertical -->
                     <div class="md:hidden flex flex-col items-center gap-3">
                         <div class="arch-node w-full max-w-[220px]">
                             <div class="text-2xl mb-1">&#127760;</div>
@@ -346,31 +359,39 @@
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
                     <span class="text-accent">0.2</span> Las 4 Capas del Microservicio (Clean Architecture)
                 </h3>
+                <p class="text-slate-300 leading-relaxed mb-4">Clean Architecture organiza el codigo en capas concentricas. Cada capa solo depende de la capa inmediatamente inferior, nunca de capas superiores. Esto garantiza que la logica de negocio permanezca aislada de detalles tecnicos como frameworks o bases de datos.</p>
                 <div class="diagram-container">
                     <div class="max-w-2xl mx-auto space-y-4">
                         <div class="border-2 border-sky-500/40 rounded-xl p-6 bg-sky-500/5">
                             <span class="px-3 py-1 bg-sky-500/20 rounded-full text-sky-400 text-xs font-bold">CAPA 4</span>
                             <span class="font-bold text-white ml-2">Controller</span>
-                            <p class="text-sm text-slate-400 mt-2">Recibe HTTP y devuelve JSON. Convierte DTOs a entidades.</p>
+                            <p class="text-sm text-slate-400 mt-2">Recibe HTTP y devuelve JSON. Convierte DTOs a entidades. Es la unica capa que conoce HTTP.</p>
                         </div>
                         <div class="text-center text-slate-600 text-xl">&darr;&darr; Delega &darr;&darr;</div>
                         <div class="border-2 border-purple-500/40 rounded-xl p-6 bg-purple-500/5">
                             <span class="px-3 py-1 bg-purple-500/20 rounded-full text-purple-400 text-xs font-bold">CAPA 3</span>
                             <span class="font-bold text-white ml-2">Service</span>
-                            <p class="text-sm text-slate-400 mt-2">Logica de negocio, validaciones, transformaciones DTO-Entity.</p>
+                            <p class="text-sm text-slate-400 mt-2">Logica de negocio, validaciones, transformaciones DTO-Entity. No sabe de HTTP ni de SQL.</p>
                         </div>
                         <div class="text-center text-slate-600 text-xl">&darr;&darr; Delega &darr;&darr;</div>
                         <div class="border-2 border-green-500/40 rounded-xl p-6 bg-green-500/5">
                             <span class="px-3 py-1 bg-green-500/20 rounded-full text-green-400 text-xs font-bold">CAPA 2</span>
                             <span class="font-bold text-white ml-2">Repository</span>
-                            <p class="text-sm text-slate-400 mt-2">Interfaz con la BD. Spring Data JPA genera SQL automaticamente.</p>
+                            <p class="text-sm text-slate-400 mt-2">Interfaz con la BD. Spring Data JPA genera SQL automaticamente a partir de nombres de metodos.</p>
                         </div>
                         <div class="text-center text-slate-600 text-xl">&darr;&darr; Mapea &darr;&darr;</div>
                         <div class="border-2 border-amber-500/40 rounded-xl p-6 bg-amber-500/5">
                             <span class="px-3 py-1 bg-amber-500/20 rounded-full text-amber-400 text-xs font-bold">CAPA 1</span>
                             <span class="font-bold text-white ml-2">Entity</span>
-                            <p class="text-sm text-slate-400 mt-2">Representacion Java de la tabla de la base de datos.</p>
+                            <p class="text-sm text-slate-400 mt-2">Representacion Java de la tabla de la base de datos. Define la estructura de los datos.</p>
                         </div>
+                    </div>
+                </div>
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#128300;</span> Por que separar en capas?</div>
+                    <div class="alert-body">
+                        <p class="mb-2">Imagina que quieres cambiar PostgreSQL por MongoDB. Si todo el codigo estuviera mezclado, tendrias que modificar cientos de lineas. Con Clean Architecture, solo cambias la capa Repository y el Entity. Las capas Service y Controller permanecen intactas porque no conocen los detalles de la base de datos.</p>
+                        <p>Otro beneficio: cada capa puede testearse de forma aislada. Puedes probar la logica de negocio (Service) sin necesidad de tener una base de datos corriendo.</p>
                     </div>
                 </div>
             </section>
@@ -379,18 +400,20 @@
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
                     <span class="text-accent">0.3</span> Stack Tecnologico
                 </h3>
+                <p class="text-slate-300 leading-relaxed mb-4">Cada herramienta del stack tiene un rol especifico. No hay redundancias: cada una resuelve un problema diferente en la arquitectura.</p>
                 <div class="overflow-x-auto rounded-xl border border-dark-100">
                     <table>
                         <thead><tr><th class="rounded-tl-xl">Herramienta</th><th>Versión</th><th>Rol</th><th class="rounded-tr-xl">Donde corre</th></tr></thead>
                         <tbody>
-                            <tr><td><code>Git</code></td><td>2.40+</td><td>Control de versiones</td><td>Host</td></tr>
-                            <tr><td><code>Docker Desktop</code></td><td>4.25+</td><td>Motor de contenedores</td><td>Host</td></tr>
-                            <tr><td><code>Java JDK</code></td><td>21 (LTS)</td><td>Lenguaje de programacion</td><td>Contenedores</td></tr>
-                            <tr><td><code>Spring Boot</code></td><td>3.3.4</td><td>Framework microservicios</td><td>Contenedores</td></tr>
-                            <tr><td><code>Spring Cloud</code></td><td>2023.0.3</td><td>API Gateway</td><td>Contenedor Gateway</td></tr>
-                            <tr><td><code>PostgreSQL</code></td><td>16 Alpine</td><td>Base de datos relacional</td><td>Contenedor DB</td></tr>
-                            <tr><td><code>Postman</code></td><td>Ultima</td><td>Cliente HTTP para probar APIs</td><td>Host</td></tr>
-                            <tr><td><code>VS Code + Live Server</code></td><td>Ultima</td><td>Editor + servidor estatico</td><td>Host</td></tr>
+                            <tr><td><code>Git</code></td><td>2.40+</td><td>Control de versiones. Tracking de cambios y colaboracion.</td><td>Host</td></tr>
+                            <tr><td><code>Docker Desktop</code></td><td>4.25+</td><td>Motor de contenedores. Aislamiento de servicios.</td><td>Host</td></tr>
+                            <tr><td><code>Java JDK</code></td><td>21 (LTS)</td><td>Lenguaje de programacion. Version LTS mas reciente.</td><td>Contenedores</td></tr>
+                            <tr><td><code>Spring Boot</code></td><td>3.3.4</td><td>Framework para microservicios. Configuracion automatica.</td><td>Contenedores</td></tr>
+                            <tr><td><code>Spring Cloud</code></td><td>2023.0.3</td><td>API Gateway, service discovery, config server.</td><td>Contenedor Gateway</td></tr>
+                            <tr><td><code>PostgreSQL</code></td><td>16 Alpine</td><td>Base de datos relacional. "Alpine" = imagen ultra-ligera (~80MB).</td><td>Contenedor DB</td></tr>
+                            <tr><td><code>Postman</code></td><td>Ultima</td><td>Cliente HTTP para probar APIs sin necesidad de frontend.</td><td>Host</td></tr>
+                            <tr><td><code>VS Code + Live Server</code></td><td>Ultima</td><td>Editor + servidor estatico para el frontend.</td><td>Host</td></tr>
+                            <tr><td><code>GitHub Actions</code></td><td>-</td><td>CI/CD. Automatiza build, test y deploy en cada push.</td><td>Cloud (GitHub)</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -400,69 +423,74 @@
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
                     <span class="text-accent">0.4</span> Estructura de Archivos del Proyecto
                 </h3>
-                <div class="code-block" data-lang="Estructura">
-                    <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
-                    <code>estudio-docker-microserv/
+                <p class="text-slate-300 leading-relaxed mb-4">Esta es la estructura completa que tendras al final del libro. Cada archivo tiene un proposito especifico que iremos descubriendo modulo a modulo.</p>
+                <div class="code-block" data-lang="Estructura"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code>estudio-docker-microserv/
 |
-+-- docker-compose.yml          # Orquesta los 3 servicios
-+-- .env                        # Variables de entorno (credenciales)
++-- docker-compose.yml          # Orquesta los 3 servicios (postgres, item-service, api-gateway)
++-- .env                        # Variables de entorno (credenciales). NO se sube a Git.
 +-- .gitignore                  # Archivos que Git ignora
-+-- .dockerignore               # Archivos que Docker ignora
++-- .dockerignore               # Archivos que Docker ignora al construir imagenes
 |
 +-- api-gateway/                # API Gateway (Spring Cloud Gateway)
-|   +-- Dockerfile
-|   +-- pom.xml
+|   +-- Dockerfile              # Receta para construir la imagen del Gateway
+|   +-- pom.xml                 # Dependencias: spring-cloud-starter-gateway
 |   +-- src/main/
 |       +-- java/com/gateway/
-|       |   +-- ApiGatewayApplication.java
+|       |   +-- ApiGatewayApplication.java  # Punto de entrada del Gateway
 |       +-- resources/
-|           +-- application.yml     # Rutas y CORS
+|           +-- application.yml # Rutas y configuracion CORS
 |
-+-- item-service/               # Microservicio (Spring Boot)
-|   +-- Dockerfile
-|   +-- pom.xml
++-- item-service/               # Microservicio principal (Spring Boot)
+|   +-- Dockerfile              # Receta para construir la imagen del Item Service
+|   +-- pom.xml                 # Dependencias: JPA, PostgreSQL, Validation, DevTools
 |   +-- src/main/
 |       +-- java/com/singleinput/
-|       |   +-- ItemServiceApplication.java
-|       |   +-- domain/Item.java           # CAPA 1: Entity
-|       |   +-- dto/ItemDTO.java           # Data Transfer Object
-|       |   +-- persistence/ItemRepository.java  # CAPA 2
+|       |   +-- ItemServiceApplication.java   # Punto de entrada
+|       |   +-- domain/Item.java              # CAPA 1: Entity (mapea tabla "items")
+|       |   +-- dto/ItemDTO.java              # Data Transfer Object (validacion)
+|       |   +-- persistence/ItemRepository.java  # CAPA 2: JpaRepository
 |       |   +-- service/ItemService.java         # CAPA 3: Interface
-|       |   +-- service/ItemServiceImpl.java     # CAPA 3: Impl
-|       |   +-- controller/ItemController.java   # CAPA 4
+|       |   +-- service/ItemServiceImpl.java     # CAPA 3: Implementacion
+|       |   +-- controller/ItemController.java   # CAPA 4: @RestController
 |       |   +-- exception/ItemNotFoundException.java
-|       |   +-- exception/GlobalExceptionHandler.java
-|       +-- resources/application.yml
+|       |   +-- exception/GlobalExceptionHandler.java  # @RestControllerAdvice
+|       +-- resources/application.yml  # Configuracion: BD, puertos, logging
 |
-+-- frontend/                   # Frontend estatico
-    +-- index.html
-    +-- style.css
-    +-- app.js</code>
-                </div>
++-- frontend/                   # Frontend estatico (Vanilla JS)
+|   +-- index.html              # Un input + 4 botones
+|   +-- style.css               # Modo oscuro, responsive
+|   +-- app.js                  # Fetch API, async/await, XSS-safe
+|
++-- .github/
+    +-- workflows/
+        +-- ci.yml              # Pipeline CI/CD (GitHub Actions)</code></div>
             </section>
         </section>
 
-        <!-- MODULO 1: GIT -->
         <section id="modulo1" class="mt-24">
             <div class="module-header">
                 <p class="module-number">Modulo 1</p>
                 <h2 class="module-title">Git: Control de Versiones Profesional</h2>
-                <p class="text-slate-400 mt-3 text-sm">Una maquina del tiempo para tu codigo.</p>
+                <p class="text-slate-400 mt-3 text-sm">Una maquina del tiempo para tu codigo. Sin Git, no hay ingenieria de software moderna.</p>
             </div>
 
             <section id="m1-bases" class="mb-16">
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-                    <span class="text-accent">1.1</span> Que es Git?
+                    <span class="text-accent">1.1</span> Que es Git y Por Que es Obligatorio?
                 </h3>
                 <p class="text-slate-300 leading-relaxed mb-4">
-                    <strong class="text-white">Git</strong> es un sistema de control de versiones distribuido. Cada vez que haces un "commit", tomas una fotografia del estado actual de tu proyecto. Si algo se rompe, puedes volver a cualquier fotografia anterior.
+                    <strong class="text-white">Git</strong> es un sistema de control de versiones distribuido. Cada vez que haces un "commit", tomas una fotografia del estado actual de tu proyecto. Si algo se rompe, puedes volver a cualquier fotografia anterior. Es como tener infinitos "Ctrl+Z" que sobreviven a reinicios, formateos y desastres.
+                </p>
+                <p class="text-slate-300 leading-relaxed mb-4">
+                    Git es <strong class="text-accent">distribuido</strong> porque cada desarrollador tiene una copia completa del historial en su maquina. No dependes de un servidor central para trabajar (aunque GitHub/GitLab sirven para sincronizar).
                 </p>
                 <div class="alert-box alert-warning">
                     <div class="alert-title"><span class="alert-icon">&#9888;&#65039;</span> Git NO es GitHub</div>
                     <div class="alert-body">
+                        <p class="mb-2">Son herramientas diferentes que trabajan juntas:</p>
                         <ul class="list-disc list-inside space-y-2 ml-4">
-                            <li><strong class="text-neon-yellow">Git:</strong> Software que corre en tu maquina. Gestiona el historial localmente.</li>
-                            <li><strong class="text-neon-green">GitHub/GitLab:</strong> Servicios en la nube que almacenan repositorios Git. Son opcionales.</li>
+                            <li><strong class="text-neon-yellow">Git:</strong> Software que corre en tu maquina. Gestiona el historial localmente. Puedes usar Git sin GitHub.</li>
+                            <li><strong class="text-neon-green">GitHub/GitLab:</strong> Servicios en la nube que almacenan repositorios Git remotamente. Sirven para colaboracion, backup y CI/CD. Son opcionales para desarrollo individual.</li>
                         </ul>
                     </div>
                 </div>
@@ -472,17 +500,21 @@
                     <div class="alert-body">
                         <div class="code-block mt-3" data-lang="bash">
                             <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
-                            <code><span class="comment"># Verificar instalacion</span>
+                            <code><span class="comment"># Verificar instalacion (debe mostrar version 2.40+)</span>
 <span class="tag">git</span> --version
-<span class="comment"># Salida: git version 2.40.0 (o superior)</span>
 
 <span class="comment"># Configurar identidad (obligatorio para commits)</span>
+<span class="comment"># Git necesita saber quien eres para registrar los cambios</span>
 <span class="tag">git</span> config --global user.name <span class="string">"Tu Nombre"</span>
 <span class="tag">git</span> config --global user.email <span class="string">"tu@email.com"</span>
 
-<span class="comment"># Verificar</span>
-<span class="tag">git</span> config --global --list</code>
+<span class="comment"># Verificar configuracion</span>
+<span class="tag">git</span> config --global --list
+
+<span class="comment"># Establecer rama principal como "main" (estandar moderno)</span>
+<span class="tag">git</span> config --global init.defaultBranch main</code>
                         </div>
+                        <p class="mt-3">La bandera <code>--global</code> aplica la configuracion a todos tus repositorios. Sin ella, solo aplica al repositorio actual.</p>
                     </div>
                 </div>
             </section>
@@ -491,6 +523,7 @@
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
                     <span class="text-accent">1.2</span> Inicializar Repositorio y .gitignore
                 </h3>
+                <p class="text-slate-300 leading-relaxed mb-4">Un <strong class="text-white">repositorio</strong> es la carpeta donde Git rastrea cambios. Inicializarlo crea una carpeta oculta <code class="text-accent">.git/</code> que contiene todo el historial.</p>
                 <div class="alert-box alert-console">
                     <div class="alert-title"><span class="alert-icon">&#128187;</span> CONSOLA - git init</div>
                     <div class="alert-body">
@@ -499,105 +532,203 @@
                             <code><span class="comment"># Ir a la carpeta del proyecto</span>
 <span class="tag">cd</span> estudio-docker-microserv
 
-<span class="comment"># Inicializar repositorio</span>
+<span class="comment"># Inicializar repositorio (crea carpeta .git/ oculta)</span>
 <span class="tag">git</span> init
+
+<span class="comment"># Ver estado (todo esta "untracked" = sin rastrear)</span>
+<span class="tag">git</span> status
 
 <span class="comment"># Crear .gitignore ANTES del primer commit</span>
 <span class="comment"># (ver codigo abajo)</span>
 
-<span class="comment"># Anadir todos los archivos</span>
+<span class="comment"># Anadir todos los archivos al "staging area"</span>
 <span class="tag">git</span> add .
 
-<span class="comment"># Primer commit</span>
-<span class="tag">git</span> commit -m <span class="string">"Initial commit: estructura base"</span></code>
+<span class="comment"># Primer commit (fotografia inicial del proyecto)</span>
+<span class="tag">git</span> commit -m <span class="string">"Initial commit: estructura base del proyecto"</span></code>
                         </div>
+                        <p class="mt-3"><strong class="text-neon-yellow">Conceptos clave:</strong></p>
+                        <ul class="list-disc list-inside ml-4 space-y-1">
+                            <li><code>git add .</code> marca todos los archivos para el proximo commit.</li>
+                            <li><code>git commit</code> toma la fotografia. El mensaje (<code>-m</code>) describe que cambios contiene.</li>
+                            <li><code>git status</code> muestra que archivos han cambiado desde el ultimo commit.</li>
+                        </ul>
                     </div>
                 </div>
 
-                <p class="text-slate-300 leading-relaxed mb-4 mt-6">Crea <code class="text-accent">.gitignore</code> en la raiz:</p>
+                <p class="text-slate-300 leading-relaxed mb-4 mt-6">Crea <code class="text-accent">.gitignore</code> en la raiz. Este archivo le dice a Git que ignore ciertos archivos (credenciales, compilados, configuraciones locales):</p>
                 <div class="code-block" data-lang=".gitignore">
                     <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
-                    <code><span class="comment"># Variables de entorno (NUNCA subir secretos)</span>
+                    <code><span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+<span class="comment"># ARCHIVOS QUE GIT DEBE IGNORAR</span>
+<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="comment"># Variables de entorno con credenciales (NUNCA subir secretos)</span>
 .env
 .env.local
+.env.*.local
 
-<span class="comment"># IDE</span>
+<span class="comment"># IDE y editores (configuraciones personales)</span>
 .vscode/
 .idea/
 *.iml
 
-<span class="comment"># Sistema</span>
+<span class="comment"># Archivos de sistema</span>
 .DS_Store
 Thumbs.db
 
-<span class="comment"># Java compilado</span>
+<span class="comment"># Java compilado (Maven lo compila dentro del contenedor)</span>
 target/
 *.class
 *.jar
+*.war
 
 <span class="comment"># Logs</span>
 *.log
 logs/
 
-<span class="comment"># Node</span>
-node_modules/</code>
+<span class="comment"># Node (si hubiera frontend Node)</span>
+node_modules/
+
+<span class="comment"># Docker (no incluir en build context)</span>
+.docker/</code>
+                </div>
+                <div class="alert-box alert-warning">
+                    <div class="alert-title"><span class="alert-icon">&#9888;&#65039;</span> Por que ignorar .env?</div>
+                    <div class="alert-body">
+                        <p>El archivo <code>.env</code> contiene credenciales (usuario, contraseña de PostgreSQL). Si lo subes a Git (especialmente a GitHub publico), cualquiera podra ver tus secretos. Por eso <code>.gitignore</code> lo excluye. En su lugar, sube un archivo <code>.env.example</code> con valores de ejemplo (sin credenciales reales) para que otros desarrolladores sepan que variables necesitan.</p>
+                    </div>
                 </div>
             </section>
 
             <section id="m1-commits" class="mb-16">
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
-                    <span class="text-accent">1.3</span> Commits y Ramas
+                    <span class="text-accent">1.3</span> Commits y Ramas: Flujo de Trabajo
                 </h3>
+                <p class="text-slate-300 leading-relaxed mb-4">Las <strong class="text-white">ramas (branches)</strong> te permiten trabajar en funcionalidades aisladas sin afectar la rama principal. Cuando terminas, "mergeas" (fusionas) la rama de vuelta a main.</p>
+                <div class="diagram-container">
+                    <p class="text-center text-slate-500 text-xs uppercase tracking-widest mb-4">Flujo de Ramas</p>
+                    <pre class="text-xs font-mono text-slate-400 leading-relaxed text-center">
+main:       A---B-----------E---F (merge)
+                 \         /
+feature:          C---D---</pre>
+                    <p class="text-center text-slate-500 text-xs mt-2">A, B = commits iniciales. C, D = trabajo en feature. E = merge. F = siguiente commit en main.</p>
+                </div>
                 <div class="alert-box alert-console">
                     <div class="alert-title"><span class="alert-icon">&#128187;</span> CONSOLA - Flujo de Trabajo con Ramas</div>
                     <div class="alert-body">
                         <div class="code-block mt-3" data-lang="bash">
                             <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
-                            <code><span class="comment"># Renombrar rama principal a main</span>
+                            <code><span class="comment"># Renombrar rama principal a main (estandar moderno)</span>
 <span class="tag">git</span> branch -M main
 
-<span class="comment"># Crear rama para nueva funcionalidad</span>
+<span class="comment"># Crear rama para nueva funcionalidad y cambiar a ella</span>
+<span class="comment"># "-b" crea la rama, "checkout" cambia a ella</span>
 <span class="tag">git</span> checkout -b feature/item-service
 
-<span class="comment"># Trabajar, hacer cambios...</span>
+<span class="comment"># Trabajar, hacer cambios en archivos...</span>
+<span class="comment"># Cuando termines una unidad logica de trabajo:</span>
 <span class="tag">git</span> add .
 <span class="tag">git</span> commit -m <span class="string">"Add Item entity and repository"</span>
 
-<span class="comment"># Otro cambio</span>
+<span class="comment"># Otro cambio (por ejemplo, agregar Controller):</span>
 <span class="tag">git</span> add .
-<span class="tag">git</span> commit -m <span class="string">"Add API Gateway configuration"</span>
+<span class="tag">git</span> commit -m <span class="string">"Add ItemController with 6 endpoints"</span>
 
-<span class="comment"># Ver historial</span>
+<span class="comment"># Ver historial de commits (grafico de ramas)</span>
 <span class="tag">git</span> log --oneline --graph
 
-<span class="comment"># Volver a main y mergear</span>
+<span class="comment"># Volver a rama main</span>
 <span class="tag">git</span> checkout main
+
+<span class="comment"># Fusionar la rama feature a main</span>
 <span class="tag">git</span> merge feature/item-service
 
-<span class="comment"># Ver todas las ramas</span>
-<span class="tag">git</span> branch -a</code>
+<span class="comment"># Ver todas las ramas (la rama feature sigue existiendo)</span>
+<span class="tag">git</span> branch -a
+
+<span class="comment"># Eliminar rama feature (ya no la necesitamos)</span>
+<span class="tag">git</span> branch -d feature/item-service</code>
                         </div>
                         <div class="alert-box alert-warning mt-4">
-                            <div class="alert-title"><span class="alert-icon">&#9888;&#65039;</span> Buenas Practicas</div>
+                            <div class="alert-title"><span class="alert-icon">&#9888;&#65039;</span> Buenas Practicas de Commits</div>
                             <div class="alert-body">
                                 <ul class="list-disc list-inside space-y-2 ml-4">
-                                    <li><strong class="text-neon-green">Commits atomicos:</strong> Cada commit = un cambio logico unico.</li>
-                                    <li><strong class="text-neon-yellow">Mensajes en imperativo:</strong> "Add feature", "Fix bug", no "Added", "Fixed".</li>
-                                    <li><strong class="text-neon-red">Nunca subas .env:</strong> Contiene credenciales.</li>
+                                    <li><strong class="text-neon-green">Commits atomicos:</strong> Cada commit = un cambio logico unico. No mezcles "añadir entity" con "configurar docker".</li>
+                                    <li><strong class="text-neon-yellow">Mensajes en imperativo:</strong> "Add feature", "Fix bug", "Update config". No "Added", "Fixed", "Updated".</li>
+                                    <li><strong class="text-neon-red">Nunca subas .env:</strong> Contiene credenciales. Siempre en .gitignore.</li>
+                                    <li><strong class="text-accent">Frecuencia:</strong> Commit despues de completar una tarea pequena. Mejor muchos commits pequeños que uno gigante.</li>
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
+
+            <section id="m1-clone" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                    <span class="text-accent">1.4</span> Clonar un Repositorio
+                </h3>
+                <p class="text-slate-300 leading-relaxed mb-4">Si el proyecto ya existe en GitHub (o tu quieres trabajar en otra maquina), usas <code class="text-accent">git clone</code> para descargar una copia completa con todo el historial.</p>
+                <div class="alert-box alert-console">
+                    <div class="alert-title"><span class="alert-icon">&#128187;</span> CONSOLA - Clonar Repositorio</div>
+                    <div class="alert-body">
+                        <div class="code-block mt-3" data-lang="bash">
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                            <code><span class="comment"># Clonar repositorio publico de GitHub</span>
+<span class="tag">git</span> clone https://github.com/usuario/single-input-crud.git
+
+<span class="comment"># Esto crea una carpeta "single-input-crud/" con todo el contenido</span>
+<span class="comment"># e inicializa Git automaticamente (no necesitas git init)</span>
+
+<span class="comment"># Entrar a la carpeta</span>
+<span class="tag">cd</span> single-input-crud
+
+<span class="comment"># Ver historial de commits</span>
+<span class="tag">git</span> log --oneline
+
+<span class="comment"># Ver ramas disponibles</span>
+<span class="tag">git</span> branch -a
+
+<span class="comment"># Si quieres trabajar en una rama remota:</span>
+<span class="tag">git</span> checkout -b feature/nueva-funcionalidad origin/feature/nueva-funcionalidad
+
+<span class="comment"># Despues de hacer cambios, subirlos al repositorio remoto:</span>
+<span class="tag">git</span> add .
+<span class="tag">git</span> commit -m <span class="string">"Add new feature"</span>
+<span class="tag">git</span> push origin feature/nueva-funcionalidad</code>
+                        </div>
+                        <p class="mt-3"><strong class="text-neon-yellow">Conceptos clave:</strong></p>
+                        <ul class="list-disc list-inside ml-4 space-y-1">
+                            <li><code>clone</code> descarga TODO: archivos + historial completo + ramas.</li>
+                            <li><code>origin</code> es el nombre por defecto del repositorio remoto (de donde clonaste).</li>
+                            <li><code>push</code> sube tus commits locales al repositorio remoto.</li>
+                            <li><code>pull</code> es lo opuesto: descarga cambios del remoto a tu local.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#128300;</span> Clone vs Init: Cuando usar cada uno</div>
+                    <div class="alert-body">
+                        <table class="mt-2">
+                            <thead><tr><th>Situacion</th><th>Comando</th></tr></thead>
+                            <tbody>
+                                <tr><td>Proyecto nuevo desde cero</td><td><code>git init</code></td></tr>
+                                <tr><td>Proyecto ya existe en GitHub</td><td><code>git clone &lt;url&gt;</code></td></tr>
+                                <tr><td>Trabajar en otra maquina</td><td><code>git clone &lt;url&gt;</code></td></tr>
+                                <tr><td>Colaborar con otros</td><td><code>git clone &lt;url&gt;</code> + <code>git pull</code> frecuente</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
         </section>
 
-        <!-- MODULO 2: DOCKER -->
         <section id="modulo2" class="mt-24">
             <div class="module-header">
                 <p class="module-number">Modulo 2</p>
                 <h2 class="module-title">Docker: Contenedores, PostgreSQL y Redes</h2>
-                <p class="text-slate-400 mt-3 text-sm">Construir los cimientos con aislamiento completo.</p>
+                <p class="text-slate-400 mt-3 text-sm">Construir los cimientos con aislamiento completo. Cada servicio vive en su propio universo.</p>
             </div>
 
             <section id="m2-contenedores" class="mb-16">
@@ -605,7 +736,7 @@ node_modules/</code>
                     <span class="text-accent">2.1</span> Contenedor vs Maquina Virtual
                 </h3>
                 <p class="text-slate-300 leading-relaxed mb-4">
-                    Un contenedor es un <strong class="text-white">proceso aislado del SO</strong>. No tiene su propio kernel (comparte el del host), pero tiene su propio sistema de archivos, red y procesos.
+                    Un <strong class="text-white">contenedor</strong> es un proceso del sistema operativo aislado. No es una maquina virtual completa (no tiene su propio kernel), pero tiene su propio sistema de archivos, tabla de procesos, red y espacio IPC. Comparte el kernel del host con otros contenedores.
                 </p>
                 <div class="diagram-container">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -615,9 +746,9 @@ node_modules/</code>
 +----------+ +----------+
 | App      | | App      |
 | Bins/Libs| | Bins/Libs|
-| Guest OS | | Guest OS |  &lt;- OS completo
+| Guest OS | | Guest OS |  &lt;- OS completo por VM
 +----------+-+----------+
-|     Hypervisor       |  &lt;- Pesado
+|     Hypervisor       |  &lt;- Capa pesada
 +----------------------+
 |      Host OS         |
 +----------------------+</pre>
@@ -627,9 +758,9 @@ node_modules/</code>
                             <pre class="text-xs font-mono text-slate-400 leading-relaxed text-center">
 +----------+ +----------+
 | App      | | App      |
-| Bins/Libs| | Bins/Libs|  &lt;- Solo necesario
+| Bins/Libs| | Bins/Libs|  &lt;- Solo lo necesario
 +----------+-+----------+
-|    Docker Engine     |  &lt;- Ligero
+|    Docker Engine     |  &lt;- Capa ligera
 +----------------------+
 |   Host OS Kernel     |  &lt;- Compartido
 +----------------------+</pre>
@@ -637,7 +768,7 @@ node_modules/</code>
                     </div>
                 </div>
                 <p class="text-slate-300 leading-relaxed mb-4">
-                    Contenedor: arranca en <strong class="text-neon-green">&lt;1 segundo</strong>, consume ~50MB RAM. PostgreSQL Alpine pesa solo <strong class="text-neon-green">~80MB</strong>.
+                    La consecuencia practica es brutal: un contenedor arranca en <strong class="text-neon-green">menos de 1 segundo</strong> (una VM tarda 30-60s), consume <strong class="text-neon-green">~50MB de RAM</strong> (una VM necesita 1-2GB), y la imagen de PostgreSQL Alpine pesa solo <strong class="text-neon-green">~80MB</strong> (una VM con Linux + PostgreSQL serian varios GB).
                 </p>
             </section>
 
@@ -645,35 +776,42 @@ node_modules/</code>
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
                     <span class="text-accent">2.2</span> Docker Compose: Los 3 Servicios
                 </h3>
-                <p class="text-slate-300 leading-relaxed mb-4">Crea <code class="text-accent">.env</code> en la raiz (NO se sube a Git):</p>
+                <p class="text-slate-300 leading-relaxed mb-4">En vez de usar comandos <code class="text-accent">docker run</code> con muchas banderas, usaremos <strong class="text-white">Docker Compose</strong> para definir todos los servicios en un archivo YAML legible y versionable.</p>
+                <p class="text-slate-300 leading-relaxed mb-4">Primero, crea el archivo <code class="text-accent">.env</code> en la raiz del proyecto. Este archivo contiene las credenciales y NO se sube a Git:</p>
                 <div class="code-block" data-lang=".env">
                     <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
-                    <code><span class="comment"># Credenciales PostgreSQL</span>
+                    <code><span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+<span class="comment"># VARIABLES DE ENTORNO (NO subir a Git - esta en .gitignore)</span>
+<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+
+<span class="comment"># PostgreSQL</span>
 POSTGRES_USER=admin
 POSTGRES_PASSWORD=secret123
 POSTGRES_DB=crud_db</code>
                 </div>
 
-                <p class="text-slate-300 leading-relaxed mb-4 mt-6">Crea <code class="text-accent">docker-compose.yml</code> en la raiz:</p>
+                <p class="text-slate-300 leading-relaxed mb-4 mt-6">Ahora crea <code class="text-accent">docker-compose.yml</code> en la raiz:</p>
                 <div class="code-block" data-lang="docker-compose.yml">
                     <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
                     <code><span class="property">services</span>:
 
-  <span class="comment"># SERVICIO 1: PostgreSQL 16</span>
+  <span class="comment"># ═══════════════════════════════════════════════════════</span>
+  <span class="comment"># SERVICIO 1: Base de Datos PostgreSQL 16 (Alpine)</span>
+  <span class="comment"># ═══════════════════════════════════════════════════════</span>
   <span class="property">postgres</span>:
     <span class="property">image</span>: <span class="string">postgres:16-alpine</span>
     <span class="property">container_name</span>: <span class="string">crud-postgres</span>
     <span class="property">restart</span>: <span class="string">unless-stopped</span>
     <span class="property">environment</span>:
-      <span class="property">POSTGRES_USER</span>: <span class="string"></span>
-      <span class="property">POSTGRES_PASSWORD</span>: <span class="string"></span>
-      <span class="property">POSTGRES_DB</span>: <span class="string"></span>
+      <span class="property">POSTGRES_USER</span>: <span class="string">${POSTGRES_USER}</span>
+      <span class="property">POSTGRES_PASSWORD</span>: <span class="string">${POSTGRES_PASSWORD}</span>
+      <span class="property">POSTGRES_DB</span>: <span class="string">${POSTGRES_DB}</span>
     <span class="property">ports</span>:
       - <span class="string">"5432:5432"</span>
     <span class="property">volumes</span>:
       - <span class="string">crud_pgdata:/var/lib/postgresql/data</span>
     <span class="property">healthcheck</span>:
-      <span class="property">test</span>: [<span class="string">"CMD-SHELL"</span>, <span class="string">"pg_isready -U  -d "</span>]
+      <span class="property">test</span>: [<span class="string">"CMD-SHELL"</span>, <span class="string">"pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"</span>]
       <span class="property">interval</span>: <span class="string">10s</span>
       <span class="property">timeout</span>: <span class="string">5s</span>
       <span class="property">retries</span>: <span class="number">5</span>
@@ -681,7 +819,9 @@ POSTGRES_DB=crud_db</code>
     <span class="property">networks</span>:
       - <span class="string">crud-network</span>
 
-  <span class="comment"># SERVICIO 2: Item Service (Spring Boot)</span>
+  <span class="comment"># ═══════════════════════════════════════════════════════</span>
+  <span class="comment"># SERVICIO 2: Item Service (Spring Boot Microservice)</span>
+  <span class="comment"># ═══════════════════════════════════════════════════════</span>
   <span class="property">item-service</span>:
     <span class="property">build</span>:
       <span class="property">context</span>: <span class="string">./item-service</span>
@@ -692,9 +832,9 @@ POSTGRES_DB=crud_db</code>
       <span class="property">postgres</span>:
         <span class="property">condition</span>: <span class="string">service_healthy</span>
     <span class="property">environment</span>:
-      <span class="property">SPRING_DATASOURCE_URL</span>: <span class="string">jdbc:postgresql://crud-postgres:5432/</span>
-      <span class="property">SPRING_DATASOURCE_USERNAME</span>: <span class="string"></span>
-      <span class="property">SPRING_DATASOURCE_PASSWORD</span>: <span class="string"></span>
+      <span class="property">SPRING_DATASOURCE_URL</span>: <span class="string">jdbc:postgresql://crud-postgres:5432/crud_db</span>
+      <span class="property">SPRING_DATASOURCE_USERNAME</span>: <span class="string">admin</span>
+      <span class="property">SPRING_DATASOURCE_PASSWORD</span>: <span class="string">secret123</span>
     <span class="property">ports</span>:
       - <span class="string">"8081:8081"</span>
       - <span class="string">"5005:5005"</span>
@@ -705,7 +845,9 @@ POSTGRES_DB=crud_db</code>
     <span class="property">networks</span>:
       - <span class="string">crud-network</span>
 
-  <span class="comment"># SERVICIO 3: API Gateway</span>
+  <span class="comment"># ═══════════════════════════════════════════════════════</span>
+  <span class="comment"># SERVICIO 3: API Gateway (Spring Cloud Gateway)</span>
+  <span class="comment"># ═══════════════════════════════════════════════════════</span>
   <span class="property">api-gateway</span>:
     <span class="property">build</span>:
       <span class="property">context</span>: <span class="string">./api-gateway</span>
@@ -735,27 +877,44 @@ POSTGRES_DB=crud_db</code>
   <span class="property">crud-network</span>:
     <span class="property">driver</span>: <span class="string">bridge</span></code>
                 </div>
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#128300;</span> Analisis de Directivas Clave</div>
+                    <div class="alert-body">
+                        <table class="mt-2">
+                            <thead><tr><th>Directiva</th><th>Explicacion</th></tr></thead>
+                            <tbody>
+                                <tr><td><code>services:</code></td><td>Define los 3 contenedores. Cada uno es un proceso aislado.</td></tr>
+                                <tr><td><code>depends_on: condition: service_healthy</code></td><td><strong class="text-neon-yellow">CRITICO.</strong> Item Service NO arranca hasta que PostgreSQL pase su healthcheck. Sin esto, Spring Boot intentaria conectarse antes de que la DB este lista.</td></tr>
+                                <tr><td><code></code></td><td>Lee la variable del archivo .env. Las credenciales no estan hardcodeadas en el YAML.</td></tr>
+                                <tr><td><code>./item-service/src:/app/src</code></td><td><strong>Bind Mount:</strong> Tu carpeta local se monta en el contenedor. Cambios en VS Code son instantaneos dentro.</td></tr>
+                                <tr><td><code>maven_cache:/root/.m2</code></td><td>Volumen para cache Maven. Las dependencias sobreviven a la recreacion del contenedor.</td></tr>
+                                <tr><td><code>networks: crud-network</code></td><td>Red bridge personalizada. Todos los servicios en la misma red pueden comunicarse por nombre.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </section>
 
             <section id="m2-redes" class="mb-16">
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
                     <span class="text-accent">2.3</span> Las 3 Reglas de Oro de las IPs en Docker
                 </h3>
+                <p class="text-slate-300 leading-relaxed mb-4">Este es el concepto mas importante del libro. Si lo entiendes, todo lo demas sera natural. Si lo ignoras, pasaras horas debuggeando errores de conexion.</p>
                 <div class="alert-box alert-warning">
                     <div class="alert-title"><span class="alert-icon">&#9888;&#65039;</span> REGLAS FUNDAMENTALES</div>
                     <div class="alert-body">
                         <div class="space-y-4">
                             <div class="border-l-2 border-neon-red pl-4">
                                 <p class="font-bold text-neon-red mb-1">Regla 1: "localhost" es egosta</p>
-                                <p>Dentro de un contenedor, <code>localhost</code> = el mismo contenedor. Si Item Service dice <code>localhost:5432</code>, busca PostgreSQL dentro de SI MISMO (y falla).</p>
+                                <p>Dentro de un contenedor, <code>localhost</code> = el mismo contenedor. Si Item Service dice <code>localhost:5432</code>, busca PostgreSQL dentro de SI MISMO (y falla). Nunca uses localhost entre contenedores.</p>
                             </div>
                             <div class="border-l-2 border-neon-yellow pl-4">
                                 <p class="font-bold text-neon-yellow mb-1">Regla 2: Los contenedores se llaman por nombre</p>
-                                <p>Las IPs (172.17.0.x) son efimeras. El nombre (<code>crud-postgres</code>) es estable. Docker DNS resuelve nombres a IPs.</p>
+                                <p>Las IPs (172.17.0.x) son efimeras. El nombre (<code>crud-postgres</code>) es estable. Docker DNS resuelve nombres a IPs. Por eso usamos <code>host: crud-postgres</code> en application.yml.</p>
                             </div>
                             <div class="border-l-2 border-neon-green pl-4">
                                 <p class="font-bold text-neon-green mb-1">Regla 3: El Host ve contenedores por puertos mapeados</p>
-                                <p>Desde tu navegador, accedes con <code>localhost:PUERTO_HOST</code>. El mapeo <code>-p 8080:8080</code> crea un tunel.</p>
+                                <p>Desde tu navegador, accedes con <code>localhost:PUERTO_HOST</code>. El mapeo <code>-p 8080:8080</code> crea un tunel entre tu maquina y el contenedor.</p>
                             </div>
                         </div>
                     </div>
@@ -766,7 +925,7 @@ POSTGRES_DB=crud_db</code>
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
                     <span class="text-accent">2.4</span> Volumenes: Persistencia de Datos
                 </h3>
-                <p class="text-slate-300 leading-relaxed mb-4">Sin volumen = datos efimeros. Con volumen = datos sobreviven a la destruccion del contenedor.</p>
+                <p class="text-slate-300 leading-relaxed mb-4">Sin volumen, si eliminas el contenedor, <strong class="text-neon-red">todos los datos se pierden</strong>. Con volumen, los datos sobreviven a la destruccion del contenedor.</p>
                 <div class="alert-box alert-console">
                     <div class="alert-title"><span class="alert-icon">&#128187;</span> CONSOLA - Comandos de Volumenes</div>
                     <div class="alert-body">
@@ -790,143 +949,269 @@ POSTGRES_DB=crud_db</code>
 <span class="comment"># Detener y BORRAR TODO (incluye datos!)</span>
 <span class="tag">docker</span> compose down -v</code>
                         </div>
+                        <div class="alert-box alert-warning mt-4">
+                            <div class="alert-title"><span class="alert-icon">&#9888;&#65039;</span> Cuidado con docker compose down -v</div>
+                            <div class="alert-body">
+                                <p>El flag <code>-v</code> elimina los volumenes nombrados. Esto significa que <strong class="text-neon-red">todos los datos de PostgreSQL se borran permanentemente</strong>. Usalo solo cuando quieras empezar de cero.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>
         </section>
 
-        <!-- MODULO 3: DEV EN VIVO -->
         <section id="modulo3" class="mt-24">
             <div class="module-header">
                 <p class="module-number">Modulo 3</p>
                 <h2 class="module-title">Desarrollo en Vivo: Dockerfiles y Bind Mounts</h2>
-                <p class="text-slate-400 mt-3 text-sm">Cada Ctrl+S se refleja automaticamente en el contenedor.</p>
+                <p class="text-slate-400 mt-3 text-sm">Cada Ctrl+S se refleja automaticamente en el contenedor. Sin reinicios manuales.</p>
             </div>
+
             <section id="m3-dockerfile" class="mb-16">
-                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">3.1</span> Dockerfile del Item Service</h3>
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                    <span class="text-accent">3.1</span> Dockerfile del Item Service
+                </h3>
+                <p class="text-slate-300 leading-relaxed mb-4">Un <strong class="text-white">Dockerfile</strong> es la "receta" que Docker usa para construir una imagen. Cada instruccion (FROM, RUN, COPY, etc.) crea una "capa" en la imagen. Docker cachea estas capas: si no cambias una instruccion, no re-ejecuta esa capa.</p>
                 <p class="text-slate-300 leading-relaxed mb-4">Crea <code class="text-accent">item-service/Dockerfile</code>:</p>
-                <div class="code-block" data-lang="item-service/Dockerfile"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="keyword">FROM</span> maven:3.9-eclipse-temurin-21-alpine
+                <div class="code-block" data-lang="item-service/Dockerfile">
+                    <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                    <code><span class="comment"># Imagen base: JDK 21 + Maven 3.9 sobre Alpine Linux</span>
+<span class="comment"># Alpine es una distribucion ultra-ligera (~5MB)</span>
+<span class="keyword">FROM</span> maven:3.9-eclipse-temurin-21-alpine
+
+<span class="comment"># Instalar bash y curl (Alpine trae solo sh por defecto)</span>
+<span class="comment"># --no-cache evita guardar el indice de paquetes (ahorra ~5MB)</span>
 <span class="keyword">RUN</span> apk add --no-cache bash curl
+
+<span class="comment"># Establecer directorio de trabajo dentro del contenedor</span>
+<span class="comment"># Todos los comandos siguientes se ejecutan desde /app</span>
 <span class="keyword">WORKDIR</span> /app
+
+<span class="comment"># Copiar SOLO pom.xml primero (optimizacion de cache)</span>
+<span class="comment"># Si pom.xml no cambia, Docker usa la capa cacheada</span>
 <span class="keyword">COPY</span> pom.xml ./pom.xml
+
+<span class="comment"># Descargar TODAS las dependencias Maven</span>
+<span class="comment"># -B = batch mode (sin colores, mejor para logs)</span>
+<span class="comment"># Esta capa se cachea: si no cambias pom.xml, no se re-ejecuta</span>
 <span class="keyword">RUN</span> mvn dependency:go-offline -B
+
+<span class="comment"># Variable de entorno: perfil activo de Spring Boot</span>
 <span class="keyword">ENV</span> SPRING_PROFILES_ACTIVE=dev
+
+<span class="comment"># Documentacion: el contenedor escucha en estos puertos</span>
+<span class="comment"># El mapeo real lo hace docker-compose.yml con -p</span>
 <span class="keyword">EXPOSE</span> <span class="number">8081</span>
 <span class="keyword">EXPOSE</span> <span class="number">5005</span>
-<span class="keyword">CMD</span> [<span class="string">"mvn"</span>,<span class="string">"spring-boot:run"</span>,<span class="string">"-Dspring-boot.run.fork=true"</span>,<span class="string">"-Dspring-boot.run.jvmArguments=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=*:5005"</span>]</code></div>
-                <p class="text-slate-300 leading-relaxed mb-4 mt-6">Crea <code class="text-accent">api-gateway/Dockerfile</code>:</p>
-                <div class="code-block" data-lang="api-gateway/Dockerfile"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="keyword">FROM</span> maven:3.9-eclipse-temurin-21-alpine
+
+<span class="comment"># Comando para arrancar Spring Boot</span>
+<span class="comment"># fork=true activa los dos classloaders de DevTools</span>
+<span class="comment"># jvmArguments habilita debug remoto en puerto 5005</span>
+<span class="keyword">CMD</span> [<span class="string">"mvn"</span>, <span class="string">"spring-boot:run"</span>, \
+     <span class="string">"-Dspring-boot.run.fork=true"</span>, \
+     <span class="string">"-Dspring-boot.run.jvmArguments=-Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=*:5005"</span>]</code>
+                </div>
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#128300;</span> Desglose del Dockerfile</div>
+                    <div class="alert-body">
+                        <table class="mt-2">
+                            <thead><tr><th>Directiva</th><th>Explicacion</th></tr></thead>
+                            <tbody>
+                                <tr><td><code>FROM maven:3.9-eclipse-temurin-21-alpine</code></td><td>Imagen base: JDK 21 + Maven 3.9 sobre Alpine. Todo lo necesario para compilar Java.</td></tr>
+                                <tr><td><code>COPY pom.xml ./pom.xml</code></td><td>Copia SOLO pom.xml primero. Docker cachea la descarga de dependencias. Si no cambias pom.xml, no se re-ejecuta.</td></tr>
+                                <tr><td><code>RUN mvn dependency:go-offline -B</code></td><td>Descarga TODAS las dependencias Maven. Esta capa se cachea: si no cambias pom.xml, no se re-ejecuta.</td></tr>
+                                <tr><td><code>EXPOSE 8081</code></td><td>Documentacion: el contenedor escucha en 8081. El mapeo real lo hace docker-compose.</td></tr>
+                                <tr><td><code>CMD ["mvn", "spring-boot:run", ...]</code></td><td>Arranca Spring Boot. fork=true activa DevTools. JVM args habilitan debug remoto en 5005.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <p class="text-slate-300 leading-relaxed mb-4 mt-8">Crea <code class="text-accent">api-gateway/Dockerfile</code>:</p>
+                <div class="code-block" data-lang="api-gateway/Dockerfile">
+                    <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                    <code><span class="keyword">FROM</span> maven:3.9-eclipse-temurin-21-alpine
+
 <span class="keyword">RUN</span> apk add --no-cache bash curl
+
 <span class="keyword">WORKDIR</span> /app
+
 <span class="keyword">COPY</span> pom.xml ./pom.xml
+
 <span class="keyword">RUN</span> mvn dependency:go-offline -B
+
 <span class="keyword">EXPOSE</span> <span class="number">8080</span>
-<span class="keyword">CMD</span> [<span class="string">"mvn"</span>,<span class="string">"spring-boot:run"</span>]</code></div>
+
+<span class="keyword">CMD</span> [<span class="string">"mvn"</span>, <span class="string">"spring-boot:run"</span>]</code>
+                </div>
             </section>
+
             <section id="m3-compose-update" class="mb-16">
-                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">3.2</span> Construir y Arrancar</h3>
-                <div class="alert-box alert-console"><div class="alert-title"><span class="alert-icon">&#128187;</span> CONSOLA</div><div class="alert-body">
-                    <div class="code-block mt-3" data-lang="bash"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment"># Construir imagenes (primera vez: 5-10 min)</span>
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                    <span class="text-accent">3.2</span> Construir y Arrancar Todo
+                </h3>
+                <div class="alert-box alert-console">
+                    <div class="alert-title"><span class="alert-icon">&#128187;</span> CONSOLA - Construir y Arrancar</div>
+                    <div class="alert-body">
+                        <div class="code-block mt-3" data-lang="bash">
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                            <code><span class="comment"># Construir imagenes (primera vez: 5-10 min)</span>
 <span class="tag">docker</span> compose build
-<span class="comment"># Arrancar los 3 servicios</span>
+
+<span class="comment"># Arrancar los 3 servicios en segundo plano</span>
 <span class="tag">docker</span> compose up -d
-<span class="comment"># Ver estado</span>
+
+<span class="comment"># Ver estado (los 3 deben estar Up)</span>
 <span class="tag">docker</span> compose ps
-<span class="comment"># Ver logs (espera "Started ...Application")</span>
+
+<span class="comment"># Ver logs del Item Service</span>
 <span class="tag">docker</span> compose logs -f item-service
-<span class="tag">docker</span> compose logs -f api-gateway</code></div>
-                </div></div>
+<span class="comment"># Espera: "Started ItemServiceApplication in X.XXX seconds"</span>
+
+<span class="comment"># Ver logs del API Gateway</span>
+<span class="tag">docker</span> compose logs -f api-gateway
+<span class="comment"># Espera: "Started ApiGatewayApplication in X.XXX seconds"</span>
+
+<span class="comment"># Ver logs de todos los servicios</span>
+<span class="tag">docker</span> compose logs -f</code>
+                        </div>
+                        <div class="alert-box alert-warning mt-4">
+                            <div class="alert-title"><span class="alert-icon">&#9888;&#65039;</span> Primera construccion es lenta</div>
+                            <div class="alert-body">
+                                <p>La primera vez que ejecutas <code>docker compose build</code>, Docker descarga las imagenes base y todas las dependencias Maven. Esto tarda 5-10 minutos. Las siguientes veces sera mucho mas rapido gracias al cache de capas.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
+
             <section id="m3-env" class="mb-16">
-                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">3.3</span> Archivo .dockerignore</h3>
-                <p class="text-slate-300 leading-relaxed mb-4">Crea <code class="text-accent">.dockerignore</code> en la raiz:</p>
-                <div class="code-block" data-lang=".dockerignore"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code>.git .gitignore .vscode .idea *.iml .DS_Store Thumbs.db
-Dockerfile docker-compose.yml .dockerignore *.md .env
-target/ *.class *.jar node_modules/</code></div>
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                    <span class="text-accent">3.3</span> Archivo .dockerignore
+                </h3>
+                <p class="text-slate-300 leading-relaxed mb-4">Cuando ejecutas <code class="text-accent">docker compose build</code>, Docker envia todo el contenido de la carpeta actual (el "build context") al daemon. Esto incluye archivos que no necesitas: <code>.git</code>, <code>node_modules</code>, archivos temporales, etc. Para evitar esto, crea un archivo <code class="text-accent">.dockerignore</code> en la raiz del proyecto.</p>
+                <div class="code-block" data-lang=".dockerignore">
+                    <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                    <code><span class="comment"># Control de versiones</span>
+.git
+.gitignore
+
+<span class="comment"># IDE y editores</span>
+.vscode
+.idea
+*.iml
+
+<span class="comment"># Archivos de sistema</span>
+.DS_Store
+Thumbs.db
+
+<span class="comment"># Docker (no incluir en build context)</span>
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+<span class="comment"># Documentacion (no necesaria en la imagen)</span>
+*.md
+README*
+
+<span class="comment"># Variables de entorno (NUNCA subir secretos)</span>
+.env
+
+<span class="comment"># Java compilado (Maven lo compila dentro del contenedor)</span>
+target/
+*.class
+*.jar
+
+<span class="comment"># Node (si hubiera frontend Node)</span>
+node_modules/</code>
+                </div>
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#128300;</span> Por que es importante .dockerignore?</div>
+                    <div class="alert-body">
+                        <table class="mt-2">
+                            <thead><tr><th>Beneficio</th><th>Explicacion</th></tr></thead>
+                            <tbody>
+                                <tr><td><strong>Velocidad de build</strong></td><td>Sin <code>.git</code> (que puede ser cientos de MB), el build context se envia en segundos en vez de minutos.</td></tr>
+                                <tr><td><strong>Tamano de imagen</strong></td><td>Archivos innecesarios no entran en la imagen, reduciendo su tamano final.</td></tr>
+                                <tr><td><strong>Seguridad</strong></td><td>Archivos <code>.env</code> con credenciales no se filtran accidentalmente en la imagen.</td></tr>
+                                <tr><td><strong>Cache de capas</strong></td><td>Menos archivos = menos cambios detectados = mejor aprovechamiento del cache de Docker.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </section>
         </section>
 
-        <!-- MODULO 4: ITEM SERVICE -->
         <section id="modulo4" class="mt-24">
             <div class="module-header">
                 <p class="module-number">Modulo 4</p>
                 <h2 class="module-title">Item Service: Microservicio Spring Boot</h2>
-                <p class="text-slate-400 mt-3 text-sm">4 capas con DTOs y manejo global de errores.</p>
+                <p class="text-slate-400 mt-3 text-sm">4 capas con DTOs y manejo global de errores. Todo el codigo es copy-paste.</p>
             </div>
+
             <section id="m4-pom" class="mb-16">
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">4.1</span> pom.xml</h3>
                 <p class="text-slate-300 leading-relaxed mb-4">Crea <code class="text-accent">item-service/pom.xml</code>:</p>
                 <div class="code-block" data-lang="item-service/pom.xml"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="tag">&lt;?xml</span> <span class="attr">version</span>=<span class="value">"1.0"</span> <span class="attr">encoding</span>=<span class="value">"UTF-8"</span><span class="tag">?&gt;</span>
-<span class="tag">&lt;project</span> <span class="attr">xmlns</span>=<span class="value">"http://maven.apache.org/POM/4.0.0"</span>
-         <span class="attr">xmlns:xsi</span>=<span class="value">"http://www.w3.org/2001/XMLSchema-instance"</span>
-         <span class="attr">xsi:schemaLocation</span>=<span class="value">"http://maven.apache.org/POM/4.0.0
-         https://maven.apache.org/xsd/maven-4.0.0.xsd"</span><span class="tag">&gt;</span>
-    <span class="tag">&lt;modelVersion&gt;</span><span class="string">4.0.0</span><span class="tag">&lt;/modelVersion&gt;</span>
+<span class="tag">&lt;project</span> <span class="attr">xmlns</span>=<span class="value">"http://maven.apache.org/POM/4.0.0"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;modelVersion&gt;</span>4.0.0<span class="tag">&lt;/modelVersion&gt;</span>
     <span class="tag">&lt;parent&gt;</span>
-        <span class="tag">&lt;groupId&gt;</span><span class="string">org.springframework.boot</span><span class="tag">&lt;/groupId&gt;</span>
-        <span class="tag">&lt;artifactId&gt;</span><span class="string">spring-boot-starter-parent</span><span class="tag">&lt;/artifactId&gt;</span>
-        <span class="tag">&lt;version&gt;</span><span class="string">3.3.4</span><span class="tag">&lt;/version&gt;</span>
-        <span class="tag">&lt;relativePath/&gt;</span>
+        <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
+        <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-parent<span class="tag">&lt;/artifactId&gt;</span>
+        <span class="tag">&lt;version&gt;</span>3.3.4<span class="tag">&lt;/version&gt;</span>
     <span class="tag">&lt;/parent&gt;</span>
-    <span class="tag">&lt;groupId&gt;</span><span class="string">com.singleinput</span><span class="tag">&lt;/groupId&gt;</span>
-    <span class="tag">&lt;artifactId&gt;</span><span class="string">item-service</span><span class="tag">&lt;/artifactId&gt;</span>
-    <span class="tag">&lt;version&gt;</span><span class="string">0.0.1-SNAPSHOT</span><span class="tag">&lt;/version&gt;</span>
+    <span class="tag">&lt;groupId&gt;</span>com.singleinput<span class="tag">&lt;/groupId&gt;</span>
+    <span class="tag">&lt;artifactId&gt;</span>item-service<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;version&gt;</span>0.0.1-SNAPSHOT<span class="tag">&lt;/version&gt;</span>
     <span class="tag">&lt;properties&gt;</span>
-        <span class="tag">&lt;java.version&gt;</span><span class="string">21</span><span class="tag">&lt;/java.version&gt;</span>
+        <span class="tag">&lt;java.version&gt;</span>21<span class="tag">&lt;/java.version&gt;</span>
     <span class="tag">&lt;/properties&gt;</span>
     <span class="tag">&lt;dependencies&gt;</span>
         <span class="tag">&lt;dependency&gt;</span>
-            <span class="tag">&lt;groupId&gt;</span><span class="string">org.springframework.boot</span><span class="tag">&lt;/groupId&gt;</span>
-            <span class="tag">&lt;artifactId&gt;</span><span class="string">spring-boot-starter-web</span><span class="tag">&lt;/artifactId&gt;</span>
+            <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
+            <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-web<span class="tag">&lt;/artifactId&gt;</span>
         <span class="tag">&lt;/dependency&gt;</span>
         <span class="tag">&lt;dependency&gt;</span>
-            <span class="tag">&lt;groupId&gt;</span><span class="string">org.springframework.boot</span><span class="tag">&lt;/groupId&gt;</span>
-            <span class="tag">&lt;artifactId&gt;</span><span class="string">spring-boot-starter-data-jpa</span><span class="tag">&lt;/artifactId&gt;</span>
+            <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
+            <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-data-jpa<span class="tag">&lt;/artifactId&gt;</span>
         <span class="tag">&lt;/dependency&gt;</span>
         <span class="tag">&lt;dependency&gt;</span>
-            <span class="tag">&lt;groupId&gt;</span><span class="string">org.springframework.boot</span><span class="tag">&lt;/groupId&gt;</span>
-            <span class="tag">&lt;artifactId&gt;</span><span class="string">spring-boot-starter-validation</span><span class="tag">&lt;/artifactId&gt;</span>
+            <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
+            <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-validation<span class="tag">&lt;/artifactId&gt;</span>
         <span class="tag">&lt;/dependency&gt;</span>
         <span class="tag">&lt;dependency&gt;</span>
-            <span class="tag">&lt;groupId&gt;</span><span class="string">org.postgresql</span><span class="tag">&lt;/groupId&gt;</span>
-            <span class="tag">&lt;artifactId&gt;</span><span class="string">postgresql</span><span class="tag">&lt;/artifactId&gt;</span>
-            <span class="tag">&lt;scope&gt;</span><span class="string">runtime</span><span class="tag">&lt;/scope&gt;</span>
+            <span class="tag">&lt;groupId&gt;</span>org.postgresql<span class="tag">&lt;/groupId&gt;</span>
+            <span class="tag">&lt;artifactId&gt;</span>postgresql<span class="tag">&lt;/artifactId&gt;</span>
+            <span class="tag">&lt;scope&gt;</span>runtime<span class="tag">&lt;/scope&gt;</span>
         <span class="tag">&lt;/dependency&gt;</span>
         <span class="tag">&lt;dependency&gt;</span>
-            <span class="tag">&lt;groupId&gt;</span><span class="string">org.springframework.boot</span><span class="tag">&lt;/groupId&gt;</span>
-            <span class="tag">&lt;artifactId&gt;</span><span class="string">spring-boot-devtools</span><span class="tag">&lt;/artifactId&gt;</span>
-            <span class="tag">&lt;scope&gt;</span><span class="string">runtime</span><span class="tag">&lt;/scope&gt;</span>
-            <span class="tag">&lt;optional&gt;</span><span class="string">true</span><span class="tag">&lt;/optional&gt;</span>
+            <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
+            <span class="tag">&lt;artifactId&gt;</span>spring-boot-devtools<span class="tag">&lt;/artifactId&gt;</span>
+            <span class="tag">&lt;scope&gt;</span>runtime<span class="tag">&lt;/scope&gt;</span>
+            <span class="tag">&lt;optional&gt;</span>true<span class="tag">&lt;/optional&gt;</span>
         <span class="tag">&lt;/dependency&gt;</span>
         <span class="tag">&lt;dependency&gt;</span>
-            <span class="tag">&lt;groupId&gt;</span><span class="string">org.projectlombok</span><span class="tag">&lt;/groupId&gt;</span>
-            <span class="tag">&lt;artifactId&gt;</span><span class="string">lombok</span><span class="tag">&lt;/artifactId&gt;</span>
-            <span class="tag">&lt;optional&gt;</span><span class="string">true</span><span class="tag">&lt;/optional&gt;</span>
+            <span class="tag">&lt;groupId&gt;</span>org.projectlombok<span class="tag">&lt;/groupId&gt;</span>
+            <span class="tag">&lt;artifactId&gt;</span>lombok<span class="tag">&lt;/artifactId&gt;</span>
+            <span class="tag">&lt;optional&gt;</span>true<span class="tag">&lt;/optional&gt;</span>
         <span class="tag">&lt;/dependency&gt;</span>
         <span class="tag">&lt;dependency&gt;</span>
-            <span class="tag">&lt;groupId&gt;</span><span class="string">org.springframework.boot</span><span class="tag">&lt;/groupId&gt;</span>
-            <span class="tag">&lt;artifactId&gt;</span><span class="string">spring-boot-starter-test</span><span class="tag">&lt;/artifactId&gt;</span>
-            <span class="tag">&lt;scope&gt;</span><span class="string">test</span><span class="tag">&lt;/scope&gt;</span>
+            <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
+            <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-test<span class="tag">&lt;/artifactId&gt;</span>
+            <span class="tag">&lt;scope&gt;</span>test<span class="tag">&lt;/scope&gt;</span>
         <span class="tag">&lt;/dependency&gt;</span>
     <span class="tag">&lt;/dependencies&gt;</span>
     <span class="tag">&lt;build&gt;</span>
         <span class="tag">&lt;plugins&gt;</span>
             <span class="tag">&lt;plugin&gt;</span>
-                <span class="tag">&lt;groupId&gt;</span><span class="string">org.springframework.boot</span><span class="tag">&lt;/groupId&gt;</span>
-                <span class="tag">&lt;artifactId&gt;</span><span class="string">spring-boot-maven-plugin</span><span class="tag">&lt;/artifactId&gt;</span>
-                <span class="tag">&lt;configuration&gt;</span>
-                    <span class="tag">&lt;excludes&gt;</span>
-                        <span class="tag">&lt;exclude&gt;</span>
-                            <span class="tag">&lt;groupId&gt;</span><span class="string">org.projectlombok</span><span class="tag">&lt;/groupId&gt;</span>
-                            <span class="tag">&lt;artifactId&gt;</span><span class="string">lombok</span><span class="tag">&lt;/artifactId&gt;</span>
-                        <span class="tag">&lt;/exclude&gt;</span>
-                    <span class="tag">&lt;/excludes&gt;</span>
-                <span class="tag">&lt;/configuration&gt;</span>
+                <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
+                <span class="tag">&lt;artifactId&gt;</span>spring-boot-maven-plugin<span class="tag">&lt;/artifactId&gt;</span>
             <span class="tag">&lt;/plugin&gt;</span>
         <span class="tag">&lt;/plugins&gt;</span>
     <span class="tag">&lt;/build&gt;</span>
 <span class="tag">&lt;/project&gt;</span></code></div>
             </section>
+
             <section id="m4-yml" class="mb-16">
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">4.2</span> application.yml</h3>
                 <p class="text-slate-300 leading-relaxed mb-4">Crea <code class="text-accent">item-service/src/main/resources/application.yml</code>:</p>
@@ -935,36 +1220,18 @@ target/ *.class *.jar node_modules/</code></div>
     <span class="property">name</span>: <span class="string">item-service</span>
   <span class="property">datasource</span>:
     <span class="property">url</span>: <span class="string">jdbc:postgresql://crud-postgres:5432/crud_db</span>
-    <span class="property">username</span>: <span class="string"></span>
-    <span class="property">password</span>: <span class="string"></span>
+    <span class="property">username</span>: <span class="string">admin</span>
+    <span class="property">password</span>: <span class="string">secret123</span>
     <span class="property">driver-class-name</span>: <span class="string">org.postgresql.Driver</span>
-    <span class="property">hikari</span>:
-      <span class="property">maximum-pool-size</span>: <span class="number">10</span>
-      <span class="property">minimum-idle</span>: <span class="number">5</span>
-      <span class="property">idle-timeout</span>: <span class="number">30000</span>
-      <span class="property">connection-timeout</span>: <span class="number">20000</span>
-      <span class="property">max-lifetime</span>: <span class="number">1800000</span>
   <span class="property">jpa</span>:
     <span class="property">hibernate</span>:
       <span class="property">ddl-auto</span>: <span class="string">update</span>
     <span class="property">show-sql</span>: <span class="string">true</span>
     <span class="property">properties</span>:
       <span class="property">hibernate</span>:
-        <span class="property">format_sql</span>: <span class="string">true</span>
         <span class="property">dialect</span>: <span class="string">org.hibernate.dialect.PostgreSQLDialect</span>
-  <span class="property">devtools</span>:
-    <span class="property">restart</span>:
-      <span class="property">enabled</span>: <span class="string">true</span>
-      <span class="property">poll-interval</span>: <span class="string">1s</span>
-    <span class="property">livereload</span>:
-      <span class="property">enabled</span>: <span class="string">true</span>
 <span class="property">server</span>:
-  <span class="property">port</span>: <span class="number">8081</span>
-<span class="property">logging</span>:
-  <span class="property">level</span>:
-    <span class="property">root</span>: <span class="string">INFO</span>
-    <span class="property">com.singleinput</span>: <span class="string">DEBUG</span>
-    <span class="property">org.hibernate.SQL</span>: <span class="string">DEBUG</span></code></div>
+  <span class="property">port</span>: <span class="number">8081</span></code></div>
             </section>
             <section id="m4-entity" class="mb-16">
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">4.3</span> Entity + DTO</h3>
@@ -1073,10 +1340,8 @@ target/ *.class *.jar node_modules/</code></div>
     }
 }</code></div>
             </section>
-
             <section id="m4-controller" class="mb-16">
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">4.6</span> Controller</h3>
-                <p class="text-slate-300 leading-relaxed mb-4">El controlador REST expone 6 endpoints. <strong class="text-neon-yellow">No tiene <code class="text-accent">@CrossOrigin</code></strong> porque CORS se maneja exclusivamente en el API Gateway.</p>
                 <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">controller/ItemController.java</code>:</p>
                 <div class="code-block" data-lang="ItemController.java"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="keyword">package</span> com.singleinput.controller;
 <span class="keyword">import</span> com.singleinput.dto.ItemDTO;
@@ -1096,7 +1361,6 @@ target/ *.class *.jar node_modules/</code></div>
     <span class="keyword">public</span> <span class="type">ResponseEntity</span>&lt;<span class="type">List</span>&lt;<span class="type">ItemDTO</span>&gt;&gt; findAll() {
         <span class="keyword">return</span> ResponseEntity.ok(service.findAll());
     }
-
     <span class="annotation">@GetMapping</span>(<span class="string">"/{id}"</span>)
     <span class="keyword">public</span> <span class="type">ResponseEntity</span>&lt;<span class="type">ItemDTO</span>&gt; findById(<span class="annotation">@PathVariable</span> <span class="type">Long</span> id) {
         <span class="keyword">return</span> ResponseEntity.ok(service.findById(id));
@@ -1119,28 +1383,11 @@ target/ *.class *.jar node_modules/</code></div>
         <span class="keyword">return</span> ResponseEntity.noContent().build();
     }
 }</code></div>
-                <div class="alert-box alert-analysis">
-                    <div class="alert-title"><span class="alert-icon">&#9432;</span> Analisis de Endpoints</div>
-                    <div class="alert-body">
-                        <table>
-                            <tr><th>Metodo</th><th>Ruta</th><th>Accion</th></tr>
-                            <tr><td><code>GET</code></td><td><code>/api/items</code></td><td>Listar todos los items</td></tr>
-                            <tr><td><code>GET</code></td><td><code>/api/items/{id}</code></td><td>Buscar por ID</td></tr>
-                            <tr><td><code>GET</code></td><td><code>/api/items/search?texto=...</code></td><td>Buscar por texto</td></tr>
-                            <tr><td><code>POST</code></td><td><code>/api/items</code></td><td>Crear nuevo item</td></tr>
-                            <tr><td><code>PUT</code></td><td><code>/api/items/{id}</code></td><td>Actualizar item</td></tr>
-                            <tr><td><code>DELETE</code></td><td><code>/api/items/{id}</code></td><td>Eliminar item</td></tr>
-                        </table>
-                    </div>
-                </div>
             </section>
-
             <section id="m4-exception" class="mb-16">
-                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">4.7</span> Manejo de Excepciones</h3>
-                <p class="text-slate-300 leading-relaxed mb-4">Creamos una excepcion personalizada y un manejador global con <code class="text-accent">@ControllerAdvice</code> para devolver respuestas HTTP correctas.</p>
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">4.7</span> Exception Handler</h3>
                 <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">exception/ItemNotFoundException.java</code>:</p>
                 <div class="code-block" data-lang="ItemNotFoundException.java"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="keyword">package</span> com.singleinput.exception;
-
 <span class="keyword">public class</span> <span class="type">ItemNotFoundException</span> <span class="keyword">extends</span> <span class="type">RuntimeException</span> {
     <span class="keyword">public</span> <span class="type">ItemNotFoundException</span>(<span class="type">Long</span> id) {
         <span class="keyword">super</span>(<span class="string">"Item no encontrado con id: "</span> + id);
@@ -1148,34 +1395,39 @@ target/ *.class *.jar node_modules/</code></div>
 }</code></div>
                 <p class="text-slate-300 leading-relaxed mb-4 mt-6"><code class="text-accent">exception/GlobalExceptionHandler.java</code>:</p>
                 <div class="code-block" data-lang="GlobalExceptionHandler.java"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="keyword">package</span> com.singleinput.exception;
-<span class="keyword">import</span> org.springframework.http.HttpStatus;
-<span class="keyword">import</span> org.springframework.http.ResponseEntity;
+<span class="keyword">import</span> org.springframework.http.*;
 <span class="keyword">import</span> org.springframework.web.bind.MethodArgumentNotValidException;
 <span class="keyword">import</span> org.springframework.web.bind.annotation.*;
-<span class="keyword">import</span> java.util.Map;
+<span class="keyword">import</span> java.time.LocalDateTime;
+<span class="keyword">import</span> java.util.*;
 
 <span class="annotation">@RestControllerAdvice</span>
 <span class="keyword">public class</span> <span class="type">GlobalExceptionHandler</span> {
-
     <span class="annotation">@ExceptionHandler</span>(<span class="type">ItemNotFoundException</span>.class)
-    <span class="keyword">public</span> <span class="type">ResponseEntity</span>&lt;<span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">String</span>&gt;&gt; handleNotFound(<span class="type">ItemNotFoundException</span> ex) {
-        <span class="keyword">return</span> ResponseEntity.status(<span class="type">HttpStatus</span>.NOT_FOUND)
-                .body(Map.of(<span class="string">"error"</span>, ex.getMessage()));
+    <span class="keyword">public</span> <span class="type">ResponseEntity</span>&lt;<span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">Object</span>&gt;&gt; handleNotFound(<span class="type">ItemNotFoundException</span> ex) {
+        <span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">Object</span>&gt; body = <span class="keyword">new</span> <span class="type">LinkedHashMap</span>&lt;&gt;();
+        body.put(<span class="string">"timestamp"</span>, LocalDateTime.now().toString());
+        body.put(<span class="string">"status"</span>, <span class="number">404</span>);
+        body.put(<span class="string">"error"</span>, <span class="string">"Not Found"</span>);
+        body.put(<span class="string">"message"</span>, ex.getMessage());
+        <span class="keyword">return</span> ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
     }
-
     <span class="annotation">@ExceptionHandler</span>(<span class="type">MethodArgumentNotValidException</span>.class)
-    <span class="keyword">public</span> <span class="type">ResponseEntity</span>&lt;<span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">String</span>&gt;&gt; handleValidation(<span class="type">MethodArgumentNotValidException</span> ex) {
-        <span class="type">String</span> msg = ex.getBindingResult().getFieldErrors().stream()
-                .map(e -&gt; e.getField() + <span class="string">": "</span> + e.getDefaultMessage())
-                .reduce(<span class="string">""</span>, (a, b) -&gt; a + b);
-        <span class="keyword">return</span> ResponseEntity.badRequest().body(Map.of(<span class="string">"error"</span>, msg));
+    <span class="keyword">public</span> <span class="type">ResponseEntity</span>&lt;<span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">Object</span>&gt;&gt; handleValidation(<span class="type">MethodArgumentNotValidException</span> ex) {
+        <span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">Object</span>&gt; body = <span class="keyword">new</span> <span class="type">LinkedHashMap</span>&lt;&gt;();
+        body.put(<span class="string">"timestamp"</span>, LocalDateTime.now().toString());
+        body.put(<span class="string">"status"</span>, <span class="number">400</span>);
+        body.put(<span class="string">"error"</span>, <span class="string">"Bad Request"</span>);
+        <span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">String</span>&gt; errors = <span class="keyword">new</span> <span class="type">LinkedHashMap</span>&lt;&gt;();
+        ex.getBindingResult().getFieldErrors().forEach(e -> errors.put(e.getField(), e.getDefaultMessage()));
+        body.put(<span class="string">"messages"</span>, errors);
+        <span class="keyword">return</span> ResponseEntity.badRequest().body(body);
     }
 }</code></div>
             </section>
-
-            <section id="m4-main" class="mb-16">
-                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">4.8</span> Punto de Entrada</h3>
-                <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">ItemServiceApplication.java</code> - La clase que arranca Spring Boot:</p>
+            <section class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">4.8</span> Application</h3>
+                <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">ItemServiceApplication.java</code>:</p>
                 <div class="code-block" data-lang="ItemServiceApplication.java"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="keyword">package</span> com.singleinput;
 <span class="keyword">import</span> org.springframework.boot.SpringApplication;
 <span class="keyword">import</span> org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -1186,21 +1438,15 @@ target/ *.class *.jar node_modules/</code></div>
         SpringApplication.run(<span class="type">ItemServiceApplication</span>.class, args);
     }
 }</code></div>
-                <div class="alert-box alert-console">
-                    <div class="alert-title"><span class="alert-icon">&#10003;</span> Microservicio Completo</div>
-                    <div class="alert-body">Con esto, <code>item-service</code> esta listo. Tiene Entity, DTO, Repository, Service, Controller, Exception Handler y punto de entrada. Corre en el puerto <code>8081</code> y solo responde a peticiones que lleguen a traves del Gateway.</div>
-                </div>
             </section>
         </section>
 
-        <!-- MODULO 5: API GATEWAY -->
-        <section id="modulo5">
+        <section id="modulo5" class="mt-24">
             <div class="module-header">
                 <p class="module-number">Modulo 5</p>
                 <h2 class="module-title">API Gateway con Spring Cloud Gateway</h2>
                 <p class="text-slate-400 mt-3 text-sm">El punto de entrada unico para todas las peticiones del cliente.</p>
             </div>
-
             <section id="m5-que-es" class="mb-16">
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">5.1</span> Que es un API Gateway?</h3>
                 <p class="text-slate-300 leading-relaxed mb-4">Un <strong class="text-white">API Gateway</strong> es un servidor que actua como <strong class="text-accent">puerta de entrada unica</strong> a todos los microservicios. El cliente (navegador) no sabe cuantos microservicios existen ni en que puertos corren; solo conoce la direccion del Gateway.</p>
@@ -1214,47 +1460,44 @@ target/ *.class *.jar node_modules/</code></div>
                     </div>
                 </div>
             </section>
-
             <section id="m5-pom" class="mb-16">
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">5.2</span> pom.xml del Gateway</h3>
-                <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">api-gateway/pom.xml</code> - Spring Boot 3.3.4 + Spring Cloud 2023.0.3:</p>
-                <div class="code-block" data-lang="pom.xml"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="tag">&lt;?xml</span> <span class="attr">version</span>=<span class="value">"1.0"</span> <span class="attr">encoding</span>=<span class="value">"UTF-8"</span><span class="tag">?&gt;</span>
-<span class="tag">&lt;project</span> <span class="attr">xmlns</span>=<span class="value">"http://maven.apache.org/POM/4.0.0"</span><span class="tag">&gt;</span>
+                <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">api-gateway/pom.xml</code>:</p>
+                <div class="code-block" data-lang="api-gateway/pom.xml"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="tag">&lt;?xml</span> <span class="attr">version</span>=<span class="value">"1.0"</span> <span class="attr">encoding</span>=<span class="value">"UTF-8"</span><span class="tag">?&gt;</span>
+<span class="tag">&lt;project</span> <span class="attr">xmlns</span>=<span class="value">"http://maven.apache.org/POM/4.0.0"</span>
+         <span class="attr">xmlns:xsi</span>=<span class="value">"http://www.w3.org/2001/XMLSchema-instance"</span>
+         <span class="attr">xsi:schemaLocation</span>=<span class="value">"http://maven.apache.org/POM/4.0.0
+         https://maven.apache.org/xsd/maven-4.0.0.xsd"</span><span class="tag">&gt;</span>
     <span class="tag">&lt;modelVersion&gt;</span>4.0.0<span class="tag">&lt;/modelVersion&gt;</span>
     <span class="tag">&lt;parent&gt;</span>
         <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
         <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-parent<span class="tag">&lt;/artifactId&gt;</span>
         <span class="tag">&lt;version&gt;</span>3.3.4<span class="tag">&lt;/version&gt;</span>
     <span class="tag">&lt;/parent&gt;</span>
-    <span class="tag">&lt;groupId&gt;</span>com.singleinput<span class="tag">&lt;/groupId&gt;</span>
+    <span class="tag">&lt;groupId&gt;</span>com.gateway<span class="tag">&lt;/groupId&gt;</span>
     <span class="tag">&lt;artifactId&gt;</span>api-gateway<span class="tag">&lt;/artifactId&gt;</span>
     <span class="tag">&lt;version&gt;</span>0.0.1-SNAPSHOT<span class="tag">&lt;/version&gt;</span>
-    <span class="tag">&lt;name&gt;</span>api-gateway<span class="tag">&lt;/name&gt;</span>
-
     <span class="tag">&lt;properties&gt;</span>
         <span class="tag">&lt;java.version&gt;</span>21<span class="tag">&lt;/java.version&gt;</span>
         <span class="tag">&lt;spring-cloud.version&gt;</span>2023.0.3<span class="tag">&lt;/spring-cloud.version&gt;</span>
     <span class="tag">&lt;/properties&gt;</span>
-
     <span class="tag">&lt;dependencies&gt;</span>
         <span class="tag">&lt;dependency&gt;</span>
             <span class="tag">&lt;groupId&gt;</span>org.springframework.cloud<span class="tag">&lt;/groupId&gt;</span>
             <span class="tag">&lt;artifactId&gt;</span>spring-cloud-starter-gateway<span class="tag">&lt;/artifactId&gt;</span>
         <span class="tag">&lt;/dependency&gt;</span>
     <span class="tag">&lt;/dependencies&gt;</span>
-
     <span class="tag">&lt;dependencyManagement&gt;</span>
         <span class="tag">&lt;dependencies&gt;</span>
             <span class="tag">&lt;dependency&gt;</span>
                 <span class="tag">&lt;groupId&gt;</span>org.springframework.cloud<span class="tag">&lt;/groupId&gt;</span>
                 <span class="tag">&lt;artifactId&gt;</span>spring-cloud-dependencies<span class="tag">&lt;/artifactId&gt;</span>
-                <span class="tag">&lt;version&gt;</span>${spring-cloud.version}<span class="tag">&lt;/version&gt;</span>
+                <span class="tag">&lt;version&gt;</span><span class="tag">&lt;/version&gt;</span>
                 <span class="tag">&lt;type&gt;</span>pom<span class="tag">&lt;/type&gt;</span>
                 <span class="tag">&lt;scope&gt;</span>import<span class="tag">&lt;/scope&gt;</span>
             <span class="tag">&lt;/dependency&gt;</span>
         <span class="tag">&lt;/dependencies&gt;</span>
     <span class="tag">&lt;/dependencyManagement&gt;</span>
-
     <span class="tag">&lt;build&gt;</span>
         <span class="tag">&lt;plugins&gt;</span>
             <span class="tag">&lt;plugin&gt;</span>
@@ -1265,13 +1508,11 @@ target/ *.class *.jar node_modules/</code></div>
     <span class="tag">&lt;/build&gt;</span>
 <span class="tag">&lt;/project&gt;</span></code></div>
             </section>
-
             <section id="m5-config" class="mb-16">
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">5.3</span> Configuracion del Gateway</h3>
-                <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">api-gateway/src/main/resources/application.yml</code> - Rutas y CORS:</p>
+                <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">api-gateway/src/main/resources/application.yml</code>:</p>
                 <div class="code-block" data-lang="application.yml"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="property">server</span>:
   <span class="property">port</span>: <span class="number">8080</span>
-
 <span class="property">spring</span>:
   <span class="property">application</span>:
     <span class="property">name</span>: <span class="string">api-gateway</span>
@@ -1292,14 +1533,8 @@ target/ *.class *.jar node_modules/</code></div>
               - <span class="string">PUT</span>
               - <span class="string">DELETE</span>
             <span class="property">allowedHeaders</span>: <span class="string">"*"</span></code></div>
-                <div class="alert-box alert-warning">
-                    <div class="alert-title"><span class="alert-icon">&#9888;</span> Punto Clave</div>
-                    <div class="alert-body">El Gateway corre en <code>puerto 8080</code>. Redirige todo lo que empiece con <code>/api/items/**</code> hacia <code>http://item-service:8081</code>. El nombre <code>item-service</code> se resuelve automaticamente gracias a la red Docker <code>single-input-network</code>. CORS permite solo peticiones desde <code>localhost:5500</code> (el frontend servido por Live Server).</div>
-                </div>
-
-                <h3 class="text-2xl font-bold text-white mb-6 mt-12 flex items-center gap-3"><span class="text-accent">5.4</span> Clase Principal del Gateway</h3>
-                <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">api-gateway/src/main/java/com/singleinput/gateway/ApiGatewayApplication.java</code>:</p>
-                <div class="code-block" data-lang="ApiGatewayApplication.java"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="keyword">package</span> com.singleinput.gateway;
+                <p class="text-slate-300 leading-relaxed mb-4 mt-6"><code class="text-accent">api-gateway/src/main/java/com/gateway/ApiGatewayApplication.java</code>:</p>
+                <div class="code-block" data-lang="ApiGatewayApplication.java"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="keyword">package</span> com.gateway;
 <span class="keyword">import</span> org.springframework.boot.SpringApplication;
 <span class="keyword">import</span> org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -1309,21 +1544,15 @@ target/ *.class *.jar node_modules/</code></div>
         SpringApplication.run(<span class="type">ApiGatewayApplication</span>.class, args);
     }
 }</code></div>
-                <div class="alert-box alert-console">
-                    <div class="alert-title"><span class="alert-icon">&#10003;</span> Gateway Listo</div>
-                    <div class="alert-body">El API Gateway esta configurado. Escucha en <code>puerto 8080</code>, enruta a <code>item-service</code> y maneja CORS. No necesita <code>@CrossOrigin</code> en el microservicio porque el Gateway ya agrega los headers necesarios.</div>
-                </div>
             </section>
         </section>
 
-        <!-- MODULO 6: POSTMAN -->
-        <section id="modulo6">
+        <section id="modulo6" class="mt-24">
             <div class="module-header">
                 <p class="module-number">Modulo 6</p>
                 <h2 class="module-title">Probando con Postman</h2>
                 <p class="text-slate-400 mt-3 text-sm">Verificar que todos los endpoints funcionan a traves del Gateway.</p>
             </div>
-
             <section id="m6-endpoints" class="mb-16">
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">6.1</span> Probar Endpoints</h3>
                 <p class="text-slate-300 leading-relaxed mb-4">Todas las peticiones se hacen al <strong class="text-white">Gateway</strong> en <code class="text-accent">http://localhost:8080</code>, nunca directamente al microservicio.</p>
@@ -1347,7 +1576,6 @@ target/ *.class *.jar node_modules/</code></div>
                     </div>
                 </div>
             </section>
-
             <section id="m6-variables" class="mb-16">
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">6.2</span> Variables Dinamicas en Postman</h3>
                 <p class="text-slate-300 leading-relaxed mb-4">Para no repetir URLs, crea una <strong class="text-white">variable de entorno</strong> en Postman:</p>
@@ -1361,17 +1589,15 @@ Usar en requests:
             </section>
         </section>
 
-        <!-- MODULO 7: FRONTEND -->
-        <section id="modulo7">
+        <section id="modulo7" class="mt-24">
             <div class="module-header">
                 <p class="module-number">Modulo 7</p>
                 <h2 class="module-title">Frontend - Single Input CRUD</h2>
                 <p class="text-slate-400 mt-3 text-sm">Una pagina HTML con un input y 4 botones. Toda la logica via Fetch API.</p>
             </div>
-
             <section id="m7-html" class="mb-16">
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">7.1</span> index.html</h3>
-                <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">frontend/index.html</code> - Un solo input, cuatro botones, una lista de resultados:</p>
+                <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">frontend/index.html</code>:</p>
                 <div class="code-block" data-lang="index.html"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="tag">&lt;!DOCTYPE html&gt;</span>
 <span class="tag">&lt;html</span> <span class="attr">lang</span>=<span class="value">"es"</span><span class="tag">&gt;</span>
 <span class="tag">&lt;head&gt;</span>
@@ -1399,10 +1625,9 @@ Usar en requests:
 <span class="tag">&lt;/body&gt;</span>
 <span class="tag">&lt;/html&gt;</span></code></div>
             </section>
-
             <section id="m7-css" class="mb-16">
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">7.2</span> style.css</h3>
-                <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">frontend/style.css</code> - Modo oscuro, responsive, minimalista:</p>
+                <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">frontend/style.css</code>:</p>
                 <div class="code-block" data-lang="style.css"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code>* { margin: 0; padding: 0; box-sizing: border-box; }
 body {
     font-family: 'Segoe UI', sans-serif;
@@ -1465,10 +1690,9 @@ input[type="text"]:focus { border-color: #38bdf8; }
 #itemList li:hover { background: #334155; }
 #itemList li .item-id { color: #64748b; font-size: 0.8rem; }</code></div>
             </section>
-
             <section id="m7-js" class="mb-16">
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">7.3</span> app.js</h3>
-                <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">frontend/app.js</code> - Fetch API con async/await, renderizado seguro con <code class="text-accent">textContent</code> (previene XSS):</p>
+                <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">frontend/app.js</code>:</p>
                 <div class="code-block" data-lang="app.js"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code>const API = 'http://localhost:8080/api/items';
 const input = document.getElementById('itemInput');
 const hiddenId = document.getElementById('itemId');
@@ -1501,7 +1725,7 @@ async function updateItem() {
     const id = hiddenId.value;
     const texto = input.value.trim();
     if (!id || !texto) return;
-    await fetch(`${API}/${id}`, {
+    await fetch(${API}/, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ texto })
@@ -1514,7 +1738,7 @@ async function updateItem() {
 async function deleteItem() {
     const id = hiddenId.value;
     if (!id) return;
-    await fetch(`${API}/${id}`, { method: 'DELETE' });
+    await fetch(${API}/, { method: 'DELETE' });
     input.value = '';
     hiddenId.value = '';
     loadAll();
@@ -1523,7 +1747,7 @@ async function deleteItem() {
 async function searchItems() {
     const texto = input.value.trim();
     if (!texto) { loadAll(); return; }
-    const res = await fetch(`${API}/search?texto=${encodeURIComponent(texto)}`);
+    const res = await fetch(${API}/search?texto=);
     const data = await res.json();
     render(data);
 }
@@ -1548,23 +1772,213 @@ function render(items) {
 }
 
 loadAll();</code></div>
+            </section>
+        </section>
+
+        <section id="modulo8" class="mt-24">
+            <div class="module-header">
+                <p class="module-number">Modulo 8</p>
+                <h2 class="module-title">JWT: Autenticacion Opcional (Sin Base de Datos)</h2>
+                <p class="text-slate-400 mt-3 text-sm">Implementar autenticacion con JWT usando credenciales en un archivo de configuracion.</p>
+            </div>
+            <section id="m8-intro" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">8.1</span> Que es JWT?</h3>
+                <p class="text-slate-300 leading-relaxed mb-4"><strong class="text-white">JWT (JSON Web Token)</strong> es un estandar para crear tokens de autenticacion. Un JWT es una cadena de texto firmada que contiene informacion del usuario (claims). El servidor verifica la firma sin necesidad de consultar una base de datos.</p>
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#9432;</span> Estructura de un JWT</div>
+                    <div class="alert-body">
+                        Un JWT tiene 3 partes separadas por puntos:<br>
+                        <code>eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiJ9.SflKxwRJSMeKKF2QT4fwpM</code><br><br>
+                        <strong>Header:</strong> Algoritmo de firma (HS256).<br>
+                        <strong>Payload:</strong> Claims (datos del usuario: sub, exp, etc.).<br>
+                        <strong>Signature:</strong> Firma criptografica para verificar integridad.
+                    </div>
+                </div>
+            </section>
+            <section id="m8-config" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">8.2</span> Configuracion sin Base de Datos</h3>
+                <p class="text-slate-300 leading-relaxed mb-4">Para este ejemplo, usaremos credenciales hardcodeadas en <code class="text-accent">application.yml</code> del Gateway. En produccion, usarias un servicio de autenticacion externo o una base de datos.</p>
+                <div class="code-block" data-lang="api-gateway/pom.xml (agregar dependencia)"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment">&lt;!-- Agregar esta dependencia al pom.xml del Gateway --&gt;</span>
+<span class="tag">&lt;dependency&gt;</span>
+    <span class="tag">&lt;groupId&gt;</span>io.jsonwebtoken<span class="tag">&lt;/groupId&gt;</span>
+    <span class="tag">&lt;artifactId&gt;</span>jjwt-api<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;version&gt;</span>0.12.6<span class="tag">&lt;/version&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span>
+<span class="tag">&lt;dependency&gt;</span>
+    <span class="tag">&lt;groupId&gt;</span>io.jsonwebtoken<span class="tag">&lt;/groupId&gt;</span>
+    <span class="tag">&lt;artifactId&gt;</span>jjwt-impl<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;version&gt;</span>0.12.6<span class="tag">&lt;/version&gt;</span>
+    <span class="tag">&lt;scope&gt;</span>runtime<span class="tag">&lt;/scope&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span>
+<span class="tag">&lt;dependency&gt;</span>
+    <span class="tag">&lt;groupId&gt;</span>io.jsonwebtoken<span class="tag">&lt;/groupId&gt;</span>
+    <span class="tag">&lt;artifactId&gt;</span>jjwt-jackson<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;version&gt;</span>0.12.6<span class="tag">&lt;/version&gt;</span>
+    <span class="tag">&lt;scope&gt;</span>runtime<span class="tag">&lt;/scope&gt;</span>
+<span class="tag">&lt;/dependency&gt;</span></code></div>
+                <p class="text-slate-300 leading-relaxed mb-4 mt-6">Agregar credenciales y clave secreta en <code class="text-accent">api-gateway/src/main/resources/application.yml</code>:</p>
+                <div class="code-block" data-lang="application.yml"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="property">security</span>:
+  <span class="property">jwt</span>:
+    <span class="property">secret</span>: <span class="string">mi-clave-secreta-muy-larga-para-jwt-que-debe-tener-al-menos-256-bits</span>
+    <span class="property">expiration</span>: <span class="number">3600000</span>
+  <span class="property">users</span>:
+    - <span class="property">username</span>: <span class="string">admin</span>
+      <span class="property">password</span>: <span class="string">admin123</span>
+      <span class="property">role</span>: <span class="string">ADMIN</span>
+    - <span class="property">username</span>: <span class="string">user</span>
+      <span class="property">password</span>: <span class="string">user123</span>
+      <span class="property">role</span>: <span class="string">USER</span></code></div>
+                <p class="text-slate-300 leading-relaxed mb-4 mt-6">Crear clase para generar y validar JWT en <code class="text-accent">api-gateway/src/main/java/com/gateway/security/JwtUtil.java</code>:</p>
+                <div class="code-block" data-lang="JwtUtil.java"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="keyword">package</span> com.gateway.security;
+<span class="keyword">import</span> io.jsonwebtoken.*;
+<span class="keyword">import</span> org.springframework.beans.factory.annotation.Value;
+<span class="keyword">import</span> org.springframework.stereotype.Component;
+<span class="keyword">import</span> java.util.Date;
+
+<span class="annotation">@Component</span>
+<span class="keyword">public class</span> <span class="type">JwtUtil</span> {
+    <span class="annotation">@Value</span>(<span class="string">""</span>)
+    <span class="keyword">private</span> <span class="type">String</span> secret;
+    <span class="annotation">@Value</span>(<span class="string">""</span>)
+    <span class="keyword">private</span> <span class="keyword">long</span> expiration;
+
+    <span class="keyword">public</span> <span class="type">String</span> generateToken(<span class="type">String</span> username, <span class="type">String</span> role) {
+        <span class="keyword">return</span> Jwts.builder()
+                .setSubject(username)
+                .claim(<span class="string">"role"</span>, role)
+                .setIssuedAt(<span class="keyword">new</span> Date())
+                .setExpiration(<span class="keyword">new</span> Date(System.currentTimeMillis() + expiration))
+                .signWith(SignatureAlgorithm.HS256, secret)
+                .compact();
+    }
+
+    <span class="keyword">public</span> <span class="type">String</span> validateToken(<span class="type">String</span> token) {
+        <span class="keyword">try</span> {
+            Claims claims = Jwts.parser()
+                    .setSigningKey(secret)
+                    .parseClaimsJws(token)
+                    .getBody();
+            <span class="keyword">return</span> claims.getSubject();
+        } <span class="keyword">catch</span> (Exception e) {
+            <span class="keyword">return null</span>;
+        }
+    }
+}</code></div>
+            </section>
+            <section id="m8-test" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">8.3</span> Probar Autenticacion</h3>
+                <p class="text-slate-300 leading-relaxed mb-4">Para probar JWT en Postman:</p>
+                <div class="code-block" data-lang="Postman"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment">// 1. Login (obtener token)</span>
+POST http://localhost:8080/api/auth/login
+Body: {"username": "admin", "password": "admin123"}
+Response: {"token": "eyJhbGciOiJIUzI1NiJ9..."}
+
+<span class="comment">// 2. Usar token en peticiones protegidas</span>
+GET http://localhost:8080/api/items
+Headers: Authorization: Bearer eyJhbGciOiJIUzI1NiJ9...</code></div>
                 <div class="alert-box alert-warning">
-                    <div class="alert-title"><span class="alert-icon">&#9888;</span> Seguridad XSS</div>
-                    <div class="alert-body">Nunca uses <code>innerHTML</code> para renderizar datos del servidor. Usamos <code>textContent</code> para que cualquier intento de inyectar HTML/JavaScript sea tratado como texto plano. El campo <code>input type="hidden"</code> guarda el ID del item seleccionado para las operaciones de Update y Delete.</div>
+                    <div class="alert-title"><span class="alert-icon">&#9888;</span> Nota Importante</div>
+                    <div class="alert-body">
+                        Este modulo es <strong>opcional</strong> y muestra los conceptos basicos de JWT. En produccion, necesitas:<br>
+                        - Endpoint <code>/api/auth/login</code> en el Gateway<br>
+                        - Filtro que valide el token en cada peticion<br>
+                        - Almacenamiento seguro de la clave secreta (no en application.yml)<br>
+                        - Refresh tokens para sesiones largas
+                    </div>
                 </div>
             </section>
         </section>
 
-        <!-- MODULO 8: TROUBLESHOOTING -->
-        <section id="modulo8">
+        <section id="modulo9" class="mt-24">
             <div class="module-header">
-                <p class="module-number">Modulo 8</p>
+                <p class="module-number">Modulo 9</p>
+                <h2 class="module-title">CI/CD: Integracion y Despliegue Continuo</h2>
+                <p class="text-slate-400 mt-3 text-sm">Automatizar build, test y deploy con GitHub Actions.</p>
+            </div>
+            <section id="m9-intro" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">9.1</span> Que es CI/CD?</h3>
+                <p class="text-slate-300 leading-relaxed mb-4"><strong class="text-white">CI (Integracion Continua):</strong> Cada vez que haces push a Git, se ejecutan automaticamente: build, tests, analisis de codigo. Si algo falla, te notifican inmediatamente.</p>
+                <p class="text-slate-300 leading-relaxed mb-4"><strong class="text-white">CD (Despliegue Continuo):</strong> Si el CI pasa, el codigo se despliega automaticamente a staging o produccion. Sin intervencion manual.</p>
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#9432;</span> Beneficios de CI/CD</div>
+                    <div class="alert-body">
+                        <strong>Deteccion temprana de errores:</strong> Los tests se ejecutan en cada push.<br>
+                        <strong>Despliegues rapidos:</strong> De horas/manuales a minutos/automaticos.<br>
+                        <strong>Consistencia:</strong> El mismo proceso se ejecuta siempre, sin errores humanos.<br>
+                        <strong>Confianza:</strong> Si los tests pasan, puedes desplegar con seguridad.
+                    </div>
+                </div>
+            </section>
+            <section id="m9-github" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">9.2</span> GitHub Actions</h3>
+                <p class="text-slate-300 leading-relaxed mb-4">GitHub Actions es el sistema de CI/CD de GitHub. Defines "workflows" en archivos YAML dentro de <code class="text-accent">.github/workflows/</code>. Cada workflow se dispara automaticamente segun eventos (push, pull request, etc.).</p>
+            </section>
+            <section id="m9-pipeline" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">9.3</span> Pipeline para Item Service</h3>
+                <p class="text-slate-300 leading-relaxed mb-4">Crea <code class="text-accent">.github/workflows/ci-item-service.yml</code>:</p>
+                <div class="code-block" data-lang=".github/workflows/ci-item-service.yml"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="property">name</span>: <span class="string">CI Item Service</span>
+
+<span class="property">on</span>:
+  <span class="property">push</span>:
+    <span class="property">branches</span>: [<span class="string">main</span>]
+    <span class="property">paths</span>:
+      - <span class="string">'item-service/**'</span>
+  <span class="property">pull_request</span>:
+    <span class="property">branches</span>: [<span class="string">main</span>]
+    <span class="property">paths</span>:
+      - <span class="string">'item-service/**'</span>
+
+<span class="property">jobs</span>:
+  <span class="property">build-and-test</span>:
+    <span class="property">runs-on</span>: <span class="string">ubuntu-latest</span>
+    
+    <span class="property">steps</span>:
+      - <span class="property">name</span>: <span class="string">Checkout code</span>
+        <span class="property">uses</span>: <span class="string">actions/checkout@v4</span>
+      
+      - <span class="property">name</span>: <span class="string">Set up JDK 21</span>
+        <span class="property">uses</span>: <span class="string">actions/setup-java@v4</span>
+        <span class="property">with</span>:
+          <span class="property">java-version</span>: <span class="string">'21'</span>
+          <span class="property">distribution</span>: <span class="string">'temurin'</span>
+          <span class="property">cache</span>: <span class="string">'maven'</span>
+      
+      - <span class="property">name</span>: <span class="string">Build with Maven</span>
+        <span class="property">working-directory</span>: <span class="string">./item-service</span>
+        <span class="property">run</span>: <span class="string">mvn clean package -DskipTests</span>
+      
+      - <span class="property">name</span>: <span class="string">Run tests</span>
+        <span class="property">working-directory</span>: <span class="string">./item-service</span>
+        <span class="property">run</span>: <span class="string">mvn test</span>
+      
+      - <span class="property">name</span>: <span class="string">Upload test results</span>
+        <span class="property">if</span>: <span class="string">always()</span>
+        <span class="property">uses</span>: <span class="string">actions/upload-artifact@v4</span>
+        <span class="property">with</span>:
+          <span class="property">name</span>: <span class="string">test-results</span>
+          <span class="property">path</span>: <span class="string">item-service/target/surefire-reports/</span></code></div>
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#9432;</span> Analisis del Pipeline</div>
+                    <div class="alert-body">
+                        <strong>on.push.paths:</strong> Solo se ejecuta si cambian archivos en <code>item-service/</code>.<br>
+                        <strong>actions/checkout@v4:</strong> Descarga el codigo del repositorio.<br>
+                        <strong>actions/setup-java@v4:</strong> Instala JDK 21 y configura cache de Maven.<br>
+                        <strong>mvn clean package:</strong> Compila el proyecto.<br>
+                        <strong>mvn test:</strong> Ejecuta todos los tests unitarios.<br>
+                        <strong>Upload artifact:</strong> Guarda los resultados de tests (util para debug).
+                    </div>
+                </div>
+            </section>
+        </section>
+
+        <section id="modulo10" class="mt-24">
+            <div class="module-header">
+                <p class="module-number">Modulo 10</p>
                 <h2 class="module-title">Troubleshooting</h2>
                 <p class="text-slate-400 mt-3 text-sm">Problemas comunes y como resolverlos.</p>
             </div>
-
             <section class="mb-16">
-                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">8.1</span> Conflictos de Puertos</h3>
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">10.1</span> Conflictos de Puertos</h3>
                 <div class="alert-box alert-warning">
                     <div class="alert-title"><span class="alert-icon">&#9888;</span> Error: Port already in use</div>
                     <div class="alert-body">
@@ -1572,19 +1986,17 @@ loadAll();</code></div>
                         <strong>Solucion:</strong> Identifica el proceso con <code>netstat -ano | findstr :8080</code> (Windows) o <code>lsof -i :8080</code> (Linux/Mac) y termimalo, o cambia el puerto en <code>application.yml</code> y <code>docker-compose.yml</code>.
                     </div>
                 </div>
-
-                <h3 class="text-2xl font-bold text-white mb-6 mt-8 flex items-center gap-3"><span class="text-accent">8.2</span> Connection Refused</h3>
+                <h3 class="text-2xl font-bold text-white mb-6 mt-8 flex items-center gap-3"><span class="text-accent">10.2</span> Connection Refused</h3>
                 <div class="alert-box alert-warning">
                     <div class="alert-title"><span class="alert-icon">&#9888;</span> Error: Connection refused to item-service:8081</div>
                     <div class="alert-body">
                         El Gateway no puede conectar con el microservicio. Causas posibles:<br><br>
                         <strong>1.</strong> El contenedor <code>item-service</code> no esta corriendo. Verifica con <code>docker ps</code>.<br>
                         <strong>2.</strong> El microservicio aun no termino de arrancar. Espera 20-30 segundos y revisa los logs: <code>docker logs item-service</code>.<br>
-                        <strong>3.</strong> No estan en la misma red Docker. Verifica que ambos servicios esten en <code>single-input-network</code>.
+                        <strong>3.</strong> No estan en la misma red Docker. Verifica que ambos servicios esten en <code>crud-network</code>.
                     </div>
                 </div>
-
-                <h3 class="text-2xl font-bold text-white mb-6 mt-8 flex items-center gap-3"><span class="text-accent">8.3</span> Errores de Routing del Gateway</h3>
+                <h3 class="text-2xl font-bold text-white mb-6 mt-8 flex items-center gap-3"><span class="text-accent">10.3</span> Errores de Routing del Gateway</h3>
                 <div class="alert-box alert-warning">
                     <div class="alert-title"><span class="alert-icon">&#9888;</span> Error: 404 Not Found en /api/items</div>
                     <div class="alert-body">
@@ -1594,8 +2006,7 @@ loadAll();</code></div>
                         <strong>3.</strong> El microservicio escuche realmente en el puerto <code>8081</code>.
                     </div>
                 </div>
-
-                <h3 class="text-2xl font-bold text-white mb-6 mt-8 flex items-center gap-3"><span class="text-accent">8.4</span> Problemas de CORS</h3>
+                <h3 class="text-2xl font-bold text-white mb-6 mt-8 flex items-center gap-3"><span class="text-accent">10.4</span> Problemas de CORS</h3>
                 <div class="alert-box alert-warning">
                     <div class="alert-title"><span class="alert-icon">&#9888;</span> Error: No 'Access-Control-Allow-Origin' header</div>
                     <div class="alert-body">
@@ -1606,34 +2017,41 @@ loadAll();</code></div>
                         <strong>4.</strong> Si usas otro puerto para el frontend, actualiza <code>allowedOrigins</code> en el Gateway.
                     </div>
                 </div>
+                <h3 class="text-2xl font-bold text-white mb-6 mt-8 flex items-center gap-3"><span class="text-accent">10.5</span> Maven Build Failures</h3>
+                <div class="alert-box alert-warning">
+                    <div class="alert-title"><span class="alert-icon">&#9888;</span> Error: Could not resolve dependencies</div>
+                    <div class="alert-body">
+                        Maven no puede descargar dependencias. Causas:<br><br>
+                        <strong>1.</strong> Sin conexion a internet. Verifica tu conexion.<br>
+                        <strong>2.</strong> Repositorio de Maven caido. Espera e intenta de nuevo.<br>
+                        <strong>3.</strong> Cache corrupto. Ejecuta <code>mvn clean install -U</code> para forzar actualizacion.
+                    </div>
+                </div>
             </section>
         </section>
 
-        <!-- MODULO 9: SIGUIENTES PASOS Y GLOSARIO -->
-        <section id="modulo9">
+        <section id="modulo11" class="mt-24">
             <div class="module-header">
-                <p class="module-number">Modulo 9</p>
+                <p class="module-number">Modulo 11</p>
                 <h2 class="module-title">Siguientes Pasos y Glosario</h2>
                 <p class="text-slate-400 mt-3 text-sm">Hacia donde llevar esta arquitectura y conceptos clave.</p>
             </div>
-
             <section class="mb-16">
-                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">9.1</span> Siguientes Pasos</h3>
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">11.1</span> Siguientes Pasos</h3>
                 <div class="alert-box alert-analysis">
                     <div class="alert-title"><span class="alert-icon">&#9432;</span> Extensiones Recomendadas</div>
                     <div class="alert-body">
                         <strong>1. Service Discovery:</strong> Agregar Eureka o Consul para que los servicios se descubran automaticamente sin hardcodear URLs.<br>
                         <strong>2. Circuit Breaker:</strong> Implementar Resilience4j para manejar fallos entre servicios gracefully.<br>
                         <strong>3. Config Server:</strong> Centralizar configuraciones con Spring Cloud Config Server.<br>
-                        <strong>4. Autenticacion:</strong> Agregar Spring Security + JWT en el Gateway.<br>
+                        <strong>4. Autenticacion Avanzada:</strong> OAuth2 con Keycloak o Auth0 en lugar de JWT simple.<br>
                         <strong>5. Logging Centralizado:</strong> Usar ELK Stack (Elasticsearch, Logstash, Kibana) o Loki.<br>
                         <strong>6. Monitoring:</strong> Integrar Prometheus + Grafana para metricas en tiempo real.<br>
-                        <strong>7. CI/CD:</strong> Automatizar build, test y deploy con GitHub Actions o Jenkins.<br>
+                        <strong>7. Testing:</strong> Tests de integracion con Testcontainers para PostgreSQL.<br>
                         <strong>8. Kubernetes:</strong> Migrar de Docker Compose a Kubernetes para orquestacion en produccion.
                     </div>
                 </div>
-
-                <h3 class="text-2xl font-bold text-white mb-6 mt-12 flex items-center gap-3"><span class="text-accent">9.2</span> Glosario</h3>
+                <h3 class="text-2xl font-bold text-white mb-6 mt-12 flex items-center gap-3"><span class="text-accent">11.2</span> Glosario</h3>
                 <table>
                     <tr><th>Termino</th><th>Definicion</th></tr>
                     <tr><td><code>Microservicio</code></td><td>Aplicacion pequena e independiente que cumple una funcion especifica.</td></tr>
@@ -1645,6 +2063,8 @@ loadAll();</code></div>
                     <tr><td><code>JPA / Hibernate</code></td><td>API de persistencia que mapea objetos Java a tablas de base de datos.</td></tr>
                     <tr><td><code>DTO</code></td><td>Data Transfer Object - objeto para transportar datos entre capas.</td></tr>
                     <tr><td><code>CORS</code></td><td>Cross-Origin Resource Sharing - mecanismo de seguridad del navegador.</td></tr>
+                    <tr><td><code>JWT</code></td><td>JSON Web Token - estandar para crear tokens de autenticacion.</td></tr>
+                    <tr><td><code>CI/CD</code></td><td>Integracion Continua / Despliegue Continuo - automatizacion de build, test y deploy.</td></tr>
                     <tr><td><code>WebFlux</code></td><td>Framework reactivo de Spring para programacion no bloqueante.</td></tr>
                     <tr><td><code>Fetch API</code></td><td>Interfaz JavaScript moderna para hacer peticiones HTTP.</td></tr>
                     <tr><td><code>XSS</code></td><td>Cross-Site Scripting - ataque que inyecta scripts maliciosos en paginas web.</td></tr>
