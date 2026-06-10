@@ -363,6 +363,168 @@
                     </div>
                 </div>
 
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Diagrama de Flujo: Cómo Funciona una Operación CRUD</h4>
+                <p class="text-slate-300 leading-relaxed mb-4">Este diagrama muestra el flujo completo cuando el usuario crea un nuevo item desde el frontend. Cada paso está numerado y explica qué hace cada componente del sistema.</p>
+                
+                <div class="diagram-container">
+                    <pre class="text-xs sm:text-sm font-mono text-slate-300 leading-relaxed overflow-x-auto">
+<span class="text-slate-500">┌─────────────────────────────────────────────────────────────────────────────────────────┐</span>
+<span class="text-slate-500">│</span>  <span class="text-accent font-bold">FLUJO COMPLETO: Crear Nuevo Item (POST /api/items)</span>                                   <span class="text-slate-500">│</span>
+<span class="text-slate-500">└─────────────────────────────────────────────────────────────────────────────────────────┘</span>
+
+<span class="text-neon-green font-bold">PASO 1: Usuario escribe "Hola Mundo" en el input y presiona "Crear"</span>
+<span class="text-slate-500">┌───────────────────────────────────────────────────────────────────────────────────────┐</span>
+<span class="text-slate-500">│</span>  <span class="text-accent">NAVEGADOR (Frontend)</span> - Puerto 5500 (Live Server)                                     <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">├─ app.js detecta el clic en "Crear"</span>                                                 <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">├─ Obtiene el texto del input: "Hola Mundo"</span>                                          <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">└─ Ejecuta: fetch('http://localhost:8080/api/items', {method: 'POST', body: ...})</span>    <span class="text-slate-500">│</span>
+<span class="text-slate-500">└───────────────────────────────────────────────────────────────────────────────────────┘</span>
+                                              <span class="text-neon-green">│</span>
+                                              <span class="text-neon-green">▼</span>
+                        <span class="text-neon-yellow">HTTP POST http://localhost:8080/api/items</span>
+                        <span class="text-neon-yellow">Content-Type: application/json</span>
+                        <span class="text-neon-yellow">Body: {"texto": "Hola Mundo"}</span>
+                                              <span class="text-neon-green">│</span>
+                                              <span class="text-neon-green">▼</span>
+<span class="text-slate-500">┌───────────────────────────────────────────────────────────────────────────────────────┐</span>
+<span class="text-slate-500">│</span>  <span class="text-neon-purple font-bold">API GATEWAY (Spring Cloud Gateway)</span> - Puerto 8080 (Expuesto al exterior)              <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">├─ Recibe la petición HTTP del navegador</span>                                             <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">├─ Verifica CORS: ¿Viene de localhost:5500? ✓ Permitido</span>                              <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">├─ Analiza la ruta: /api/items → coincide con predicate "Path=/api/items/**"</span>         <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">├─ Aplica regla de enrutamiento: uri = "http://item-service:8081"</span>                    <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">└─ Reenvía la petición al Item Service (resuelve DNS: item-service → 172.18.0.3)</span>     <span class="text-slate-500">│</span>
+<span class="text-slate-500">└───────────────────────────────────────────────────────────────────────────────────────┘</span>
+                                              <span class="text-neon-green">│</span>
+                                              <span class="text-neon-green">▼</span>
+                        <span class="text-neon-yellow">HTTP POST http://item-service:8081/api/items</span>
+                        <span class="text-neon-yellow">(Red interna Docker: crud-network)</span>
+                                              <span class="text-neon-green">│</span>
+                                              <span class="text-neon-green">▼</span>
+<span class="text-slate-500">┌───────────────────────────────────────────────────────────────────────────────────────┐</span>
+<span class="text-slate-500">│</span>  <span class="text-accent font-bold">ITEM SERVICE (Spring Boot)</span> - Puerto 8081 (Interno, no expuesto)                      <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>                                                                                       <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-neon-green font-bold">CAPA 4: Controller (ItemController.java)</span>                                             <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">├─ @PostMapping("/api/items") recibe la petición</span>                                     <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">├─ @RequestBody deserializa JSON → ItemDTO{texto="Hola Mundo"}</span>                         <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">├─ @Valid valida: ¿texto no está vacío? ✓ ¿Longitud &lt; 255? ✓</span>                         <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">└─ Llama a: itemService.create(dto)</span>                                                  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>                                                                                       <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-neon-purple font-bold">CAPA 3: Service (ItemServiceImpl.java)</span>                                               <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">├─ Recibe ItemDTO{texto="Hola Mundo"}</span>                                                <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">├─ Convierte DTO → Entity: new Item("Hola Mundo")</span>                                    <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">├─ @Transactional inicia transacción de base de datos</span>                                <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">└─ Llama a: itemRepository.save(item)</span>                                                <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>                                                                                       <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-neon-yellow font-bold">CAPA 2: Repository (ItemRepository.java)</span>                                             <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">├─ Hereda de JpaRepository&lt;Item, Long&gt;</span>                                               <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">├─ save() genera SQL: INSERT INTO items (texto) VALUES ('Hola Mundo')</span>                <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">├─ Hibernate ejecuta el SQL contra PostgreSQL</span>                                        <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">└─ PostgreSQL retorna: id=1 (generado automáticamente)</span>                               <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>                                                                                       <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">Flujo de retorno:</span>                                                                    <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">Repository → Service (convierte Entity → DTO) → Controller</span>                           <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">Controller retorna: ResponseEntity.ok(ItemDTO{id=1, texto="Hola Mundo"})</span>             <span class="text-slate-500">│</span>
+<span class="text-slate-500">└───────────────────────────────────────────────────────────────────────────────────────┘</span>
+                                              <span class="text-neon-green">│</span>
+                                              <span class="text-neon-green">▼</span>
+                        <span class="text-neon-yellow">HTTP 200 OK</span>
+                        <span class="text-neon-yellow">Content-Type: application/json</span>
+                        <span class="text-neon-yellow">Body: {"id": 1, "texto": "Hola Mundo"}</span>
+                                              <span class="text-neon-green">│</span>
+                                              <span class="text-neon-green">▼</span>
+<span class="text-slate-500">┌───────────────────────────────────────────────────────────────────────────────────────┐</span>
+<span class="text-slate-500">│</span>  <span class="text-neon-purple font-bold">API GATEWAY (Retorno)</span>                                                                <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">├─ Recibe respuesta del Item Service</span>                                                 <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">├─ Agrega headers CORS: Access-Control-Allow-Origin: http://localhost:5500</span>           <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">└─ Reenvía respuesta al navegador</span>                                                    <span class="text-slate-500">│</span>
+<span class="text-slate-500">└───────────────────────────────────────────────────────────────────────────────────────┘</span>
+                                              <span class="text-neon-green">│</span>
+                                              <span class="text-neon-green">▼</span>
+<span class="text-slate-500">┌───────────────────────────────────────────────────────────────────────────────────────┐</span>
+<span class="text-slate-500">│</span>  <span class="text-accent font-bold">NAVEGADOR (Frontend - Retorno)</span>                                                       <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">├─ fetch() recibe respuesta HTTP 200</span>                                                 <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">├─ response.json() parsea: {id: 1, texto: "Hola Mundo"}</span>                              <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">├─ Limpia el input</span>                                                                   <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">├─ Llama a loadAll() para actualizar la lista</span>                                        <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">└─ renderItems() muestra el nuevo item en la lista del DOM</span>                           <span class="text-slate-500">│</span>
+<span class="text-slate-500">└───────────────────────────────────────────────────────────────────────────────────────┘</span>
+
+<span class="text-neon-green font-bold">✓ OPERACIÓN COMPLETADA: El item "Hola Mundo" ahora existe en PostgreSQL</span>
+</pre>
+                </div>
+
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#128300;</span> Puntos Clave del Flujo</div>
+                    <div class="alert-body">
+                        <ul class="list-disc list-inside space-y-2 ml-4">
+                            <li><strong class="text-neon-green">Separación de responsabilidades:</strong> Cada componente hace UNA cosa bien. El Gateway solo enruta, el Service solo aplica lógica de negocio, el Repository solo habla con la BD.</li>
+                            <li><strong class="text-neon-yellow">Conversión de datos:</strong> JSON → DTO → Entity → SQL → Entity → DTO → JSON. Cada conversión tiene un propósito específico.</li>
+                            <li><strong class="text-neon-purple">Red interna Docker:</strong> El Gateway y el Item Service se comunican por nombres (item-service:8081), no por IPs. Docker DNS resuelve automáticamente.</li>
+                            <li><strong class="text-accent">Transaccionalidad:</strong> @Transactional garantiza que si algo falla a mitad del proceso, se hace rollback y la BD no queda en estado inconsistente.</li>
+                            <li><strong class="text-neon-red">Seguridad CORS:</strong> El navegador bloquearía la petición si el Gateway no agregara los headers CORS. Por eso el Gateway los maneja centralizadamente.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Resumen de Puertos y Comunicación</h4>
+                <div class="overflow-x-auto rounded-xl border border-dark-100">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="rounded-tl-xl">Componente</th>
+                                <th>Puerto</th>
+                                <th>Expuesto al Host</th>
+                                <th>Protocolo</th>
+                                <th class="rounded-tr-xl">Comunicación</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong class="text-accent">Frontend (Live Server)</strong></td>
+                                <td><code>5500</code></td>
+                                <td>Sí</td>
+                                <td>HTTP</td>
+                                <td>Navegador → Gateway (localhost:8080)</td>
+                            </tr>
+                            <tr>
+                                <td><strong class="text-neon-purple">API Gateway</strong></td>
+                                <td><code>8080</code></td>
+                                <td>Sí</td>
+                                <td>HTTP/WebFlux</td>
+                                <td>Frontend → Gateway → Item Service</td>
+                            </tr>
+                            <tr>
+                                <td><strong class="text-accent">Item Service</strong></td>
+                                <td><code>8081</code></td>
+                                <td>No (solo interno)</td>
+                                <td>HTTP/MVC</td>
+                                <td>Gateway → Item Service → PostgreSQL</td>
+                            </tr>
+                            <tr>
+                                <td><strong class="text-accent">PostgreSQL</strong></td>
+                                <td><code>5432</code></td>
+                                <td>Sí (para debugging)</td>
+                                <td>JDBC/TCP</td>
+                                <td>Item Service → PostgreSQL (crud-postgres:5432)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="alert-box alert-warning">
+                    <div class="alert-title"><span class="alert-icon">&#9888;&#65039;</span> Por Qué el Item Service NO Está Expuesto al Host?</div>
+                    <div class="alert-body">
+                        <p class="mb-3">En el docker-compose.yml, el Item Service tiene <code>ports: ["8081:8081"]</code>, pero esto es solo para debugging. En producción, <strong class="text-white">solo el Gateway debería estar expuesto</strong>.</p>
+                        <p class="mb-3">Esto se llama <strong class="text-accent">principio de mínimo privilegio</strong>: el Item Service no necesita ser accesible desde fuera de la red Docker. Solo el Gateway necesita exponer puertos al mundo exterior.</p>
+                        <p>Beneficios:</p>
+                        <ul class="list-disc list-inside ml-4 space-y-1">
+                            <li><strong>Seguridad:</strong> Menos superficie de ataque. Solo el Gateway está expuesto.</li>
+                            <li><strong>Control:</strong> El Gateway puede aplicar autenticación, rate limiting, logging.</li>
+                            <li><strong>Flexibilidad:</strong> Puedes cambiar el Item Service sin afectar los clientes externos.</li>
+                        </ul>
+                    </div>
+                </div>
+
                 <div class="alert-box alert-analysis">
                     <div class="alert-title"><span class="alert-icon">&#128300;</span> Por que un API Gateway?</div>
                     <div class="alert-body">
