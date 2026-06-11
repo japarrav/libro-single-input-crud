@@ -185,7 +185,15 @@
             <p class="text-xs text-slate-500 mt-1">Arquitectura de Microservicios v2.1</p>
         </div>
         <nav class="space-y-1">
-            <a href="#modulo0" class="nav-link active">Modulo 0 - Introduccion</a>
+            <a href="#modulo-importante" class="nav-link active">Importante - Avisos</a>
+            <a href="#imp-aviso" class="nav-link pl-8 text-xs">Aviso Importante</a>
+            <a href="#imp-errores" class="nav-link pl-8 text-xs">Sobre el Código y Errores</a>
+            <a href="#imp-frontend" class="nav-link pl-8 text-xs">Frontend y Contenedores</a>
+            <a href="#imp-jenkins" class="nav-link pl-8 text-xs">Jenkins y Flujo Dev</a>
+            <a href="#imp-flujos" class="nav-link pl-8 text-xs">Los Dos Flujos de Trabajo</a>
+            <div class="border-t border-dark-100 my-4"></div>
+            <a href="#modulo0" class="nav-link">Modulo 0 - Introduccion</a>
+            <a href="#m0-construir" class="nav-link pl-8 text-xs">0.1 Que Vamos a Construir?</a>
             <a href="#m0-arquitectura" class="nav-link pl-8 text-xs">0.2 Las 4 Capas del Microservicio</a>
             <a href="#m0-stack" class="nav-link pl-8 text-xs">0.3 Stack Tecnologico</a>
             <a href="#m0-estructura" class="nav-link pl-8 text-xs">0.4 Estructura de Archivos</a>
@@ -250,7 +258,14 @@
     </aside>
     <div class="mobile-nav">
         <select onchange="window.location.href=this.value">
+            <option value="#modulo-importante">Importante - Avisos</option>
+            <option value="#imp-aviso">-- Aviso Importante</option>
+            <option value="#imp-errores">-- Sobre el Código y Errores</option>
+            <option value="#imp-frontend">-- Frontend y Contenedores</option>
+            <option value="#imp-jenkins">-- Jenkins y Flujo Dev</option>
+            <option value="#imp-flujos">-- Los Dos Flujos de Trabajo</option>
             <option value="#modulo0">Modulo 0 - Introduccion</option>
+            <option value="#m0-construir">-- 0.1 Que Vamos a Construir?</option>
             <option value="#m0-arquitectura">-- 0.2 Las 4 Capas del Microservicio</option>
             <option value="#m0-stack">-- 0.3 Stack Tecnologico</option>
             <option value="#m0-estructura">-- 0.4 Estructura de Archivos</option>
@@ -327,147 +342,155 @@
             </div>
         </header>
 
-        <div class="mb-12 p-5 rounded-xl border border-amber-500/30 bg-amber-500/5">
-            <p class="text-amber-400 font-bold text-sm mb-2 flex items-center gap-2">
-                <span>&#9888;&#65039;</span> Aviso importante
-            </p>
-            <p class="text-slate-300 text-sm leading-relaxed">
-                Este material tiene <strong class="text-white">fines educativos</strong> y busca facilitar la comprension de las tecnologias mencionadas. En ningun caso reemplaza ni esta por sobre la <strong class="text-white">documentacion oficial</strong> de cada herramienta. Para informacion definitiva, consulta siempre las fuentes oficiales:
-            </p>
-            <ul class="text-slate-400 text-xs mt-3 ml-4 space-y-1 list-disc">
-                <li><a href="https://docs.docker.com" class="text-accent hover:underline" target="_blank">docs.docker.com</a></li>
-                <li><a href="https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/" class="text-accent hover:underline" target="_blank">docs.spring.io/spring-boot</a></li>
-                <li><a href="https://docs.spring.io/spring-cloud-gateway/reference/" class="text-accent hover:underline" target="_blank">docs.spring.io/spring-cloud-gateway</a></li>
-                <li><a href="https://www.postgresql.org/docs/" class="text-accent hover:underline" target="_blank">postgresql.org/docs</a></li>
-                <li><a href="https://git-scm.com/doc" class="text-accent hover:underline" target="_blank">git-scm.com/doc</a></li>
-            </ul>
-        </div>
-
-        <div class="mb-12 p-5 rounded-xl border border-sky-500/30 bg-sky-500/5">
-            <p class="text-sky-400 font-bold text-sm mb-2 flex items-center gap-2">
-                <span>&#128736;</span> Sobre el codigo y posibles errores
-            </p>
-            <p class="text-slate-300 text-sm leading-relaxed">
-                Todo el codigo de este libro ha sido probado y esta listo para copiar y ejecutar. Sin embargo, las tecnologias evolucionan constantemente: las versiones cambian, las dependencias se actualizan y las configuraciones pueden variar segun tu entorno.
-            </p>
-            <p class="text-slate-300 text-sm leading-relaxed mt-3">
-                Si encuentras un error al ejecutar el codigo o una dependencia que ya no funciona:
-            </p>
-            <ul class="text-slate-400 text-xs mt-3 ml-4 space-y-2 list-disc">
-                <li><strong class="text-white">Primero:</strong> Revisa los logs de error. La mayoria de los mensajes te indican exactamente que falta o que version necesita.</li>
-                <li><strong class="text-white">Segundo:</strong> Busca el mensaje de error en <a href="https://stackoverflow.com" class="text-accent hover:underline" target="_blank">Stack Overflow</a> o en el <a href="https://www.google.com" class="text-accent hover:underline" target="_blank">buscador de tu preferencia</a>. Es muy probable que alguien ya haya tenido el mismo problema.</li>
-                <li><strong class="text-white">Tercero:</strong> Consulta la documentacion oficial de la herramienta que esta dando problemas. Las guias de migracion y changelogs explican los cambios entre versiones.</li>
-                <li><strong class="text-white">Cuarto:</strong> Si el problema es con una version especifica de una dependencia, busca la version mas reciente compatible en <a href="https://mvnrepository.com" class="text-accent hover:underline" target="_blank">Maven Repository</a> o <a href="https://central.sonatype.com" class="text-accent hover:underline" target="_blank">Maven Central</a>.</li>
-            </ul>
-            <p class="text-slate-400 text-xs mt-3 italic">
-                Este libro te ensena los fundamentos y la arquitectura. La capacidad de resolver errores buscando informacion es una habilidad esencial de todo desarrollador profesional.
-            </p>
-        </div>
-
-        <div class="mb-12 p-5 rounded-xl border border-purple-500/30 bg-purple-500/5">
-            <p class="text-purple-400 font-bold text-sm mb-2 flex items-center gap-2">
-                <span>&#128187;</span> Nota sobre el Frontend y los Contenedores
-            </p>
-            <p class="text-slate-300 text-sm leading-relaxed">
-                A lo largo de este libro, <strong class="text-white">todos los servicios backend corren en contenedores Docker</strong>: PostgreSQL, Item Service, API Gateway y Jenkins. Sin embargo, el <strong class="text-white">frontend se trabaja de forma local</strong> usando Live Server de VS Code (puerto 5500), no en un contenedor.
-            </p>
-            <p class="text-slate-300 text-sm leading-relaxed mt-3">
-                <strong class="text-accent">¿Por qué?</strong> Es una decisión pedagógica deliberada. Live Server ofrece <strong class="text-neon-green">hot reload automático</strong>: cuando editas HTML, CSS o JavaScript, el navegador se actualiza instantáneamente sin necesidad de reconstruir contenedores. Esto acelera enormemente el desarrollo y te permite concentrarte en aprender la arquitectura de microservicios sin fricciones innecesarias.
-            </p>
-            <p class="text-slate-300 text-sm leading-relaxed mt-3">
-                <strong class="text-accent">¿Quieres todo 100% contenedorizado?</strong> Si prefieres una arquitectura completamente consistente donde el frontend también corra en un contenedor (como se hace en producción), el <strong class="text-white"><a href="#m9-frontend-container" class="text-accent hover:underline">Módulo 9, Sección 9.5: Frontend en Contenedor con Nginx (Opcional)</a></strong> te enseña paso a paso cómo lograrlo. Allí aprenderás a:
-            </p>
-            <ul class="text-slate-400 text-xs mt-3 ml-4 space-y-2 list-disc">
-                <li>Crear un Dockerfile para el frontend usando Nginx Alpine</li>
-                <li>Configurar Nginx como reverse proxy para las peticiones a la API</li>
-                <li>Agregar el servicio frontend al docker-compose.yml</li>
-                <li>Entender las ventajas y desventajas frente a Live Server</li>
-            </ul>
-            <p class="text-slate-400 text-xs mt-3 italic">
-                Esta sección es completamente opcional. Puedes seguir todo el libro con Live Server y, si más adelante necesitas contenerizar el frontend para producción, volver al Módulo 9 cuando lo necesites.
-            </p>
-        </div>
-
-        <div class="mb-12 p-5 rounded-xl border border-red-500/30 bg-red-500/5">
-            <p class="text-red-400 font-bold text-sm mb-2 flex items-center gap-2">
-                <span>&#9881;</span> Nota sobre Jenkins y el Flujo de Desarrollo
-            </p>
-            <p class="text-slate-300 text-sm leading-relaxed">
-                Durante el desarrollo normal de este libro, <strong class="text-white">NO necesitas Jenkins</strong>. El flujo de trabajo principal es simple y automático:
-            </p>
-            <div class="mt-3 p-3 bg-slate-800/50 rounded-lg">
-                <p class="text-neon-green font-bold text-xs mb-2">Flujo Principal de Desarrollo (sin Jenkins):</p>
-                <ol class="text-slate-300 text-xs space-y-1 ml-4 list-decimal">
-                    <li>Editas código Java en VS Code (ej: ItemController.java)</li>
-                    <li>Guardas el archivo (Ctrl+S)</li>
-                    <li>Spring Boot DevTools detecta el cambio automáticamente</li>
-                    <li>El contenedor se recarga en ~2 segundos (hot reload)</li>
-                    <li>Pruebas los cambios en el navegador o Postman</li>
-                </ol>
-                <p class="text-slate-400 text-xs mt-2 italic">Este flujo es automático, rápido y funciona perfectamente para todo el libro.</p>
+        <section id="modulo-importante" class="mb-16">
+            <div class="module-header">
+                <p class="module-number">Importante</p>
+                <h2 class="module-title">Avisos y Consideraciones Previas</h2>
+                <p class="text-slate-400 mt-3 text-sm">Información crítica sobre el entorno, flujos de trabajo y resolución de problemas.</p>
             </div>
-            <p class="text-slate-300 text-sm leading-relaxed mt-3">
-                <strong class="text-accent">¿Qué es Jenkins entonces?</strong> Jenkins es un servidor de <strong class="text-white">CI/CD (Integración Continua/Despliegue Continuo)</strong> que automatiza tareas como: compilar el código, ejecutar tests, construir imágenes Docker y desplegar actualizaciones. Es útil para:
-            </p>
-            <ul class="text-slate-400 text-xs mt-3 ml-4 space-y-2 list-disc">
-                <li>Automatizar el proceso de build y test cuando haces push a Git</li>
-                <li>Construir imágenes Docker automáticamente</li>
-                <li>Desplegar nuevas versiones sin intervención manual</li>
-                <li>Entornos de producción donde necesitas pipelines de despliegue</li>
-            </ul>
-            <p class="text-slate-300 text-sm leading-relaxed mt-3">
-                <strong class="text-accent">¿Cuándo usar Jenkins?</strong> Si quieres aprender sobre CI/CD y automatización avanzada, el <strong class="text-white"><a href="#m9-jenkins" class="text-accent hover:underline">Módulo 9, Sección 9.4: CI/CD Local con Jenkins</a></strong> te enseña paso a paso cómo configurarlo. Pero <strong class="text-neon-green">no es necesario para seguir el resto del libro</strong>.
-            </p>
-            <p class="text-slate-400 text-xs mt-3 italic">
-                Recomendación: Sigue el libro normalmente con el flujo de hot reload automático. Cuando termines y quieras aprender sobre automatización CI/CD, vuelve al Módulo 9.
-            </p>
-        </div>
 
-        <div class="mb-12 p-5 rounded-xl border border-green-500/30 bg-green-500/5">
-            <p class="text-green-400 font-bold text-sm mb-2 flex items-center gap-2">
-                <span>&#128640;</span> Los Dos Flujos de Trabajo del Libro
-            </p>
-            <p class="text-slate-300 text-sm leading-relaxed mb-3">
-                Este libro te enseña <strong class="text-white">dos formas de trabajar</strong>. Ambas son válidas, pero tienen propósitos diferentes:
-            </p>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                <div class="border-2 border-neon-green/40 rounded-lg p-4 bg-neon-green/5">
-                    <p class="text-neon-green font-bold text-sm mb-2">✓ FLUJO BÁSICO (Recomendado para el curso)</p>
-                    <ul class="text-xs text-slate-300 space-y-1 ml-4 list-disc">
-                        <li><strong>Frontend:</strong> Live Server en localhost:5500 (host, no contenedor)</li>
-                        <li><strong>Backend:</strong> Contenedores Docker con hot reload automático</li>
-                        <li><strong>Flujo:</strong> VS Code → Ctrl+S → código se sincroniza al contenedor → DevTools recarga automáticamente (~2s)</li>
-                        <li><strong>Ventaja:</strong> Rápido, simple, ideal para aprender</li>
-                        <li><strong>API en app.js:</strong> <code class="text-neon-green">const API = 'http://localhost:8080/api/items';</code></li>
+            <section id="imp-aviso" class="mb-12 p-5 rounded-xl border border-amber-500/30 bg-amber-500/5">
+                <p class="text-amber-400 font-bold text-sm mb-2 flex items-center gap-2">
+                    <span>&#9888;&#65039;</span> Aviso importante
+                </p>
+                <p class="text-slate-300 text-sm leading-relaxed">
+                    Este material tiene <strong class="text-white">fines educativos</strong> y busca facilitar la comprension de las tecnologias mencionadas. En ningun caso reemplaza ni esta por sobre la <strong class="text-white">documentacion oficial</strong> de cada herramienta. Para informacion definitiva, consulta siempre las fuentes oficiales:
+                </p>
+                <ul class="text-slate-400 text-xs mt-3 ml-4 space-y-1 list-disc">
+                    <li><a href="https://docs.docker.com" class="text-accent hover:underline" target="_blank">docs.docker.com</a></li>
+                    <li><a href="https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/" class="text-accent hover:underline" target="_blank">docs.spring.io/spring-boot</a></li>
+                    <li><a href="https://docs.spring.io/spring-cloud-gateway/reference/" class="text-accent hover:underline" target="_blank">docs.spring.io/spring-cloud-gateway</a></li>
+                    <li><a href="https://www.postgresql.org/docs/" class="text-accent hover:underline" target="_blank">postgresql.org/docs</a></li>
+                    <li><a href="https://git-scm.com/doc" class="text-accent hover:underline" target="_blank">git-scm.com/doc</a></li>
+                </ul>
+            </section>
+
+            <section id="imp-errores" class="mb-12 p-5 rounded-xl border border-sky-500/30 bg-sky-500/5">
+                <p class="text-sky-400 font-bold text-sm mb-2 flex items-center gap-2">
+                    <span>&#128736;</span> Sobre el codigo y posibles errores
+                </p>
+                <p class="text-slate-300 text-sm leading-relaxed">
+                    Todo el codigo de este libro ha sido probado y esta listo para copiar y ejecutar. Sin embargo, las tecnologias evolucionan constantemente: las versiones cambian, las dependencias se actualizan y las configuraciones pueden variar segun tu entorno.
+                </p>
+                <p class="text-slate-300 text-sm leading-relaxed mt-3">
+                    Si encuentras un error al ejecutar el codigo o una dependencia que ya no funciona:
+                </p>
+                <ul class="text-slate-400 text-xs mt-3 ml-4 space-y-2 list-disc">
+                    <li><strong class="text-white">Primero:</strong> Revisa los logs de error. La mayoria de los mensajes te indican exactamente que falta o que version necesita.</li>
+                    <li><strong class="text-white">Segundo:</strong> Busca el mensaje de error en <a href="https://stackoverflow.com" class="text-accent hover:underline" target="_blank">Stack Overflow</a> o en el <a href="https://www.google.com" class="text-accent hover:underline" target="_blank">buscador de tu preferencia</a>. Es muy probable que alguien ya haya tenido el mismo problema.</li>
+                    <li><strong class="text-white">Tercero:</strong> Consulta la documentacion oficial de la herramienta que esta dando problemas. Las guias de migracion y changelogs explican los cambios entre versiones.</li>
+                    <li><strong class="text-white">Cuarto:</strong> Si el problema es con una version especifica de una dependencia, busca la version mas reciente compatible en <a href="https://mvnrepository.com" class="text-accent hover:underline" target="_blank">Maven Repository</a> o <a href="https://central.sonatype.com" class="text-accent hover:underline" target="_blank">Maven Central</a>.</li>
+                </ul>
+                <p class="text-slate-400 text-xs mt-3 italic">
+                    Este libro te ensena los fundamentos y la arquitectura. La capacidad de resolver errores buscando informacion es una habilidad esencial de todo desarrollador profesional.
+                </p>
+            </section>
+
+            <section id="imp-frontend" class="mb-12 p-5 rounded-xl border border-purple-500/30 bg-purple-500/5">
+                <p class="text-purple-400 font-bold text-sm mb-2 flex items-center gap-2">
+                    <span>&#128187;</span> Nota sobre el Frontend y los Contenedores
+                </p>
+                <p class="text-slate-300 text-sm leading-relaxed">
+                    A lo largo de este libro, <strong class="text-white">todos los servicios backend corren en contenedores Docker</strong>: PostgreSQL, Item Service, API Gateway y Jenkins. Sin embargo, el <strong class="text-white">frontend se trabaja de forma local</strong> usando Live Server de VS Code (puerto 5500), no en un contenedor.
+                </p>
+                <p class="text-slate-300 text-sm leading-relaxed mt-3">
+                    <strong class="text-accent">¿Por qué?</strong> Es una decisión pedagógica deliberada. Live Server ofrece <strong class="text-neon-green">hot reload automático</strong>: cuando editas HTML, CSS o JavaScript, el navegador se actualiza instantáneamente sin necesidad de reconstruir contenedores. Esto acelera enormemente el desarrollo y te permite concentrarte en aprender la arquitectura de microservicios sin fricciones innecesarias.
+                </p>
+                <p class="text-slate-300 text-sm leading-relaxed mt-3">
+                    <strong class="text-accent">¿Quieres todo 100% contenedorizado?</strong> Si prefieres una arquitectura completamente consistente donde el frontend también corra en un contenedor (como se hace en producción), el <strong class="text-white"><a href="#m9-frontend-container" class="text-accent hover:underline">Módulo 9, Sección 9.5: Frontend en Contenedor con Nginx (Opcional)</a></strong> te enseña paso a paso cómo lograrlo. Allí aprenderás a:
+                </p>
+                <ul class="text-slate-400 text-xs mt-3 ml-4 space-y-2 list-disc">
+                    <li>Crear un Dockerfile para el frontend usando Nginx Alpine</li>
+                    <li>Configurar Nginx como reverse proxy para las peticiones a la API</li>
+                    <li>Agregar el servicio frontend al docker-compose.yml</li>
+                    <li>Entender las ventajas y desventajas frente a Live Server</li>
+                </ul>
+                <p class="text-slate-400 text-xs mt-3 italic">
+                    Esta sección es completamente opcional. Puedes seguir todo el libro con Live Server y, si más adelante necesitas contenerizar el frontend para producción, volver al Módulo 9 cuando lo necesites.
+                </p>
+            </section>
+
+            <section id="imp-jenkins" class="mb-12 p-5 rounded-xl border border-red-500/30 bg-red-500/5">
+                <p class="text-red-400 font-bold text-sm mb-2 flex items-center gap-2">
+                    <span>&#9881;</span> Nota sobre Jenkins y el Flujo de Desarrollo
+                </p>
+                <p class="text-slate-300 text-sm leading-relaxed">
+                    Durante el desarrollo normal de este libro, <strong class="text-white">NO necesitas Jenkins</strong>. El flujo de trabajo principal es simple y automático:
+                </p>
+                <div class="mt-3 p-3 bg-slate-800/50 rounded-lg">
+                    <p class="text-neon-green font-bold text-xs mb-2">Flujo Principal de Desarrollo (sin Jenkins):</p>
+                    <ol class="text-slate-300 text-xs space-y-1 ml-4 list-decimal">
+                        <li>Editas código Java en VS Code (ej: ItemController.java)</li>
+                        <li>Guardas el archivo (Ctrl+S)</li>
+                        <li>Spring Boot DevTools detecta el cambio automáticamente</li>
+                        <li>El contenedor se recarga en ~2 segundos (hot reload)</li>
+                        <li>Pruebas los cambios en el navegador o Postman</li>
+                    </ol>
+                    <p class="text-slate-400 text-xs mt-2 italic">Este flujo es automático, rápido y funciona perfectamente para todo el libro.</p>
+                </div>
+                <p class="text-slate-300 text-sm leading-relaxed mt-3">
+                    <strong class="text-accent">¿Qué es Jenkins entonces?</strong> Jenkins es un servidor de <strong class="text-white">CI/CD (Integración Continua/Despliegue Continuo)</strong> que automatiza tareas como: compilar el código, ejecutar tests, construir imágenes Docker y desplegar actualizaciones. Es útil para:
+                </p>
+                <ul class="text-slate-400 text-xs mt-3 ml-4 space-y-2 list-disc">
+                    <li>Automatizar el proceso de build y test cuando haces push a Git</li>
+                    <li>Construir imágenes Docker automáticamente</li>
+                    <li>Desplegar nuevas versiones sin intervención manual</li>
+                    <li>Entornos de producción donde necesitas pipelines de despliegue</li>
+                </ul>
+                <p class="text-slate-300 text-sm leading-relaxed mt-3">
+                    <strong class="text-accent">¿Cuándo usar Jenkins?</strong> Si quieres aprender sobre CI/CD y automatización avanzada, el <strong class="text-white"><a href="#m9-jenkins" class="text-accent hover:underline">Módulo 9, Sección 9.4: CI/CD Local con Jenkins</a></strong> te enseña paso a paso cómo configurarlo. Pero <strong class="text-neon-green">no es necesario para seguir el resto del libro</strong>.
+                </p>
+                <p class="text-slate-400 text-xs mt-3 italic">
+                    Recomendación: Sigue el libro normalmente con el flujo de hot reload automático. Cuando termines y quieras aprender sobre automatización CI/CD, vuelve al Módulo 9.
+                </p>
+            </section>
+
+            <section id="imp-flujos" class="mb-12 p-5 rounded-xl border border-green-500/30 bg-green-500/5">
+                <p class="text-green-400 font-bold text-sm mb-2 flex items-center gap-2">
+                    <span>&#128640;</span> Los Dos Flujos de Trabajo del Libro
+                </p>
+                <p class="text-slate-300 text-sm leading-relaxed mb-3">
+                    Este libro te enseña <strong class="text-white">dos formas de trabajar</strong>. Ambas son válidas, pero tienen propósitos diferentes:
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <div class="border-2 border-neon-green/40 rounded-lg p-4 bg-neon-green/5">
+                        <p class="text-neon-green font-bold text-sm mb-2">✓ FLUJO BÁSICO (Recomendado para el curso)</p>
+                        <ul class="text-xs text-slate-300 space-y-1 ml-4 list-disc">
+                            <li><strong>Frontend:</strong> Live Server en localhost:5500 (host, no contenedor)</li>
+                            <li><strong>Backend:</strong> Contenedores Docker con hot reload automático</li>
+                            <li><strong>Flujo:</strong> VS Code → Ctrl+S → código se sincroniza al contenedor → DevTools recarga automáticamente (~2s)</li>
+                            <li><strong>Ventaja:</strong> Rápido, simple, ideal para aprender</li>
+                            <li><strong>API en app.js:</strong> <code class="text-neon-green">const API = 'http://localhost:8080/api/items';</code></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="border-2 border-red-500/40 rounded-lg p-4 bg-red-500/5">
+                        <p class="text-red-400 font-bold text-sm mb-2">⚙ FLUJO AVANZADO (Opcional - Módulo 9)</p>
+                        <ul class="text-xs text-slate-300 space-y-1 ml-4 list-disc">
+                            <li><strong>Frontend:</strong> Nginx en contenedor (localhost:3000)</li>
+                            <li><strong>Backend:</strong> Contenedores Docker + Jenkins CI/CD</li>
+                            <li><strong>Flujo:</strong> Git push → Jenkins detecta → build → test → deploy automático</li>
+                            <li><strong>Ventaja:</strong> 100% contenedorizado, automatizado, profesional</li>
+                            <li><strong>API en app.js:</strong> <code class="text-red-400">const API = '/api/items';</code></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="border border-dark-100 bg-dark-200/50 rounded-lg p-4 mt-4">
+                    <p class="text-slate-300 text-sm"><strong class="text-accent">¿Cuál usar?</strong></p>
+                    <ul class="text-xs text-slate-400 space-y-1 ml-4 list-disc mt-2">
+                        <li><strong class="text-neon-green">Para seguir el libro:</strong> Usa el Flujo Básico. Todo el código está configurado para este flujo.</li>
+                        <li><strong class="text-red-400">Para producción o aprendizaje avanzado:</strong> Implementa el Flujo Avanzado siguiendo el Módulo 9.</li>
+                        <li><strong class="text-accent">Ambos son complementarios:</strong> Puedes usar hot reload para desarrollo y Jenkins para CI/CD.</li>
                     </ul>
                 </div>
                 
-                <div class="border-2 border-red-500/40 rounded-lg p-4 bg-red-500/5">
-                    <p class="text-red-400 font-bold text-sm mb-2">⚙ FLUJO AVANZADO (Opcional - Módulo 9)</p>
-                    <ul class="text-xs text-slate-300 space-y-1 ml-4 list-disc">
-                        <li><strong>Frontend:</strong> Nginx en contenedor (localhost:3000)</li>
-                        <li><strong>Backend:</strong> Contenedores Docker + Jenkins CI/CD</li>
-                        <li><strong>Flujo:</strong> Git push → Jenkins detecta → build → test → deploy automático</li>
-                        <li><strong>Ventaja:</strong> 100% contenedorizado, automatizado, profesional</li>
-                        <li><strong>API en app.js:</strong> <code class="text-red-400">const API = '/api/items';</code></li>
-                    </ul>
-                </div>
-            </div>
-            
-            <div class="mt-4 p-3 bg-slate-800/50 rounded-lg">
-                <p class="text-slate-300 text-sm"><strong class="text-accent">¿Cuál usar?</strong></p>
-                <ul class="text-xs text-slate-400 space-y-1 ml-4 list-disc mt-2">
-                    <li><strong class="text-neon-green">Para seguir el libro:</strong> Usa el Flujo Básico. Todo el código está configurado para este flujo.</li>
-                    <li><strong class="text-red-400">Para producción o aprendizaje avanzado:</strong> Implementa el Flujo Avanzado siguiendo el Módulo 9.</li>
-                    <li><strong class="text-accent">Ambos son complementarios:</strong> Puedes usar hot reload para desarrollo y Jenkins para CI/CD.</li>
-                </ul>
-            </div>
-            
-            <p class="text-slate-400 text-xs mt-3 italic">
-                <strong>Nota importante:</strong> Si usas el Flujo Básico (recomendado), NO necesitas implementar Jenkins ni Nginx. El hot reload automático funciona perfectamente para todo el libro. Jenkins y Nginx son solo para cuando quieras aprender sobre CI/CD y arquitecturas 100% contenerizadas.
-            </p>
-        </div>
+                <p class="text-slate-400 text-xs mt-3 italic">
+                    <strong>Nota importante:</strong> Si usas el Flujo Básico (recomendado), NO necesitas implementar Jenkins ni Nginx. El hot reload automático funciona perfectamente para todo el libro. Jenkins y Nginx son solo para cuando quieras aprender sobre CI/CD y arquitecturas 100% contenerizadas.
+                </p>
+            </section>
+        </section>
 
         <section id="modulo0">
             <div class="module-header">
@@ -476,7 +499,7 @@
                 <p class="text-slate-400 mt-3 text-sm">Entender el terreno de juego antes de escribir una sola linea de codigo.</p>
             </div>
 
-            <section class="mb-16">
+            <section id="m0-construir" class="mb-16">
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
                     <span class="text-accent">0.1</span> Que Vamos a Construir?
                 </h3>
