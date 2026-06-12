@@ -3281,7 +3281,7 @@ node_modules/</code>
             <span class="tag">&lt;dependency&gt;</span>
                 <span class="tag">&lt;groupId&gt;</span>org.springframework.cloud<span class="tag">&lt;/groupId&gt;</span>
                 <span class="tag">&lt;artifactId&gt;</span>spring-cloud-dependencies<span class="tag">&lt;/artifactId&gt;</span>
-                <span class="tag">&lt;version&gt;</span><span class="tag">&lt;/version&gt;</span>
+                <span class="tag">&lt;version&gt;</span>${spring-cloud.version}<span class="tag">&lt;/version&gt;</span>
                 <span class="tag">&lt;type&gt;</span>pom<span class="tag">&lt;/type&gt;</span>
                 <span class="comment">&lt;!-- scope=import: importa las versiones del BOM --&gt;</span>
                 <span class="tag">&lt;scope&gt;</span>import<span class="tag">&lt;/scope&gt;</span>
@@ -3365,6 +3365,7 @@ node_modules/</code>
               - <span class="string">POST</span>
               - <span class="string">PUT</span>
               - <span class="string">DELETE</span>
+              - <span class="string">OPTIONS</span>
             <span class="comment"># allowedHeaders: Que headers se permiten ("*" = todos)</span>
             <span class="comment"># Necesario para Content-Type: application/json, Authorization, etc.</span>
             <span class="property">allowedHeaders</span>: <span class="string">"*"</span></code></div>
@@ -5020,6 +5021,7 @@ H/5 * * * *</code>
               - <span class="string">POST</span>
               - <span class="string">PUT</span>
               - <span class="string">DELETE</span>
+              - <span class="string">OPTIONS</span>
             <span class="property">allowedHeaders</span>: <span class="string">"*"</span></code>
                 </div>
 
