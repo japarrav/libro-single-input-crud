@@ -343,8 +343,8 @@
             </p>
             <div class="flex justify-center gap-3 mt-8 flex-wrap">
                 <span class="px-3 py-1 bg-sky-500/10 border border-sky-500/20 rounded-full text-sky-400 text-xs font-medium">Java 21</span>
-                <span class="px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 text-xs font-medium">Spring Boot 3.3.4</span>
-                <span class="px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400 text-xs font-medium">Spring Cloud 2023.0.3</span>
+                <span class="px-3 py-1 bg-blue-500/10 border border-blue-500/20 rounded-full text-blue-400 text-xs font-medium">Spring Boot 3.5.15</span>
+                <span class="px-3 py-1 bg-cyan-500/10 border border-cyan-500/20 rounded-full text-cyan-400 text-xs font-medium">Spring Cloud 2024.0.3</span>
                 <span class="px-3 py-1 bg-indigo-500/10 border border-indigo-500/20 rounded-full text-indigo-400 text-xs font-medium">PostgreSQL 16</span>
                 <span class="px-3 py-1 bg-purple-500/10 border border-purple-500/20 rounded-full text-purple-400 text-xs font-medium">API Gateway</span>
                 <span class="px-3 py-1 bg-amber-500/10 border border-amber-500/20 rounded-full text-amber-400 text-xs font-medium">Initializr</span>
@@ -1024,8 +1024,8 @@
                             <tr><td><code>Git</code></td><td>2.40+</td><td>Control de versiones. Tracking de cambios y colaboracion.</td><td>Host</td></tr>
                             <tr><td><code>Docker Desktop</code></td><td>4.25+</td><td>Motor de contenedores. Aislamiento de servicios.</td><td>Host</td></tr>
                             <tr><td><code>Java JDK</code></td><td>21 (LTS)</td><td>Lenguaje de programacion. Version LTS mas reciente.</td><td>Contenedores</td></tr>
-                            <tr><td><code>Spring Boot</code></td><td>3.3.4</td><td>Framework para microservicios. Configuracion automatica.</td><td>Contenedores</td></tr>
-                            <tr><td><code>Spring Cloud</code></td><td>2023.0.3</td><td>API Gateway, service discovery, config server.</td><td>Contenedor Gateway</td></tr>
+                            <tr><td><code>Spring Boot</code></td><td>3.5.15</td><td>Framework para microservicios. Configuracion automatica.</td><td>Contenedores</td></tr>
+                            <tr><td><code>Spring Cloud</code></td><td>2024.0.3</td><td>API Gateway, service discovery, config server.</td><td>Contenedor Gateway</td></tr>
                             <tr><td><code>PostgreSQL</code></td><td>16 Alpine</td><td>Base de datos relacional. "Alpine" = imagen ultra-ligera (~80MB).</td><td>Contenedor DB</td></tr>
                             <tr><td><code>Nginx</code></td><td>Alpine</td><td>Servidor web para el frontend. Reverse proxy para /api/*. Ultra-ligero (~5MB).</td><td>Contenedor Frontend</td></tr>
                             <tr><td><code>Jenkins</code></td><td>LTS JDK 21</td><td>Servidor de CI/CD local. Automatiza build, test y deploy.</td><td>Contenedor Jenkins</td></tr>
@@ -1113,7 +1113,7 @@
                     <div class="alert-body">
                         <p class="mb-2">Al generar tu proyecto desde Initializr, obtienes:</p>
                         <ul class="list-disc list-inside ml-4 space-y-1">
-                            <li>La <strong class="text-white">configuración más actualizada</strong> para Spring Boot 3.3.4</li>
+                            <li>La <strong class="text-white">configuración más actualizada</strong> para Spring Boot 3.5.15</li>
                             <li>Un proyecto <strong class="text-white">100% tuyo</strong>, no una copia del libro</li>
                             <li>La <strong class="text-white">experiencia real</strong> de iniciar un proyecto Spring Boot desde cero, como harías en tu trabajo</li>
                             <li>Versiones de dependencias <strong class="text-white">resueltas automáticamente</strong> por el BOM de Spring Boot</li>
@@ -1134,7 +1134,7 @@
                         <tbody>
                             <tr><td><code>Project</code></td><td><strong class="text-white">Maven</strong></td><td>Usamos Maven como gestor de dependencias. La alternativa es Gradle, pero Maven es el estándar en la mayoría de equipos.</td></tr>
                             <tr><td><code>Language</code></td><td><strong class="text-white">Java</strong></td><td>Java 21, el LTS más reciente. Podría ser Kotlin, pero Java es el lenguaje principal de Spring.</td></tr>
-                            <tr><td><code>Spring Boot</code></td><td><strong class="text-white">3.3.4</strong></td><td>Versión compatible con Spring Cloud 2023.0.3 que usaremos en el Gateway.</td></tr>
+                            <tr><td><code>Spring Boot</code></td><td><strong class="text-white">3.5.15</strong></td><td>Versión compatible con Spring Cloud 2024.0.3 que usaremos en el Gateway.</td></tr>
                             <tr><td><code>Group</code></td><td><code>com.singleinput</code></td><td>Identificador del grupo/empresa (convención inversa de dominio).</td></tr>
                             <tr><td><code>Artifact</code></td><td><code>item-service</code></td><td>Nombre del artefacto y del JAR generado.</td></tr>
                             <tr><td><code>Name</code></td><td><code>item-service</code></td><td>Nombre del proyecto (se autocompleta con el Artifact).</td></tr>
@@ -1626,7 +1626,7 @@ feature:          C---D---</pre>
     <span class="tag">&lt;parent&gt;</span>
         <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
         <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-parent<span class="tag">&lt;/artifactId&gt;</span>
-        <span class="tag">&lt;version&gt;</span>3.3.4<span class="tag">&lt;/version&gt;</span>
+        <span class="tag">&lt;version&gt;</span>3.5.15<span class="tag">&lt;/version&gt;</span>
     <span class="tag">&lt;/parent&gt;</span>
 
     <span class="comment">&lt;!-- ═══════════════════════════════════════════════════════════ --&gt;</span>
@@ -3423,11 +3423,11 @@ node_modules/</code>
          https://maven.apache.org/xsd/maven-4.0.0.xsd"</span><span class="tag">&gt;</span>
     <span class="tag">&lt;modelVersion&gt;</span>4.0.0<span class="tag">&lt;/modelVersion&gt;</span>
 
-    <span class="comment">&lt;!-- HERENCIA: Mismo parent que Item Service (Spring Boot 3.3.4) --&gt;</span>
+    <span class="comment">&lt;!-- HERENCIA: Mismo parent que Item Service (Spring Boot 3.5.15) --&gt;</span>
     <span class="tag">&lt;parent&gt;</span>
         <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
         <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-parent<span class="tag">&lt;/artifactId&gt;</span>
-        <span class="tag">&lt;version&gt;</span>3.3.4<span class="tag">&lt;/version&gt;</span>
+        <span class="tag">&lt;version&gt;</span>3.5.15<span class="tag">&lt;/version&gt;</span>
     <span class="tag">&lt;/parent&gt;</span>
 
     <span class="comment">&lt;!-- COORDENADAS: Identificacion unica del Gateway --&gt;</span>
@@ -3440,7 +3440,7 @@ node_modules/</code>
     <span class="tag">&lt;properties&gt;</span>
         <span class="tag">&lt;java.version&gt;</span>21<span class="tag">&lt;/java.version&gt;</span>
         <span class="comment">&lt;!-- Spring Cloud version: BOM que gestiona versiones de todos los starters --&gt;</span>
-        <span class="tag">&lt;spring-cloud.version&gt;</span>2023.0.3<span class="tag">&lt;/spring-cloud.version&gt;</span>
+        <span class="tag">&lt;spring-cloud.version&gt;</span>2024.0.3<span class="tag">&lt;/spring-cloud.version&gt;</span>
     <span class="tag">&lt;/properties&gt;</span>
 
     <span class="comment">&lt;!-- DEPENDENCIAS: Solo necesita Spring Cloud Gateway --&gt;</span>
