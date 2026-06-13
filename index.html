@@ -2624,6 +2624,8 @@ POSTGRES_DB=crud_db</code>
     <span class="comment"># postgres:16-alpine = PostgreSQL version 16 en Alpine Linux</span>
     <span class="comment"># "Alpine" = distribucion minimalista (~80MB vs ~400MB de Debian)</span>
     <span class="property">image</span>: <span class="string">postgres:16-alpine</span>
+    <span class="property">env_file</span>:
+      - <span class="string">.env</span>
 
     <span class="comment"># container_name: Nombre del contenedor cuando aparece en "docker ps"</span>
     <span class="comment"># Tambien es el nombre que otros contenedores usan para conectarse</span>
@@ -2816,7 +2818,7 @@ POSTGRES_DB=crud_db</code>
                             <tbody>
                                 <tr><td><code>services:</code></td><td>Define los 3 contenedores. Cada uno es un proceso aislado.</td></tr>
                                 <tr><td><code>depends_on: condition: service_healthy</code></td><td><strong class="text-neon-yellow">CRITICO.</strong> Item Service NO arranca hasta que PostgreSQL pase su healthcheck. Sin esto, Spring Boot intentaria conectarse antes de que la DB este lista.</td></tr>
-                                <tr><td><code></code></td><td>Lee la variable del archivo .env. Las credenciales no estan hardcodeadas en el YAML.</td></tr>
+                                <tr><td><code>env_file: - .env</code></td><td>Carga las variables del archivo .env. Las credenciales no estan hardcodeadas en el YAML.</td></tr>
                                 <tr><td><code>./item-service/src:/app/src</code></td><td><strong>Bind Mount:</strong> Tu carpeta local se monta en el contenedor. Cambios en VS Code son instantaneos dentro.</td></tr>
                                 <tr><td><code>maven_cache:/root/.m2</code></td><td>Volumen para cache Maven. Las dependencias sobreviven a la recreacion del contenedor.</td></tr>
                                 <tr><td><code>networks: crud-network</code></td><td>Red bridge personalizada. Todos los servicios en la misma red pueden comunicarse por nombre.</td></tr>
@@ -3653,6 +3655,9 @@ node_modules/</code>
 <span class="tag">&lt;/head&gt;</span>
 <span class="tag">&lt;body&gt;</span>
     <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="value">"container"</span><span class="tag">&gt;</span>
+        <span class="tag">&lt;div</span> <span class="attr">id</span>=<span class="value">"dbError"</span> <span class="attr">class</span>=<span class="value">"db-error"</span> <span class="attr">style</span>=<span class="value">"display:none;"</span><span class="tag">&gt;</span>
+            ⚠ Sin conexi&oacute;n a la base de datos. Verifica que PostgreSQL est&eacute; funcionando.
+        <span class="tag">&lt;/div&gt;</span>
         <span class="tag">&lt;h1&gt;</span>Single Input CRUD<span class="tag">&lt;/h1&gt;</span>
         <span class="tag">&lt;div</span> <span class="attr">class</span>=<span class="value">"input-group"</span><span class="tag">&gt;</span>
             <span class="tag">&lt;input</span> <span class="attr">type</span>=<span class="value">"text"</span> <span class="attr">id</span>=<span class="value">"itemInput"</span> <span class="attr">placeholder</span>=<span class="value">"Escribe algo..."</span><span class="tag">&gt;</span>
@@ -3741,6 +3746,17 @@ input[type="text"]:focus { border-color: #38bdf8; }
 }
 .message.visible { opacity: 1; }
 .message.success { background: #064e3b; color: #6ee7b7; border: 1px solid #065f46; }
+.db-error {
+    background: #991b1b;
+    color: #ffffff;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    text-align: center;
+    border: 1px solid #fca5a5;
+}
 .message.error { background: #450a0a; color: #fca5a5; border: 1px solid #7f1d1d; }
 .message.warning { background: #451a03; color: #fdba74; border: 1px solid #7c2d12; }
 #itemList { list-style: none; display: none; }
@@ -3769,9 +3785,6 @@ input[type="text"]:focus { border-color: #38bdf8; }
                     </div>
                 </div>
 
-            <section id="m7-js" class="mb-16">
-                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">7.3</span> app.js</h3>
-
                 <div class="alert-box alert-warning mb-4">
                     <div class="alert-title"><span class="alert-icon">&#9888;</span> IMPORTANTE: Configuración según tu Flujo de Trabajo</div>
                     <div class="alert-body">
@@ -3794,13 +3807,6 @@ input[type="text"]:focus { border-color: #38bdf8; }
                         </div>
                         
                         <p class="text-sm text-slate-300 mt-4"><strong class="text-accent">¿Cuál usar?</strong> Si estás siguiendo el libro normalmente, usa la configuración del <strong class="text-neon-green">Flujo Básico</strong> (URL completa con localhost:8080). Si implementaste Nginx en el Módulo 10.5, cambia a la configuración del <strong class="text-red-400">Flujo Avanzado</strong> (ruta relativa).</p>
-                    </div>
-                </div>
-
-                <div class="alert-box alert-analysis mb-4">
-                    <div class="alert-title"><span class="alert-icon">&#128300;</span> ¿Por qué este archivo?</div>
-                    <div class="alert-body">
-                        <p><strong class="text-white">Es el "cerebro" del frontend.</strong> Contiene toda la logica de la aplicacion: que hacer cuando el usuario hace clic en un boton, cómo comunicarse con el API Gateway (fetch API), cómo renderizar los datos en la lista, y cómo manejar los errores. Sin app.js, los botones no harian nada y la lista estaria vacia.</p>
                     </div>
                 </div>
 
@@ -4014,7 +4020,19 @@ document.getElementById(<span class="string">'btnSearch'</span>).addEventListene
     });
 }
 
-updateButtons();</code></div>
+updateButtons();
+
+<span class="keyword">async</span> <span class="keyword">function</span> checkDbConnection() {
+    <span class="keyword">try</span> {
+        <span class="keyword">const</span> res = <span class="keyword">await</span> fetch(API, { method: <span class="string">'GET'</span>, signal: AbortSignal.timeout(<span class="number">5000</span>) });
+        <span class="keyword">if</span> (!res.ok) <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string">'Error del servidor'</span>);
+        document.getElementById(<span class="string">'dbError'</span>).style.display = <span class="string">'none'</span>;
+    } <span class="keyword">catch</span> {
+        document.getElementById(<span class="string">'dbError'</span>).style.display = <span class="string">'block'</span>;
+    }
+}
+
+checkDbConnection();</code></div>
             </section>
         </section>
 
