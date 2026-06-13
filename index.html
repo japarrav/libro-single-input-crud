@@ -4133,6 +4133,15 @@ Usar en requests:
                 <h2 class="module-title">JWT: Autenticacion Opcional (Sin Base de Datos)</h2>
                 <p class="text-slate-400 mt-3 text-sm">Protegiendo nuestro input. Implementaremos tokens JWT para asegurar que solo usuarios autorizados puedan crear o modificar datos.</p>
             </div>
+            <div class="alert-box alert-analysis mb-8">
+                <div class="alert-title"><span class="alert-icon">&#128300;</span> Conectando con los capitulos anteriores</div>
+                <div class="alert-body">
+                    <p class="mb-2">Hasta ahora construimos: el <strong class="text-white">Item Service</strong> (Modulo 5) que expone endpoints CRUD, el <strong class="text-white">Frontend</strong> (Modulo 5) que consume esos endpoints, la <strong class="text-white">infraestructura Docker</strong> (Modulo 6) que los orquesta, y el <strong class="text-white">API Gateway</strong> (Modulo 7) que enruta las peticiones y agrega CORS.</p>
+                    <p class="mb-2">El problema: <strong class="text-accent">cualquier persona</strong> con la URL del Gateway puede crear, modificar o eliminar datos. No hay barrera de entrada. Necesitamos autenticacion.</p>
+                    <p class="mb-2">La solucion: agregar una capa de seguridad <strong class="text-white">en el propio Gateway</strong>. Los microservicios <strong class="text-accent">no necesitan cambiar</strong> — el filtro JWT intercepta las peticiones antes de que lleguen a ellos. El Gateway verifica el token y, si es valido, deja pasar la peticion al microservicio correspondiente.</p>
+                    <p><strong class="text-white">Arquitectura resultante:</strong> Cliente → Gateway (valida JWT) → Microservicio (procesa). El microservicio confia en el Gateway y no necesita su propio sistema de autenticacion.</p>
+                </div>
+            </div>
             <section id="m9-intro" class="mb-16">
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">9.1</span> ¿Qué es JWT?</h3>
                 <p class="text-slate-300 leading-relaxed mb-4"><strong class="text-white">JWT (JSON Web Token)</strong> es un estandar abierto (RFC 7519) para crear tokens de autenticacion. Un JWT es una cadena de texto <strong class="text-accent">firmada criptograficamente</strong> que contiene informacion del usuario (claims). La clave esta en que <strong class="text-white">el servidor puede verificar la firma sin necesidad de consultar una base de datos</strong>, lo que lo hace ideal para microservicios.</p>
@@ -4286,15 +4295,13 @@ Usar en requests:
     <span class="comment"># En produccion: usar variable de entorno ${JWT_SECRET}</span>
     <span class="property">secret</span>: <span class="string">mi-clave-secreta-muy-larga-para-jwt-que-debe-tener-al-menos-256-bits</span>
     <span class="comment"># Tiempo de expiracion en milisegundos (3600000 = 1 hora)</span>
-    <span class="property">expiration</span>: <span class="number">3600000</span>
-  <span class="comment"># Usuarios hardcodeados (solo para ejemplo)</span>
-  <span class="property">users</span>:
-    - <span class="property">username</span>: <span class="string">admin</span>
-      <span class="property">password</span>: <span class="string">admin123</span>
-      <span class="property">role</span>: <span class="string">ADMIN</span>
-    - <span class="property">username</span>: <span class="string">user</span>
-      <span class="property">password</span>: <span class="string">user123</span>
-      <span class="property">role</span>: <span class="string">USER</span></code></div>
+    <span class="property">expiration</span>: <span class="number">3600000</span></code></div>
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#9432;</span> ¿Donde estan los usuarios?</div>
+                    <div class="alert-body">
+                        Nota que en <code class="text-accent">application.yml</code> ya no hay lista de usuarios. Los usuarios <strong class="text-white">admin/admin123</strong> y <strong class="text-white">user/user123</strong> estan hardcodeados directamente en <code class="text-accent">AuthController.java</code> usando un <code>Map</code> con un <code>record User</code>. Esto evita problemas de inyeccion y hace que el codigo funcione <strong class="text-white">apenas lo copies</strong>. En produccion, estos usuarios vendrian de una base de datos.
+                    </div>
+                </div>
 
                 <h4 class="text-xl font-bold text-white mb-4 mt-8">Paso 3: JwtUtil - Generar y validar tokens</h4>
                 <p class="text-slate-300 leading-relaxed mb-4">Crea la clase <code class="text-accent">JwtUtil.java</code> en <code class="text-accent">api-gateway/src/main/java/com/gateway/security/</code>. Esta clase es el <strong class="text-white">corazon de la autenticacion</strong>: genera tokens cuando el usuario hace login, y los valida en cada peticion protegida.</p>
@@ -4368,44 +4375,49 @@ Usar en requests:
 <span class="comment">// Ubicacion: api-gateway/src/main/java/com/gateway/controller/AuthController.java</span>
 <span class="keyword">package</span> com.gateway.controller;
 <span class="keyword">import</span> com.gateway.security.JwtUtil;
-<span class="keyword">import</span> org.springframework.beans.factory.annotation.Value;
+<span class="keyword">import</span> org.springframework.http.HttpStatus;
 <span class="keyword">import</span> org.springframework.http.ResponseEntity;
 <span class="keyword">import</span> org.springframework.web.bind.annotation.*;
-<span class="keyword">import</span> java.util.List;
 <span class="keyword">import</span> java.util.Map;
 
 <span class="annotation">@RestController</span>
 <span class="annotation">@RequestMapping</span>(<span class="string">"/api/auth"</span>)
 <span class="keyword">public class</span> <span class="type">AuthController</span> {
 
+    <span class="comment">// Record interno para datos de usuario (Java 16+)</span>
+    <span class="keyword">private record</span> <span class="type">User</span>(<span class="type">String</span> password, <span class="type">String</span> role) {}
+
+    <span class="comment">// Usuarios hardcodeados (coinciden con los documentados en application.yml)</span>
+    <span class="comment">// En produccion: vendrian de una base de datos o LDAP</span>
+    <span class="keyword">private static final</span> <span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">User</span>&gt; USERS = <span class="type">Map</span>.of(
+        <span class="string">"admin"</span>, <span class="keyword">new</span> <span class="type">User</span>(<span class="string">"admin123"</span>, <span class="string">"ADMIN"</span>),
+        <span class="string">"user"</span>,  <span class="keyword">new</span> <span class="type">User</span>(<span class="string">"user123"</span>,  <span class="string">"USER"</span>)
+    );
+
     <span class="keyword">private final</span> <span class="type">JwtUtil</span> jwtUtil;
-    
-    <span class="comment">// Lista de usuarios hardcodeados desde application.yml</span>
-    <span class="annotation">@Value</span>(<span class="string">"#{${security.users}}"</span>)
-    <span class="keyword">private</span> <span class="type">List</span>&lt;<span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">String</span>&gt;&gt; users;
 
     <span class="keyword">public</span> <span class="type">AuthController</span>(<span class="type">JwtUtil</span> jwtUtil) {
         <span class="keyword">this</span>.jwtUtil = jwtUtil;
     }
 
     <span class="comment">// POST /api/auth/login</span>
-    <span class="comment">// Recibe {username, password}, valida contra la lista, devuelve JWT</span>
+    <span class="comment">// Recibe {username, password}, valida contra el mapa, devuelve JWT</span>
     <span class="annotation">@PostMapping</span>(<span class="string">"/login"</span>)
     <span class="keyword">public</span> <span class="type">ResponseEntity</span>&lt;?&gt; login(<span class="annotation">@RequestBody</span> <span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">String</span>&gt; body) {
         <span class="type">String</span> username = body.get(<span class="string">"username"</span>);
         <span class="type">String</span> password = body.get(<span class="string">"password"</span>);
 
-        <span class="comment">// Buscar el usuario en la lista hardcodeada</span>
-        <span class="keyword">for</span> (<span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">String</span>&gt; user : users) {
-            <span class="keyword">if</span> (user.get(<span class="string">"username"</span>).equals(username) &&
-                user.get(<span class="string">"password"</span>).equals(password)) {
-                <span class="comment">// Credenciales validas → generar JWT</span>
-                <span class="type">String</span> token = jwtUtil.generateToken(username, user.get(<span class="string">"role"</span>));
-                <span class="keyword">return</span> ResponseEntity.ok(Map.of(<span class="string">"token"</span>, token));
-            }
+        <span class="comment">// Buscar usuario en el mapa hardcodeado</span>
+        <span class="type">User</span> user = USERS.get(username);
+        <span class="keyword">if</span> (user != <span class="keyword">null</span> && user.password().equals(password)) {
+            <span class="comment">// Credenciales validas → generar JWT</span>
+            <span class="type">String</span> token = jwtUtil.generateToken(username, user.role());
+            <span class="keyword">return</span> ResponseEntity.ok(Map.of(<span class="string">"token"</span>, token));
         }
-        <span class="comment">// Credenciales invalidas → 401</span>
-        <span class="keyword">return</span> ResponseEntity.status(401).body(Map.of(<span class="string">"error"</span>, <span class="string">"Credenciales invalidas"</span>));
+
+        <span class="comment">// Credenciales invalidas → 401 Unauthorized</span>
+        <span class="keyword">return</span> ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of(<span class="string">"error"</span>, <span class="string">"Credenciales invalidas"</span>));
     }
 }</code></div>
 
@@ -4470,8 +4482,14 @@ Usar en requests:
 
         <span class="comment">// Token valido: agregar header X-User-Name con el username</span>
         <span class="comment">// Los microservicios pueden usar este header si necesitan saber quien hizo la peticion</span>
-        exchange.getRequest().mutate()
-                .header(<span class="string">"X-User-Name"</span>, username);
+        <span class="comment">// IMPORTANTE: mutate() crea un builder → hay que .build() y crear nuevo exchange</span>
+        exchange = exchange.mutate()
+                .request(
+                    exchange.getRequest().mutate()
+                        .header(<span class="string">"X-User-Name"</span>, username)
+                        .build()
+                )
+                .build();
 
         <span class="keyword">return</span> chain.filter(exchange); <span class="comment">// Continuar con la peticion</span>
     }
@@ -4485,7 +4503,7 @@ Usar en requests:
                 <div class="diagram-container">
                     <pre class="text-xs sm:text-sm font-mono text-slate-300 leading-relaxed overflow-x-auto">
 <span class="text-slate-500">┌──────────┐     POST /api/auth/login     ┌──────────────┐     validar credenciales     ┌─────────┐</span>
-<span class="text-slate-500">│</span>  Cliente  <span class="text-slate-500">│</span>  ──────────────────────────&gt;  <span class="text-slate-500">│</span>  AuthFilter  <span class="text-slate-500">│</span>  ─────────────────────&gt;  <span class="text-slate-500">│</span> JwtUtil <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  Cliente  <span class="text-slate-500">│</span>  ──────────────────────────&gt;  <span class="text-slate-500">│</span> JwtAuthFilter <span class="text-slate-500">│</span>  ─────────────────────&gt;  <span class="text-slate-500">│</span> JwtUtil <span class="text-slate-500">│</span>
 <span class="text-slate-500">│</span> (Postman) <span class="text-slate-500">│</span>                                <span class="text-slate-500">│</span>  (Gateway)  <span class="text-slate-500">│</span>                          <span class="text-slate-500">│</span>(generar) <span class="text-slate-500">│</span>
 <span class="text-slate-500">└──────────┘</span>                                <span class="text-slate-500">└──────────────┘</span>                          <span class="text-slate-500">└─────────┘</span>
      <span class="text-slate-500">│</span>                                          <span class="text-slate-500">│</span>                               
