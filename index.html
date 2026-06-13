@@ -594,7 +594,7 @@
                 <div class="diagram-container">
                     <pre class="text-xs sm:text-sm font-mono text-slate-300 leading-relaxed overflow-x-auto">
 <span class="text-slate-500">┌─────────────────────────────────────────────────────────────────────────────────────────┐</span>
-<span class="text-slate-500">│</span>  <span class="text-accent font-bold">FLUJO COMPLETO: Crear Nuevo Item (POST /api/items)</span>                                   <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-accent font-bold">FLUJO COMPLETO: Crear Nuevo Item (POST /api/items/crear)</span>                                   <span class="text-slate-500">│</span>
 <span class="text-slate-500">└─────────────────────────────────────────────────────────────────────────────────────────┘</span>
 
 <span class="text-neon-green font-bold">PASO 1: Usuario escribe "Hola Mundo" en el input y presiona "Crear"</span>
@@ -602,11 +602,11 @@
 <span class="text-slate-500">│</span>  <span class="text-accent">NAVEGADOR (Frontend)</span> - Puerto 5500 (Live Server)                                     <span class="text-slate-500">│</span>
 <span class="text-slate-500">│</span>  <span class="text-slate-400">├─ app.js detecta el clic en "Crear"</span>                                                 <span class="text-slate-500">│</span>
 <span class="text-slate-500">│</span>  <span class="text-slate-400">├─ Obtiene el texto del input: "Hola Mundo"</span>                                          <span class="text-slate-500">│</span>
-<span class="text-slate-500">│</span>  <span class="text-slate-400">└─ Ejecuta: fetch('http://localhost:8080/api/items', {method: 'POST', body: ...})</span>    <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">└─ Ejecuta: fetch('http://localhost:8080/api/items/crear', {method: 'POST', body: ...})</span>    <span class="text-slate-500">│</span>
 <span class="text-slate-500">└───────────────────────────────────────────────────────────────────────────────────────┘</span>
                                               <span class="text-neon-green">│</span>
                                               <span class="text-neon-green">▼</span>
-                        <span class="text-neon-yellow">HTTP POST http://localhost:8080/api/items</span>
+                        <span class="text-neon-yellow">HTTP POST http://localhost:8080/api/items/crear</span>
                         <span class="text-neon-yellow">Content-Type: application/json</span>
                         <span class="text-neon-yellow">Body: {"texto": "Hola Mundo"}</span>
                                               <span class="text-neon-green">│</span>
@@ -621,7 +621,7 @@
 <span class="text-slate-500">└───────────────────────────────────────────────────────────────────────────────────────┘</span>
                                               <span class="text-neon-green">│</span>
                                               <span class="text-neon-green">▼</span>
-                        <span class="text-neon-yellow">HTTP POST http://item-service:8081/api/items</span>
+                        <span class="text-neon-yellow">HTTP POST http://item-service:8081/api/items/crear</span>
                         <span class="text-neon-yellow">(Red interna Docker: crud-network)</span>
                                               <span class="text-neon-green">│</span>
                                               <span class="text-neon-green">▼</span>
@@ -629,7 +629,7 @@
 <span class="text-slate-500">│</span>  <span class="text-accent font-bold">ITEM SERVICE (Spring Boot)</span> - Puerto 8081 (Interno, no expuesto)                      <span class="text-slate-500">│</span>
 <span class="text-slate-500">│</span>                                                                                       <span class="text-slate-500">│</span>
 <span class="text-slate-500">│</span>  <span class="text-neon-green font-bold">CAPA 4: Controller (ItemController.java)</span>                                             <span class="text-slate-500">│</span>
-<span class="text-slate-500">│</span>  <span class="text-slate-400">├─ @PostMapping("/api/items") recibe la petición</span>                                     <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">├─ @PostMapping("/crear") recibe la petición</span>                                     <span class="text-slate-500">│</span>
 <span class="text-slate-500">│</span>  <span class="text-slate-400">├─ @RequestBody deserializa JSON → ItemDTO{texto="Hola Mundo"}</span>                         <span class="text-slate-500">│</span>
 <span class="text-slate-500">│</span>  <span class="text-slate-400">├─ @Valid valida: ¿texto no está vacío? ✓ ¿Longitud &lt; 255? ✓</span>                         <span class="text-slate-500">│</span>
 <span class="text-slate-500">│</span>  <span class="text-slate-400">└─ Llama a: itemService.create(dto)</span>                                                  <span class="text-slate-500">│</span>
@@ -2118,12 +2118,12 @@ feature:          C---D---</pre>
     <span class="keyword">public</span> <span class="type">ItemController</span>(<span class="type">ItemService</span> service) { <span class="keyword">this</span>.service = service; }
 
     <span class="comment">// ═══════════════════════════════════════════════════════</span>
-    <span class="comment">// ENDPOINT: GET /api/items</span>
+    <span class="comment">// ENDPOINT: GET /api/items/listar</span>
     <span class="comment">// Retorna todos los items</span>
     <span class="comment">// ═══════════════════════════════════════════════════════</span>
     <span class="comment">// @GetMapping: Mapea peticiones HTTP GET a este metodo</span>
-    <span class="comment">// Sin path adicional, usa el @RequestMapping de la clase: /api/items</span>
-    <span class="annotation">@GetMapping</span>
+    <span class="comment">// "/listar": Path especifico para listar todos los items</span>
+    <span class="annotation">@GetMapping</span>(<span class="string">"/listar"</span>)
     <span class="comment">// ResponseEntity: Envoltorio que incluye body + status code + headers</span>
     <span class="comment">// ResponseEntity.ok() = HTTP 200 + body con la lista de items</span>
     <span class="keyword">public</span> <span class="type">ResponseEntity</span>&lt;<span class="type">List</span>&lt;<span class="type">ItemDTO</span>&gt;&gt; findAll() {
@@ -2131,34 +2131,34 @@ feature:          C---D---</pre>
     }
 
     <span class="comment">// ═══════════════════════════════════════════════════════</span>
-    <span class="comment">// ENDPOINT: GET /api/items/{id}</span>
+    <span class="comment">// ENDPOINT: GET /api/items/mostrar/{id}</span>
     <span class="comment">// Retorna un item especifico por su ID</span>
     <span class="comment">// ═══════════════════════════════════════════════════════</span>
-    <span class="comment">// @GetMapping("/{id}"): Se combina con @RequestMapping</span>
-    <span class="comment">//   URL completa: GET /api/items/5 (donde 5 es el {id})</span>
-    <span class="annotation">@GetMapping</span>(<span class="string">"/{id}"</span>)
+    <span class="comment">// @GetMapping("/mostrar/{id}"): Se combina con @RequestMapping</span>
+    <span class="comment">//   URL completa: GET /api/items/mostrar/5 (donde 5 es el {id})</span>
+    <span class="annotation">@GetMapping</span>(<span class="string">"/mostrar/{id}"</span>)
     <span class="comment">// @PathVariable: Extrae el valor de la URL</span>
-    <span class="comment">//   En /api/items/5, @PathVariable Long id = 5</span>
+    <span class="comment">//   En /api/items/mostrar/5, @PathVariable Long id = 5</span>
     <span class="keyword">public</span> <span class="type">ResponseEntity</span>&lt;<span class="type">ItemDTO</span>&gt; findById(<span class="annotation">@PathVariable</span> <span class="type">Long</span> id) {
         <span class="keyword">return</span> ResponseEntity.ok(service.findById(id));
     }
 
     <span class="comment">// ═══════════════════════════════════════════════════════</span>
-    <span class="comment">// ENDPOINT: GET /api/items/search?texto=Hola</span>
+    <span class="comment">// ENDPOINT: GET /api/items/buscar?texto=Hola</span>
     <span class="comment">// Busca items que contengan el texto indicado</span>
     <span class="comment">// ═══════════════════════════════════════════════════════</span>
-    <span class="annotation">@GetMapping</span>(<span class="string">"/search"</span>)
+    <span class="annotation">@GetMapping</span>(<span class="string">"/buscar"</span>)
     <span class="comment">// @RequestParam: Extrae un parametro de la query string</span>
-    <span class="comment">//   En /api/items/search?texto=Hola, @RequestParam String texto = "Hola"</span>
+    <span class="comment">//   En /api/items/buscar?texto=Hola, @RequestParam String texto = "Hola"</span>
     <span class="keyword">public</span> <span class="type">ResponseEntity</span>&lt;<span class="type">List</span>&lt;<span class="type">ItemDTO</span>&gt;&gt; search(<span class="annotation">@RequestParam</span> <span class="type">String</span> texto) {
         <span class="keyword">return</span> ResponseEntity.ok(service.search(texto));
     }
 
     <span class="comment">// ═══════════════════════════════════════════════════════</span>
-    <span class="comment">// ENDPOINT: POST /api/items</span>
+    <span class="comment">// ENDPOINT: POST /api/items/crear</span>
     <span class="comment">// Crea un nuevo item</span>
     <span class="comment">// ═══════════════════════════════════════════════════════</span>
-    <span class="annotation">@PostMapping</span>
+    <span class="annotation">@PostMapping</span>(<span class="string">"/crear"</span>)
     <span class="comment">// @Valid: Activa validacion del DTO (@NotBlank, @Size)</span>
     <span class="comment">//   Si el JSON no cumple las reglas, Spring retorna 400 automaticamente</span>
     <span class="comment">// @RequestBody: Convierte el JSON del body HTTP a objeto Java (ItemDTO)</span>
@@ -2168,20 +2168,20 @@ feature:          C---D---</pre>
     }
 
     <span class="comment">// ═══════════════════════════════════════════════════════</span>
-    <span class="comment">// ENDPOINT: PUT /api/items/{id}</span>
+    <span class="comment">// ENDPOINT: PUT /api/items/modificar/{id}</span>
     <span class="comment">// Actualiza un item existente</span>
     <span class="comment">// ═══════════════════════════════════════════════════════</span>
-    <span class="annotation">@PutMapping</span>(<span class="string">"/{id}"</span>)
+    <span class="annotation">@PutMapping</span>(<span class="string">"/modificar/{id}"</span>)
     <span class="comment">// Combina @PathVariable (de la URL) con @RequestBody (del JSON)</span>
     <span class="keyword">public</span> <span class="type">ResponseEntity</span>&lt;<span class="type">ItemDTO</span>&gt; update(<span class="annotation">@PathVariable</span> <span class="type">Long</span> id, <span class="annotation">@Valid</span> <span class="annotation">@RequestBody</span> <span class="type">ItemDTO</span> dto) {
         <span class="keyword">return</span> ResponseEntity.ok(service.update(id, dto));
     }
 
     <span class="comment">// ═══════════════════════════════════════════════════════</span>
-    <span class="comment">// ENDPOINT: DELETE /api/items/{id}</span>
+    <span class="comment">// ENDPOINT: DELETE /api/items/eliminar/{id}</span>
     <span class="comment">// Elimina un item por su ID</span>
     <span class="comment">// ═══════════════════════════════════════════════════════</span>
-    <span class="annotation">@DeleteMapping</span>(<span class="string">"/{id}"</span>)
+    <span class="annotation">@DeleteMapping</span>(<span class="string">"/eliminar/{id}"</span>)
     <span class="comment">// Retorna Void porque no hay body en la respuesta</span>
     <span class="keyword">public</span> <span class="type">ResponseEntity</span>&lt;<span class="type">Void</span>&gt; delete(<span class="annotation">@PathVariable</span> <span class="type">Long</span> id) {
         service.delete(id);
@@ -2948,7 +2948,7 @@ POSTGRES_DB=crud_db</code>
   TU APLICACION                 CONTENEDOR                    VOLUMEN
   (Postman/Navegador)           (PostgreSQL)                  (crud_pgdata)
                                 +------------------+          +-------------+
-  POST /api/items               |                  |          |             |
+  POST /api/items/crear          |                  |          |             |
   {"texto":"Hola"}  ----------> | Spring Boot      |          |             |
                                 |      |           |          |             |
                                 |      v           |          |             |
@@ -3406,7 +3406,7 @@ node_modules/</code>
           <span class="property">uri</span>: <span class="string">http://item-service:8081</span>
           <span class="comment"># predicates: Condiciones que debe cumplir la peticion para usar esta ruta</span>
           <span class="comment"># Path=/api/items/** = si la URL empieza con /api/items/, usar esta ruta</span>
-          <span class="comment"># "**" = cualquier cosa despues de /api/items/ (incluyendo /api/items/1, /api/items/search, etc.)</span>
+          <span class="comment"># "**" = cualquier cosa despues de /api/items/ (incluyendo /api/items/listar, /api/items/crear, etc.)</span>
           <span class="property">predicates</span>:
             - <span class="string">Path=/api/items/**</span>
       <span class="comment"># ═══════════════════════════════════════════════════════</span>
@@ -3876,7 +3876,7 @@ document.getElementById(<span class="string">'btnSearch'</span>).addEventListene
     <span class="keyword">const</span> texto = input.value.trim();
     <span class="keyword">if</span> (!texto) { showMessage(<span class="string">'Escribe un texto para crear'</span>, <span class="string">'error'</span>); <span class="keyword">return</span>; }
     <span class="keyword">try</span> {
-        <span class="keyword">const</span> check = <span class="keyword">await</span> fetch(`${API}/search?texto=${encodeURIComponent(texto)}`);
+        <span class="keyword">const</span> check = <span class="keyword">await</span> fetch(`${API}/buscar?texto=${encodeURIComponent(texto)}`);
         <span class="keyword">const</span> existentes = <span class="keyword">await</span> check.json();
         <span class="keyword">if</span> (existentes.some(item =&gt; item.texto.toLowerCase() === texto.toLowerCase())) {
             showMessage(<span class="string">`El texto &quot;${texto}&quot; ya existe`</span>, <span class="string">'error'</span>);
@@ -3884,7 +3884,7 @@ document.getElementById(<span class="string">'btnSearch'</span>).addEventListene
             updateButtons();
             <span class="keyword">return</span>;
         }
-        <span class="keyword">const</span> res = <span class="keyword">await</span> fetch(API, {
+        <span class="keyword">const</span> res = <span class="keyword">await</span> fetch(`${API}/crear`, {
             method: <span class="string">'POST'</span>,
             headers: { <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span> },
             body: JSON.stringify({ texto })
@@ -3906,7 +3906,7 @@ document.getElementById(<span class="string">'btnSearch'</span>).addEventListene
     <span class="keyword">if</span> (!texto) { showMessage(<span class="string">'Escribe un texto para actualizar'</span>, <span class="string">'error'</span>); <span class="keyword">return</span>; }
     <span class="keyword">if</span> (texto === originalText) { showMessage(<span class="string">'El texto es igual al actual, modifícalo'</span>, <span class="string">'error'</span>); <span class="keyword">return</span>; }
     <span class="keyword">try</span> {
-        <span class="keyword">const</span> check = <span class="keyword">await</span> fetch(`${API}/search?texto=${encodeURIComponent(texto)}`);
+        <span class="keyword">const</span> check = <span class="keyword">await</span> fetch(`${API}/buscar?texto=${encodeURIComponent(texto)}`);
         <span class="keyword">if</span> (check.ok) {
             <span class="keyword">const</span> existentes = <span class="keyword">await</span> check.json();
             <span class="keyword">if</span> (existentes.some(item =&gt; item.texto.toLowerCase() === texto.toLowerCase() && item.id != id)) {
@@ -3914,7 +3914,7 @@ document.getElementById(<span class="string">'btnSearch'</span>).addEventListene
                 <span class="keyword">return</span>;
             }
         }
-        <span class="keyword">const</span> res = <span class="keyword">await</span> fetch(`${API}/${id}`, {
+        <span class="keyword">const</span> res = <span class="keyword">await</span> fetch(`${API}/modificar/${id}`, {
             method: <span class="string">'PUT'</span>,
             headers: { <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span> },
             body: JSON.stringify({ texto })
@@ -3938,7 +3938,7 @@ document.getElementById(<span class="string">'btnSearch'</span>).addEventListene
                 showMessage(<span class="string">'Eliminaci&oacute;n cancelada'</span>, <span class="string">'warning'</span>);
                 <span class="keyword">return</span>;
             }
-            <span class="keyword">await</span> fetch(`${API}/${id}`, { method: <span class="string">'DELETE'</span> });
+            <span class="keyword">await</span> fetch(`${API}/eliminar/${id}`, { method: <span class="string">'DELETE'</span> });
             list.innerHTML = <span class="string">''</span>;
             list.style.display = <span class="string">'none'</span>;
             showMessage(<span class="string">`Texto &quot;${texto}&quot; eliminado correctamente`</span>, <span class="string">'success'</span>);
@@ -3948,7 +3948,7 @@ document.getElementById(<span class="string">'btnSearch'</span>).addEventListene
             updateButtons();
             <span class="keyword">return</span>;
         }
-        <span class="keyword">const</span> res = <span class="keyword">await</span> fetch(`${API}/search?texto=${encodeURIComponent(texto)}`);
+        <span class="keyword">const</span> res = <span class="keyword">await</span> fetch(`${API}/buscar?texto=${encodeURIComponent(texto)}`);
         <span class="keyword">const</span> resultados = <span class="keyword">await</span> res.json();
         <span class="keyword">const</span> item = resultados.find(it =&gt; it.texto.toLowerCase() === texto.toLowerCase());
         <span class="keyword">if</span> (!item) {
@@ -3967,7 +3967,7 @@ document.getElementById(<span class="string">'btnSearch'</span>).addEventListene
             updateButtons();
             <span class="keyword">return</span>;
         }
-        <span class="keyword">await</span> fetch(`${API}/${item.id}`, { method: <span class="string">'DELETE'</span> });
+        <span class="keyword">await</span> fetch(`${API}/eliminar/${item.id}`, { method: <span class="string">'DELETE'</span> });
         list.innerHTML = <span class="string">''</span>;
         list.style.display = <span class="string">'none'</span>;
         showMessage(<span class="string">`Texto &quot;${texto}&quot; eliminado correctamente`</span>, <span class="string">'success'</span>);
@@ -3981,7 +3981,7 @@ document.getElementById(<span class="string">'btnSearch'</span>).addEventListene
 <span class="keyword">async</span> <span class="keyword">function</span> searchAndShow() {
     <span class="keyword">const</span> texto = input.value.trim();
     <span class="keyword">try</span> {
-        <span class="keyword">const</span> url = texto ? `${API}/search?texto=${encodeURIComponent(texto)}` : API;
+        <span class="keyword">const</span> url = texto ? `${API}/buscar?texto=${encodeURIComponent(texto)}` : `${API}/listar`;
         <span class="keyword">const</span> res = <span class="keyword">await</span> fetch(url);
         <span class="keyword">const</span> data = <span class="keyword">await</span> handleResponse(res);
         <span class="keyword">if</span> (data.length === <span class="number">0</span>) {
@@ -4022,7 +4022,7 @@ document.getElementById(<span class="string">'btnSearch'</span>).addEventListene
 
 <span class="keyword">async</span> <span class="keyword">function</span> checkDbConnection() {
     <span class="keyword">try</span> {
-        <span class="keyword">const</span> res = <span class="keyword">await</span> fetch(API, { method: <span class="string">'GET'</span>, signal: AbortSignal.timeout(<span class="number">5000</span>) });
+        <span class="keyword">const</span> res = <span class="keyword">await</span> fetch(`${API}/listar`, { method: <span class="string">'GET'</span>, signal: AbortSignal.timeout(<span class="number">5000</span>) });
         <span class="keyword">if</span> (!res.ok) <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string">'Error del servidor'</span>);
         document.getElementById(<span class="string">'dbError'</span>).style.display = <span class="string">'none'</span>;
     } <span class="keyword">catch</span> {
@@ -4046,19 +4046,19 @@ checkDbConnection();</code></div>
                 <p class="text-slate-300 leading-relaxed mb-4">Todas las peticiones se hacen al <strong class="text-white">Gateway</strong> en <code class="text-accent">http://localhost:8080</code>, nunca directamente al microservicio.</p>
                 <table class="mb-6">
                     <tr><th>Metodo</th><th>URL</th><th>Body (JSON)</th><th>Descripcion</th></tr>
-                    <tr><td><code>POST</code></td><td><code>localhost:8080/api/items</code></td><td><code>{"texto": "Hola mundo"}</code></td><td>Crear item</td></tr>
-                    <tr><td><code>GET</code></td><td><code>localhost:8080/api/items</code></td><td>-</td><td>Listar todos</td></tr>
-                    <tr><td><code>GET</code></td><td><code>localhost:8080/api/items/1</code></td><td>-</td><td>Buscar por ID</td></tr>
-                    <tr><td><code>GET</code></td><td><code>localhost:8080/api/items/search?texto=Hola</code></td><td>-</td><td>Buscar por texto</td></tr>
-                    <tr><td><code>PUT</code></td><td><code>localhost:8080/api/items/1</code></td><td><code>{"texto": "Actualizado"}</code></td><td>Actualizar item</td></tr>
-                    <tr><td><code>DELETE</code></td><td><code>localhost:8080/api/items/1</code></td><td>-</td><td>Eliminar item</td></tr>
+                    <tr><td><code>POST</code></td><td><code>localhost:8080/api/items/crear</code></td><td><code>{"texto": "Hola mundo"}</code></td><td>Crear item</td></tr>
+                    <tr><td><code>GET</code></td><td><code>localhost:8080/api/items/listar</code></td><td>-</td><td>Listar todos</td></tr>
+                    <tr><td><code>GET</code></td><td><code>localhost:8080/api/items/mostrar/1</code></td><td>-</td><td>Buscar por ID</td></tr>
+                    <tr><td><code>GET</code></td><td><code>localhost:8080/api/items/buscar?texto=Hola</code></td><td>-</td><td>Buscar por texto</td></tr>
+                    <tr><td><code>PUT</code></td><td><code>localhost:8080/api/items/modificar/1</code></td><td><code>{"texto": "Actualizado"}</code></td><td>Actualizar item</td></tr>
+                    <tr><td><code>DELETE</code></td><td><code>localhost:8080/api/items/eliminar/1</code></td><td>-</td><td>Eliminar item</td></tr>
                 </table>
                 <div class="alert-box alert-analysis">
                     <div class="alert-title"><span class="alert-icon">&#9432;</span> Flujo de una Peticion</div>
                     <div class="alert-body">
-                        <strong>1.</strong> Postman envia <code>POST http://localhost:8080/api/items</code><br>
+                        <strong>1.</strong> Postman envia <code>POST http://localhost:8080/api/items/crear</code><br>
                         <strong>2.</strong> El Gateway recibe la peticion y verifica que la ruta coincida con <code>/api/items/**</code><br>
-                        <strong>3.</strong> El Gateway reenvia la peticion a <code>http://item-service:8081/api/items</code> (resolucion DNS de Docker)<br>
+                        <strong>3.</strong> El Gateway reenvia la peticion a <code>http://item-service:8081/api/items/crear</code> (resolucion DNS de Docker)<br>
                         <strong>4.</strong> El microservicio procesa, guarda en PostgreSQL y devuelve la respuesta<br>
                         <strong>5.</strong> El Gateway agrega headers CORS y devuelve la respuesta a Postman
                     </div>
@@ -4071,9 +4071,12 @@ checkDbConnection();</code></div>
 Valor:    http://localhost:8080/api/items
 
 Usar en requests:
-{{baseUrl}}           -- GET all, POST
-{{baseUrl}}/1         -- GET by ID, PUT, DELETE
-{{baseUrl}}/search?texto=Hola  -- Search</code></div>
+{{baseUrl}}/listar                    -- GET all
+{{baseUrl}}/crear                     -- POST
+{{baseUrl}}/mostrar/1                 -- GET by ID
+{{baseUrl}}/buscar?texto=Hola         -- Search
+{{baseUrl}}/modificar/1               -- PUT
+{{baseUrl}}/eliminar/1                -- DELETE</code></div>
             </section>
         </section>
 
@@ -4186,7 +4189,7 @@ Body: {"username": "admin", "password": "admin123"}
 Response: {"token": "eyJhbGciOiJIUzI1NiJ9..."}
 
 <span class="comment">// 2. Usar token en peticiones protegidas</span>
-GET http://localhost:8080/api/items
+GET http://localhost:8080/api/items/listar
 Headers: Authorization: Bearer eyJhbGciOiJIUzI1NiJ9...</code></div>
                 <div class="alert-box alert-warning">
                     <div class="alert-title"><span class="alert-icon">&#9888;</span> Nota Importante</div>
