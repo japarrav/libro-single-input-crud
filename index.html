@@ -250,7 +250,7 @@
             <div class="border-t border-dark-100 my-4"></div>
             <a href="#modulo9" class="nav-link">Modulo 9 - JWT (Opcional)</a>
             <a href="#m9-intro" class="nav-link pl-8 text-xs">9.1 ¿Qué es JWT?</a>
-            <a href="#m9-config" class="nav-link pl-8 text-xs">9.2 Configuracion sin BD</a>
+            <a href="#m9-config" class="nav-link pl-8 text-xs">9.2 Configuracion del Gateway</a>
             <a href="#m9-test" class="nav-link pl-8 text-xs">9.3 Probar Autenticacion</a>
             <div class="border-t border-dark-100 my-4"></div>
             <a href="#modulo10" class="nav-link">Modulo 10 - CI/CD</a>
@@ -321,7 +321,7 @@
             <option value="#m8-variables">-- 8.2 Variables Dinamicas</option>
             <option value="#modulo9">Modulo 9 - JWT (Opcional)</option>
             <option value="#m9-intro">-- 9.1 ¿Qué es JWT?</option>
-            <option value="#m9-config">-- 9.2 Configuracion sin BD</option>
+            <option value="#m9-config">-- 9.2 Configuracion del Gateway</option>
             <option value="#m9-test">-- 9.3 Probar Autenticacion</option>
             <option value="#modulo10">Modulo 10 - CI/CD</option>
             <option value="#m10-intro">-- 10.1 ¿Qué es CI/CD?</option>
@@ -4135,22 +4135,120 @@ Usar en requests:
             </div>
             <section id="m9-intro" class="mb-16">
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">9.1</span> ¿Qué es JWT?</h3>
-                <p class="text-slate-300 leading-relaxed mb-4"><strong class="text-white">JWT (JSON Web Token)</strong> es un estandar para crear tokens de autenticacion. Un JWT es una cadena de texto firmada que contiene informacion del usuario (claims). El servidor verifica la firma sin necesidad de consultar una base de datos.</p>
-                <div class="alert-box alert-analysis">
-                    <div class="alert-title"><span class="alert-icon">&#9432;</span> Estructura de un JWT</div>
-                    <div class="alert-body">
-                        Un JWT tiene 3 partes separadas por puntos:<br>
-                        <code>eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiJ9.SflKxwRJSMeKKF2QT4fwpM</code><br><br>
-                        <strong>Header:</strong> Algoritmo de firma (HS256).<br>
-                        <strong>Payload:</strong> Claims (datos del usuario: sub, exp, etc.).<br>
-                        <strong>Signature:</strong> Firma criptografica para verificar integridad.
-                    </div>
+                <p class="text-slate-300 leading-relaxed mb-4"><strong class="text-white">JWT (JSON Web Token)</strong> es un estandar abierto (RFC 7519) para crear tokens de autenticacion. Un JWT es una cadena de texto <strong class="text-accent">firmada criptograficamente</strong> que contiene informacion del usuario (claims). La clave esta en que <strong class="text-white">el servidor puede verificar la firma sin necesidad de consultar una base de datos</strong>, lo que lo hace ideal para microservicios.</p>
+
+                <h4 class="text-xl font-bold text-white mb-4">Problema que resuelve JWT</h4>
+                <p class="text-slate-300 leading-relaxed mb-4">Sin JWT, cada microservicio necesitaria su propio sistema de autenticacion o consultar una BD compartida en cada peticion. Con JWT, el <strong class="text-accent">API Gateway</strong> valida el token una vez y los microservicios confian en esa validacion.</p>
+
+                <div class="diagram-container">
+                    <pre class="text-xs sm:text-sm font-mono text-slate-300 leading-relaxed overflow-x-auto">
+<span class="text-slate-500">┌─────────────────────────────────────────────────────────────────────────────────────────┐</span>
+<span class="text-slate-500">│</span>  <span class="text-accent font-bold">AUTENTICACION ESTATICA: Sesion Tradicional vs JWT</span>                                      <span class="text-slate-500">│</span>
+<span class="text-slate-500">└─────────────────────────────────────────────────────────────────────────────────────────┘</span>
+
+<span class="text-neon-yellow font-bold">SESION TRADICIONAL (con BD):</span>
+<span class="text-slate-500">  Cliente ───(login)───&gt; Servidor ───&gt; [BD: guarda sesion] ───&gt; sessionId</span>
+<span class="text-slate-500">  Cliente ───(request + sessionId)───&gt; Servidor ───&gt; [BD: busca sesion] ───&gt; OK/Error</span>
+<span class="text-slate-400">  ❌ Cada microservicio necesita consultar la BD para validar la sesion</span>
+<span class="text-slate-400">  ❌ Escalar horizontalmente es complejo (sesiones atadas a un servidor)</span>
+
+<span class="text-neon-green font-bold">JWT (sin BD):</span>
+<span class="text-slate-500">  Cliente ───(login)───&gt; Servidor ───&gt; [firma JWT] ───&gt; token</span>
+<span class="text-slate-500">  Cliente ───(request + JWT)───&gt; Servidor ───&gt; [verifica firma] ───&gt; OK/Error</span>
+<span class="text-slate-400">  ✅ El token CONTIENE los datos del usuario (firmados, no encriptados)</span>
+<span class="text-slate-400">  ✅ Cualquier microservicio puede verificar sin BD (solo necesita la clave secreta)</span>
+<span class="text-slate-400">  ✅ Escalado horizontal simple: cualquier instancia puede validar cualquier token</span></pre>
+                </div>
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Estructura de un JWT</h4>
+                <p class="text-slate-300 leading-relaxed mb-4">Un JWT tiene <strong class="text-white">3 partes separadas por puntos (.)</strong>, cada una codificada en Base64:</p>
+
+                <div class="diagram-container">
+                    <pre class="text-xs sm:text-sm font-mono text-slate-300 leading-relaxed overflow-x-auto">
+<span class="comment">// EJEMPLO DE JWT (coloreado por partes):</span>
+<span class="text-neon-green">eyJhbGciOiJIUzI1NiJ9</span>.<span class="text-neon-yellow">eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJBRE1JTiJ9</span>.<span class="text-accent">SflKxwRJSMeKKF2QT4fwpM</span>
+<span class="text-neon-green">  ▲── HEADER ──▲</span>       <span class="text-neon-yellow">▲── PAYLOAD ──▲</span>       <span class="text-accent">▲── SIGNATURE ──▲</span>
+
+<span class="text-slate-500">┌───────────────────────────────────────────────────────────────────────────────────────┐</span>
+<span class="text-slate-500">│</span>  <span class="text-neon-green font-bold">HEADER (cabecera)</span>                                                                       <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">Contiene el algoritmo de firma y el tipo de token.</span>                                     <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">Ejemplo decodificado: {"alg": "HS256", "typ": "JWT"}</span>                                  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">HS256 = HMAC con SHA-256 (firma simetrica, misma clave para firmar y verificar)</span>       <span class="text-slate-500">│</span>
+<span class="text-slate-500">├───────────────────────────────────────────────────────────────────────────────────────┤</span>
+<span class="text-slate-500">│</span>  <span class="text-neon-yellow font-bold">PAYLOAD (carga util)</span>                                                                    <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">Contiene los "claims": datos del usuario y metadatos del token.</span>                       <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">Ejemplo: {"sub": "admin", "role": "ADMIN", "iat": 1712345678, "exp": 1712349278}</span>      <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">Claims estandar: sub (subject), iat (issued at), exp (expiration), iss (issuer)</span>       <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">Claims personalizados: role, permissions, tenantId...</span>                                 <span class="text-slate-500">│</span>
+<span class="text-slate-500">├───────────────────────────────────────────────────────────────────────────────────────┤</span>
+<span class="text-slate-500">│</span>  <span class="text-accent font-bold">SIGNATURE (firma)</span>                                                                     <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">Firma criptografica que verifica que el token no fue alterado.</span>                        <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">Se genera con: HMACSHA256( base64UrlEncode(header) + "." + base64UrlEncode(payload),</span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">                  secret )</span>                                                            <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">Si alguien modifica el header o payload, la firma ya no coincide → token invalido.</span>    <span class="text-slate-500">│</span>
+<span class="text-slate-500">└───────────────────────────────────────────────────────────────────────────────────────┘</span></pre>
+                </div>
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">¿Como funciona el flujo completo?</h4>
+
+                <div class="diagram-container">
+                    <pre class="text-xs sm:text-sm font-mono text-slate-300 leading-relaxed overflow-x-auto">
+<span class="text-slate-500">┌─────────────────────────────────────────────────────────────────────────────────────────┐</span>
+<span class="text-slate-500">│</span>  <span class="text-accent font-bold">FLUJO DE AUTENTICACION CON JWT</span>                                                       <span class="text-slate-500">│</span>
+<span class="text-slate-500">└─────────────────────────────────────────────────────────────────────────────────────────┘</span>
+
+<span class="text-neon-green font-bold">PASO 1: Login</span>
+<span class="text-slate-500">  Cliente (Postman/Frontend)</span>
+<span class="text-slate-500">     │</span>
+<span class="text-slate-500">     │ POST /api/auth/login</span>
+<span class="text-slate-500">     │ {"username": "admin", "password": "admin123"}</span>
+<span class="text-slate-500">     ▼</span>
+<span class="text-slate-500">  API GATEWAY ───&gt; AuthController</span>
+<span class="text-slate-500">     │</span>
+<span class="text-slate-500">     ├─ 1. Valida credenciales contra lista hardcodeada (o BD)</span>
+<span class="text-slate-500">     ├─ 2. Crea JWT con: username, role, iat (fecha creacion), exp (fecha expiracion)</span>
+<span class="text-slate-500">     ├─ 3. Firma el JWT con la clave secreta (HMAC-SHA256)</span>
+<span class="text-slate-500">     └─ 4. Responde: {"token": "eyJhbGciOiJIUzI1NiJ9..."}</span>
+<span class="text-slate-500">     │</span>
+<span class="text-slate-500">     ▼</span>
+<span class="text-slate-500">  Cliente recibe el token y lo almacena (en memoria, localStorage, etc.)</span>
+
+<span class="text-neon-green font-bold">PASO 2: Peticion a recurso protegido</span>
+<span class="text-slate-500">  Cliente</span>
+<span class="text-slate-500">     │</span>
+<span class="text-slate-500">     │ GET /api/items/listar</span>
+<span class="text-slate-500">     │ Headers: Authorization: Bearer &lt;JWT&gt;</span>
+<span class="text-slate-500">     ▼</span>
+<span class="text-slate-500">  API GATEWAY ───&gt; JwtAuthFilter</span>
+<span class="text-slate-500">     │</span>
+<span class="text-slate-500">     ├─ 1. Extrae el token del header "Authorization: Bearer ..."</span>
+<span class="text-slate-500">     ├─ 2. Verifica la firma con la clave secreta</span>
+<span class="text-slate-500">     ├─ 3. Verifica que el token no haya expirado (claim "exp")</span>
+<span class="text-slate-500">     ├─ 4. Extrae username y role del payload</span>
+<span class="text-slate-500">     └─ 5. Si es valido → reenvia al microservicio</span>
+<span class="text-slate-500">         Si es invalido → responde 401 Unauthorized</span>
+<span class="text-slate-500">     │</span>
+<span class="text-slate-500">     ▼</span>
+<span class="text-slate-500">  Item Service ───&gt; Procesa la peticion normalmente (confia en el Gateway)</span>
+
+<span class="text-neon-red font-bold">¿Que pasa si alguien intenta modificar el token?</span>
+<span class="text-slate-500">  Token original:   header.payload.<span class="text-accent">firma_valida</span></span>
+<span class="text-slate-500">  Token modificado: header.<span class="text-neon-red">payload_modificado</span>.<span class="text-neon-red">firma_invalida</span></span>
+<span class="text-slate-500">  </span>
+<span class="text-slate-500">  Al verificar: HMACSHA256(header + payload_modificado, secret) != firma_invalida</span>
+<span class="text-slate-500">  Resultado: 🔴 TOKEN RECHAZADO (401 Unauthorized)</span>
+<span class="text-slate-500">  </span>
+<span class="text-slate-400">  La firma solo puede generarse con la clave secreta. Sin ella, es imposible</span>
+<span class="text-slate-400">  crear un token valido o modificar uno existente sin invalidarlo.</span></pre>
                 </div>
             </section>
             <section id="m9-config" class="mb-16">
-                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">9.2</span> Configuracion sin Base de Datos</h3>
-                <p class="text-slate-300 leading-relaxed mb-4">Para este ejemplo, usaremos credenciales hardcodeadas en <code class="text-accent">application.yml</code> del Gateway. En produccion, usarias un servicio de autenticacion externo o una base de datos.</p>
-                <div class="code-block" data-lang="api-gateway/pom.xml (agregar dependencia)"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment">&lt;!-- Agregar esta dependencia al pom.xml del Gateway --&gt;</span>
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">9.2</span> Configuracion del Gateway con JWT</h3>
+                <p class="text-slate-300 leading-relaxed mb-4">Vamos a agregar <strong class="text-white">3 piezas</strong> al API Gateway: la libreria JJWT, un generador/validador de tokens, un controlador de login, y un filtro para proteger rutas.</p>
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Paso 1: Agregar la dependencia JJWT</h4>
+                <p class="text-slate-300 leading-relaxed mb-4">Abre el <code class="text-accent">pom.xml</code> del Gateway y agrega estas 3 dependencias de <strong class="text-white">JJWT (Java JWT)</strong>. Necesitamos la API, la implementacion y el serializador JSON:</p>
+                <div class="code-block" data-lang="api-gateway/pom.xml"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment">&lt;!-- JJWT: Libreria para generar y validar JWT --&gt;</span>
 <span class="tag">&lt;dependency&gt;</span>
     <span class="tag">&lt;groupId&gt;</span>io.jsonwebtoken<span class="tag">&lt;/groupId&gt;</span>
     <span class="tag">&lt;artifactId&gt;</span>jjwt-api<span class="tag">&lt;/artifactId&gt;</span>
@@ -4168,11 +4266,28 @@ Usar en requests:
     <span class="tag">&lt;version&gt;</span>0.12.6<span class="tag">&lt;/version&gt;</span>
     <span class="tag">&lt;scope&gt;</span>runtime<span class="tag">&lt;/scope&gt;</span>
 <span class="tag">&lt;/dependency&gt;</span></code></div>
-                <p class="text-slate-300 leading-relaxed mb-4 mt-6">Agregar credenciales y clave secreta en <code class="text-accent">api-gateway/src/main/resources/application.yml</code>:</p>
-                <div class="code-block" data-lang="application.yml"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="property">security</span>:
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Paso 2: Configurar credenciales y clave secreta</h4>
+                <p class="text-slate-300 leading-relaxed mb-4">En <code class="text-accent">api-gateway/src/main/resources/application.yml</code>, agrega la configuracion de seguridad. La <strong class="text-white">clave secreta</strong> debe tener al menos 256 bits (32 caracteres) para HMAC-SHA256. El tiempo de expiracion esta en milisegundos: <code class="text-accent">3600000</code> = 1 hora.</p>
+                <div class="alert-box alert-warning">
+                    <div class="alert-title"><span class="alert-icon">&#9888;</span> Importante sobre la clave secreta</div>
+                    <div class="alert-body">
+                        En este ejemplo usamos una clave hardcodeada para simplificar. <strong class="text-white">NUNCA</strong> hagas esto en produccion. Usa variables de entorno o un servicio como Vault. Si alguien obtiene tu clave secreta, puede generar tokens falsos.
+                    </div>
+                </div>
+                <div class="code-block" data-lang="application.yml"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment"># ═══════════════════════════════════════════════════════</span>
+<span class="comment"># SEGURIDAD JWT (Opcional - Modulo 9)</span>
+<span class="comment"># Configuracion para autenticacion sin base de datos</span>
+<span class="comment"># ═══════════════════════════════════════════════════════</span>
+<span class="property">security</span>:
+  <span class="comment"># Configuracion del token JWT</span>
   <span class="property">jwt</span>:
+    <span class="comment"># Clave secreta para firmar tokens (minimo 256 bits = 32 caracteres)</span>
+    <span class="comment"># En produccion: usar variable de entorno ${JWT_SECRET}</span>
     <span class="property">secret</span>: <span class="string">mi-clave-secreta-muy-larga-para-jwt-que-debe-tener-al-menos-256-bits</span>
+    <span class="comment"># Tiempo de expiracion en milisegundos (3600000 = 1 hora)</span>
     <span class="property">expiration</span>: <span class="number">3600000</span>
+  <span class="comment"># Usuarios hardcodeados (solo para ejemplo)</span>
   <span class="property">users</span>:
     - <span class="property">username</span>: <span class="string">admin</span>
       <span class="property">password</span>: <span class="string">admin123</span>
@@ -4180,8 +4295,23 @@ Usar en requests:
     - <span class="property">username</span>: <span class="string">user</span>
       <span class="property">password</span>: <span class="string">user123</span>
       <span class="property">role</span>: <span class="string">USER</span></code></div>
-                <p class="text-slate-300 leading-relaxed mb-4 mt-6">Crear clase para generar y validar JWT en <code class="text-accent">api-gateway/src/main/java/com/gateway/security/JwtUtil.java</code>:</p>
-                <div class="code-block" data-lang="JwtUtil.java"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="keyword">package</span> com.gateway.security;
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Paso 3: JwtUtil - Generar y validar tokens</h4>
+                <p class="text-slate-300 leading-relaxed mb-4">Crea la clase <code class="text-accent">JwtUtil.java</code> en <code class="text-accent">api-gateway/src/main/java/com/gateway/security/</code>. Esta clase es el <strong class="text-white">corazon de la autenticacion</strong>: genera tokens cuando el usuario hace login, y los valida en cada peticion protegida.</p>
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#128300;</span> Analisis de JwtUtil</div>
+                    <div class="alert-body">
+                        <p class="mb-2"><strong class="text-white">@Component:</strong> Marca la clase como un bean de Spring. Spring creara una unica instancia y la inyectara donde sea necesaria.</p>
+                        <p class="mb-2"><strong class="text-white">@Value("${...}"):</strong> Inyecta valores desde application.yml. <code>secret</code> y <code>expiration</code> se leen automaticamente.</p>
+                        <p class="mb-2"><strong class="text-white">getSigningKey():</strong> Convierte la clave secreta (String) en una <code>SecretKey</code> de Java, que es lo que necesita la libreria JJWT para firmar/verificar.</p>
+                        <p class="mb-2"><strong class="text-white">generateToken():</strong> Construye el JWT: asigna subject (username), claims (role), fechas de creacion y expiracion, y lo firma con HMAC-SHA256.</p>
+                        <p class="mb-2"><strong class="text-white">validateToken():</strong> Parsea el token, verifica la firma y la expiracion. Si todo esta bien, devuelve el username. Si no, devuelve null (token invalido).</p>
+                        <p><strong class="text-accent">Nota:</strong> Si la firma no coincide o el token expiro, JJWT lanza una excepcion. El catch la captura y devuelve null.</p>
+                    </div>
+                </div>
+                <div class="code-block" data-lang="JwtUtil.java"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment">// JwtUtil.java - Utilidad para generar y validar tokens JWT</span>
+<span class="comment">// Ubicacion: api-gateway/src/main/java/com/gateway/security/JwtUtil.java</span>
+<span class="keyword">package</span> com.gateway.security;
 <span class="keyword">import</span> io.jsonwebtoken.*;
 <span class="keyword">import</span> io.jsonwebtoken.security.Keys;
 <span class="keyword">import</span> org.springframework.beans.factory.annotation.Value;
@@ -4190,19 +4320,23 @@ Usar en requests:
 <span class="keyword">import</span> java.nio.charset.StandardCharsets;
 <span class="keyword">import</span> java.util.Date;
 
+<span class="comment">// @Component: Spring crea un bean unico y lo inyecta donde se necesite</span>
 <span class="annotation">@Component</span>
 <span class="keyword">public class</span> <span class="type">JwtUtil</span> {
+    <span class="comment">// @Value inyecta los valores desde application.yml</span>
     <span class="annotation">@Value</span>(<span class="string">"${security.jwt.secret}"</span>)
     <span class="keyword">private</span> <span class="type">String</span> secret;
     
     <span class="annotation">@Value</span>(<span class="string">"${security.jwt.expiration}"</span>)
     <span class="keyword">private</span> <span class="keyword">long</span> expiration;
 
+    <span class="comment">// Convierte el String secreto en una clave criptografica</span>
     <span class="keyword">private</span> <span class="type">SecretKey</span> getSigningKey() {
         <span class="keyword">byte</span>[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);
         <span class="keyword">return</span> Keys.hmacShaKeyFor(keyBytes);
     }
 
+    <span class="comment">// Genera un JWT con username, role, fecha de creacion y expiracion</span>
     <span class="keyword">public</span> <span class="type">String</span> generateToken(<span class="type">String</span> username, <span class="type">String</span> role) {
         <span class="keyword">return</span> Jwts.builder()
                 .subject(username)
@@ -4213,6 +4347,7 @@ Usar en requests:
                 .compact();
     }
 
+    <span class="comment">// Valida un JWT: verifica firma + expiracion. Devuelve username o null</span>
     <span class="keyword">public</span> <span class="type">String</span> validateToken(<span class="type">String</span> token) {
         <span class="keyword">try</span> {
             Claims claims = Jwts.parser()
@@ -4226,26 +4361,228 @@ Usar en requests:
         }
     }
 }</code></div>
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Paso 4: AuthController - Endpoint de Login</h4>
+                <p class="text-slate-300 leading-relaxed mb-4">Crea <code class="text-accent">AuthController.java</code> en <code class="text-accent">api-gateway/src/main/java/com/gateway/controller/</code>. Este controlador expone el endpoint <code class="text-accent">POST /api/auth/login</code> que recibe credenciales y devuelve un JWT.</p>
+                <div class="code-block" data-lang="AuthController.java"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment">// AuthController.java - Endpoint de login</span>
+<span class="comment">// Ubicacion: api-gateway/src/main/java/com/gateway/controller/AuthController.java</span>
+<span class="keyword">package</span> com.gateway.controller;
+<span class="keyword">import</span> com.gateway.security.JwtUtil;
+<span class="keyword">import</span> org.springframework.beans.factory.annotation.Value;
+<span class="keyword">import</span> org.springframework.http.ResponseEntity;
+<span class="keyword">import</span> org.springframework.web.bind.annotation.*;
+<span class="keyword">import</span> java.util.List;
+<span class="keyword">import</span> java.util.Map;
+
+<span class="annotation">@RestController</span>
+<span class="annotation">@RequestMapping</span>(<span class="string">"/api/auth"</span>)
+<span class="keyword">public class</span> <span class="type">AuthController</span> {
+
+    <span class="keyword">private final</span> <span class="type">JwtUtil</span> jwtUtil;
+    
+    <span class="comment">// Lista de usuarios hardcodeados desde application.yml</span>
+    <span class="annotation">@Value</span>(<span class="string">"#{${security.users}}"</span>)
+    <span class="keyword">private</span> <span class="type">List</span>&lt;<span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">String</span>&gt;&gt; users;
+
+    <span class="keyword">public</span> <span class="type">AuthController</span>(<span class="type">JwtUtil</span> jwtUtil) {
+        <span class="keyword">this</span>.jwtUtil = jwtUtil;
+    }
+
+    <span class="comment">// POST /api/auth/login</span>
+    <span class="comment">// Recibe {username, password}, valida contra la lista, devuelve JWT</span>
+    <span class="annotation">@PostMapping</span>(<span class="string">"/login"</span>)
+    <span class="keyword">public</span> <span class="type">ResponseEntity</span>&lt;?&gt; login(<span class="annotation">@RequestBody</span> <span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">String</span>&gt; body) {
+        <span class="type">String</span> username = body.get(<span class="string">"username"</span>);
+        <span class="type">String</span> password = body.get(<span class="string">"password"</span>);
+
+        <span class="comment">// Buscar el usuario en la lista hardcodeada</span>
+        <span class="keyword">for</span> (<span class="type">Map</span>&lt;<span class="type">String</span>, <span class="type">String</span>&gt; user : users) {
+            <span class="keyword">if</span> (user.get(<span class="string">"username"</span>).equals(username) &&
+                user.get(<span class="string">"password"</span>).equals(password)) {
+                <span class="comment">// Credenciales validas → generar JWT</span>
+                <span class="type">String</span> token = jwtUtil.generateToken(username, user.get(<span class="string">"role"</span>));
+                <span class="keyword">return</span> ResponseEntity.ok(Map.of(<span class="string">"token"</span>, token));
+            }
+        }
+        <span class="comment">// Credenciales invalidas → 401</span>
+        <span class="keyword">return</span> ResponseEntity.status(401).body(Map.of(<span class="string">"error"</span>, <span class="string">"Credenciales invalidas"</span>));
+    }
+}</code></div>
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Paso 5: JwtAuthFilter - Filtro de validacion</h4>
+                <p class="text-slate-300 leading-relaxed mb-4">Crea <code class="text-accent">JwtAuthFilter.java</code> en <code class="text-accent">api-gateway/src/main/java/com/gateway/security/</code>. Este filtro <strong class="text-white">intercepta TODAS las peticiones</strong> antes de que lleguen a los microservicios, extrae el token del header <code class="text-accent">Authorization: Bearer &lt;token&gt;</code> y lo valida. Si es invalido, rechaza la peticion con 401.</p>
+                <div class="code-block" data-lang="JwtAuthFilter.java"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment">// JwtAuthFilter.java - Filtro global de autenticacion</span>
+<span class="comment">// Ubicacion: api-gateway/src/main/java/com/gateway/security/JwtAuthFilter.java</span>
+<span class="keyword">package</span> com.gateway.security;
+<span class="keyword">import</span> org.springframework.cloud.gateway.filter.GatewayFilterChain;
+<span class="keyword">import</span> org.springframework.cloud.gateway.filter.GlobalFilter;
+<span class="keyword">import</span> org.springframework.core.Ordered;
+<span class="keyword">import</span> org.springframework.http.HttpStatus;
+<span class="keyword">import</span> org.springframework.stereotype.Component;
+<span class="keyword">import</span> org.springframework.web.server.ServerWebExchange;
+<span class="keyword">import</span> reactor.core.publisher.Mono;
+
+<span class="comment">// GlobalFilter: Intercepta todas las peticiones que pasan por el Gateway</span>
+<span class="annotation">@Component</span>
+<span class="keyword">public class</span> <span class="type">JwtAuthFilter</span> <span class="keyword">implements</span> <span class="type">GlobalFilter</span>, <span class="type">Ordered</span> {
+
+    <span class="keyword">private final</span> <span class="type">JwtUtil</span> jwtUtil;
+
+    <span class="keyword">public</span> <span class="type">JwtAuthFilter</span>(<span class="type">JwtUtil</span> jwtUtil) {
+        <span class="keyword">this</span>.jwtUtil = jwtUtil;
+    }
+
+    <span class="comment">// ordered(): Define el orden del filtro (menor = ejecuta primero)</span>
+    <span class="annotation">@Override</span>
+    <span class="keyword">public</span> <span class="type">int</span> getOrder() {
+        <span class="keyword">return</span> -1; <span class="comment">// Se ejecuta antes que cualquier otro filtro</span>
+    }
+
+    <span class="comment">// filter(): Metodo principal que se ejecuta en cada peticion</span>
+    <span class="annotation">@Override</span>
+    <span class="keyword">public</span> <span class="type">Mono</span>&lt;<span class="type">Void</span>&gt; filter(<span class="type">ServerWebExchange</span> exchange, <span class="type">GatewayFilterChain</span> chain) {
+        <span class="type">String</span> path = exchange.getRequest().getURI().getPath();
+
+        <span class="comment">// Excluir /api/auth/login de la validacion (no requiere token)</span>
+        <span class="keyword">if</span> (path.equals(<span class="string">"/api/auth/login"</span>)) {
+            <span class="keyword">return</span> chain.filter(exchange); <span class="comment">// Dejar pasar sin validar</span>
+        }
+
+        <span class="comment">// Extraer el header Authorization</span>
+        <span class="type">String</span> authHeader = exchange.getRequest().getHeaders()
+                .getFirst(<span class="string">"Authorization"</span>);
+
+        <span class="keyword">if</span> (authHeader == <span class="keyword">null</span> || !authHeader.startsWith(<span class="string">"Bearer "</span>)) {
+            <span class="comment">// Sin token → 401</span>
+            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+            <span class="keyword">return</span> exchange.getResponse().setComplete();
+        }
+
+        <span class="comment">// Extraer el token (remover "Bearer ")</span>
+        <span class="type">String</span> token = authHeader.substring(7);
+        <span class="type">String</span> username = jwtUtil.validateToken(token);
+
+        <span class="keyword">if</span> (username == <span class="keyword">null</span>) {
+            <span class="comment">// Token invalido o expirado → 401</span>
+            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
+            <span class="keyword">return</span> exchange.getResponse().setComplete();
+        }
+
+        <span class="comment">// Token valido: agregar header X-User-Name con el username</span>
+        <span class="comment">// Los microservicios pueden usar este header si necesitan saber quien hizo la peticion</span>
+        exchange.getRequest().mutate()
+                .header(<span class="string">"X-User-Name"</span>, username);
+
+        <span class="keyword">return</span> chain.filter(exchange); <span class="comment">// Continuar con la peticion</span>
+    }
+}</code></div>
             </section>
             <section id="m9-test" class="mb-16">
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3"><span class="text-accent">9.3</span> Probar Autenticacion</h3>
-                <p class="text-slate-300 leading-relaxed mb-4">Para probar JWT en Postman:</p>
-                <div class="code-block" data-lang="Postman"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment">// 1. Login (obtener token)</span>
-POST http://localhost:8080/api/auth/login
-Body: {"username": "admin", "password": "admin123"}
-Response: {"token": "eyJhbGciOiJIUzI1NiJ9..."}
+                <p class="text-slate-300 leading-relaxed mb-4">Ahora probemos el flujo completo de autenticacion: login, token valido, token invalido y token expirado.</p>
 
-<span class="comment">// 2. Usar token en peticiones protegidas</span>
-GET http://localhost:8080/api/items/listar
-Headers: Authorization: Bearer eyJhbGciOiJIUzI1NiJ9...</code></div>
+                <h4 class="text-xl font-bold text-white mb-4">Diagrama del flujo de autenticacion</h4>
+                <div class="diagram-container">
+                    <pre class="text-xs sm:text-sm font-mono text-slate-300 leading-relaxed overflow-x-auto">
+<span class="text-slate-500">┌──────────┐     POST /api/auth/login     ┌──────────────┐     validar credenciales     ┌─────────┐</span>
+<span class="text-slate-500">│</span>  Cliente  <span class="text-slate-500">│</span>  ──────────────────────────&gt;  <span class="text-slate-500">│</span>  AuthFilter  <span class="text-slate-500">│</span>  ─────────────────────&gt;  <span class="text-slate-500">│</span> JwtUtil <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span> (Postman) <span class="text-slate-500">│</span>                                <span class="text-slate-500">│</span>  (Gateway)  <span class="text-slate-500">│</span>                          <span class="text-slate-500">│</span>(generar) <span class="text-slate-500">│</span>
+<span class="text-slate-500">└──────────┘</span>                                <span class="text-slate-500">└──────────────┘</span>                          <span class="text-slate-500">└─────────┘</span>
+     <span class="text-slate-500">│</span>                                          <span class="text-slate-500">│</span>                               
+     <span class="text-slate-500">│</span>  <span class="text-neon-green">&lt;─────── {"token": "eyJ..."} ────────────</span>  <span class="text-slate-500">│</span>                               
+     <span class="text-slate-500">│</span>                                          <span class="text-slate-500">│</span>                               
+     <span class="text-slate-500">│</span>                                          <span class="text-slate-500">│</span>                               
+     <span class="text-slate-500">│</span>  GET /api/items/listar                    <span class="text-slate-500">│</span>                               
+     <span class="text-slate-500">│</span>  Authorization: Bearer eyJ...             <span class="text-slate-500">│</span>                               
+     <span class="text-slate-500">│</span>  ──────────────────────────────────────&gt;  <span class="text-slate-500">│</span>                               
+     <span class="text-slate-500">│</span>                                          <span class="text-slate-500">│</span>  ───&gt; validar firma y expiracion
+     <span class="text-slate-500">│</span>                                          <span class="text-slate-500">│</span>  ───&gt; si ok, reenviar al microservicio
+     <span class="text-slate-500">│</span>  <span class="text-neon-green">&lt;────────── 200 OK + datos ──────────────</span> <span class="text-slate-500">│</span>                               
+     <span class="text-slate-500">│</span>                                          <span class="text-slate-500">│</span>                               
+     <span class="text-slate-500">│</span>  GET /api/items/listar <span class="text-red-400">(sin token)</span>        <span class="text-slate-500">│</span>                               
+     <span class="text-slate-500">│</span>  ──────────────────────────────────────&gt;  <span class="text-slate-500">│</span>                               
+     <span class="text-slate-500">│</span>  <span class="text-red-400">&lt;───── 401 UNAUTHORIZED ─────────────────</span>  <span class="text-slate-500">│</span>                               
+<span class="text-slate-500">└──────────┘</span>                                <span class="text-slate-500">└──────────────┘</span></pre>
+                </div>
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Paso 1: Obtener token via curl</h4>
+                <p class="text-slate-300 leading-relaxed mb-4">Primero, obten un token JWT haciendo login con las credenciales configuradas en <code class="text-accent">application.yml</code>:</p>
+                <div class="code-block" data-lang="bash"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment"># Login como admin → devuelve un JWT firmado con rol ADMIN</span>
+curl -s -X POST http://localhost:8080/api/auth/login \
+  -H <span class="string">"Content-Type: application/json"</span> \
+  -d <span class="string">'{"username": "admin", "password": "admin123"}'</span></code></div>
+                <p class="text-slate-300 leading-relaxed mb-2">Respuesta esperada:</p>
+                <div class="code-block" data-lang="json"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code>{
+  <span class="property">"token"</span>: <span class="string">"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTcxNzIwMDAwMCwiZXhwIjoxNzE3MjAzNjAwfQ.ejqFmZs4XpDJmC-A5aPNPxp0kJmt6X2LyQ5EM3tFn8U"</span>
+}</code></div>
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Paso 2: Usar el token en peticiones protegidas</h4>
+                <p class="text-slate-300 leading-relaxed mb-4">Copia el token de la respuesta y usalo en el header <code class="text-accent">Authorization: Bearer &lt;token&gt;</code>:</p>
+                <div class="code-block" data-lang="bash"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment"># Guardar token en variable de entorno para facil reuso</span>
+TOKEN=<span class="string">"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTcxNzIwMDAwMCwiZXhwIjoxNzE3MjAzNjAwfQ.ejqFmZs4XpDJmC-A5aPNPxp0kJmt6X2LyQ5EM3tFn8U"</span>
+
+<span class="comment"># Listar items (protegido)</span>
+curl -s http://localhost:8080/api/items/listar \
+  -H <span class="string">"Authorization: Bearer $TOKEN"</span>
+
+<span class="comment"># Crear item (protegido)</span>
+curl -s -X POST http://localhost:8080/api/items/crear \
+  -H <span class="string">"Content-Type: application/json"</span> \
+  -H <span class="string">"Authorization: Bearer $TOKEN"</span> \
+  -d <span class="string">'{"nombre": "Item desde JWT"}'</span></code></div>
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Paso 3: Probar errores comunes</h4>
+                <div class="code-block" data-lang="bash"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment"># Error 1: Sin token → 401</span>
+curl -s -o /dev/null -w <span class="string">"%{http_code}"</span> http://localhost:8080/api/items/listar
+<span class="comment"># Respuesta: 401</span>
+
+<span class="comment"># Error 2: Token invalido (Bearer vacio) → 401</span>
+curl -s -o /dev/null -w <span class="string">"%{http_code}"</span> http://localhost:8080/api/items/listar \
+  -H <span class="string">"Authorization: Bearer token-invalido"</span>
+<span class="comment"># Respuesta: 401</span>
+
+<span class="comment"># Error 3: Credenciales incorrectas → 401</span>
+curl -s -X POST http://localhost:8080/api/auth/login \
+  -H <span class="string">"Content-Type: application/json"</span> \
+  -d <span class="string">'{"username": "admin", "password": "wrong"}'</span>
+<span class="comment"># Respuesta: {"error": "Credenciales invalidas"} (HTTP 401)</span></code></div>
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Paso 4: Inspeccionar el token en jwt.io</h4>
+                <p class="text-slate-300 leading-relaxed mb-4">JWT es un estandar abierto. Puedes inspeccionar cualquier token pegandolo en <a href="https://jwt.io" class="text-accent underline" target="_blank">jwt.io</a>. El token tiene 3 partes separadas por puntos:</p>
+                <div class="diagram-container">
+                    <pre class="text-xs sm:text-sm font-mono text-slate-300 leading-relaxed overflow-x-auto">
+<span class="text-neon-green">eyJhbGciOiJIUzI1NiJ9</span>.<span class="text-accent">eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTcxNzIwMDAwMCwiZXhwIjoxNzE3MjAzNjAwfQ</span>.<span class="text-slate-500">ejqFmZs4XpDJmC-A5aPNPxp0kJmt6X2LyQ5EM3tFn8U</span>
+<span class="text-slate-500">│</span>                                 <span class="text-slate-500">│</span>                                 <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span> <span class="text-neon-green">HEADER</span>                          <span class="text-accent">│</span> PAYLOAD                        <span class="text-slate-500">│</span> FIRMA
+<span class="text-slate-500">│</span> Algoritmo: HS256                <span class="text-accent">│</span> sub: admin                      <span class="text-slate-500">│</span> Verifica que el token
+<span class="text-slate-500">│</span> Tipo: JWT                        <span class="text-accent">│</span> role: ADMIN                     <span class="text-slate-500">│</span> no fue alterado
+<span class="text-slate-500">│</span>                                 <span class="text-accent">│</span> iat: fecha creacion             <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>                                 <span class="text-accent">│</span> exp: fecha expiracion           <span class="text-slate-500">│</span></pre>
+                </div>
+                <p class="text-slate-300 leading-relaxed mb-4">Pega tu token en <code class="text-accent">jwt.io</code> y observa como se decodifica el payload. <strong class="text-white">Nota:</strong> jamas compartas tokens reales de produccion en jwt.io, ya que se envian a servidores externos.</p>
+
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Paso 5: Flujo completo en Postman</h4>
+                <ol class="list-decimal list-inside text-slate-300 space-y-3 mb-6">
+                    <li><strong class="text-white">Crear variable de entorno</strong> en Postman: <code class="text-accent">jwt_token</code> (vacia).</li>
+                    <li><strong class="text-white">Request de Login:</strong> <code class="text-accent">POST http://localhost:8080/api/auth/login</code>, Body JSON. En la pestana "Tests" agrega el script de abajo para guardar automaticamente el token.</li>
+                    <li><strong class="text-white">Request protegida:</strong> <code class="text-accent">GET http://localhost:8080/api/items/listar</code>, en la pestana "Authorization" selecciona "Bearer Token" y usa <code class="text-accent">{{jwt_token}}</code>.</li>
+                </ol>
+                <div class="code-block" data-lang="Postman Test Script"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment">// Script para pestana "Tests" del request de Login</span>
+<span class="comment">// Guarda automaticamente el token como variable de entorno</span>
+<span class="keyword">if</span> (pm.response.code === 200) {
+    <span class="keyword">var</span> jsonData = pm.response.json();
+    pm.environment.set(<span class="string">"jwt_token"</span>, jsonData.token);
+    console.log(<span class="string">"Token guardado:"</span>, jsonData.token);
+} <span class="keyword">else</span> {
+    console.log(<span class="string">"Login fallo:"</span>, pm.response.code);
+}</code></div>
+
                 <div class="alert-box alert-warning">
-                    <div class="alert-title"><span class="alert-icon">&#9888;</span> Nota Importante</div>
+                    <div class="alert-title"><span class="alert-icon">&#9888;</span> Resumen y Buenas Practicas</div>
                     <div class="alert-body">
-                        Este modulo es <strong>opcional</strong> y muestra los conceptos basicos de JWT. En produccion, necesitas:<br>
-                        - Endpoint <code>/api/auth/login</code> en el Gateway<br>
-                        - Filtro que valide el token en cada peticion<br>
-                        - Almacenamiento seguro de la clave secreta (no en application.yml)<br>
-                        - Refresh tokens para sesiones largas
+                        <p class="mb-2"><strong class="text-white">Lo que logramos:</strong> El Gateway ahora protege todos los endpoints de los microservicios. Sin un JWT valido, el filtro rechaza la peticion con 401 antes de que llegue al microservicio.</p>
+                        <p class="mb-2"><strong class="text-white">Limites de este ejemplo:</strong> Usuarios hardcodeados en application.yml (en produccion se usa base de datos o LDAP), clave secreta en texto plano (en produccion se usa Vault o variables de entorno), sin refresh tokens (el token expira en 1 hora y el usuario debe hacer login de nuevo).</p>
+                        <p><strong class="text-white">Mejoras para produccion:</strong> Almacenar claves en <code class="text-accent">${JWT_SECRET}</code> (variable de entorno), agregar HTTPS para que el token no viaje en texto plano, usar refresh tokens rotativos, y agregar rate limiting en el endpoint de login para evitar ataques de fuerza bruta.</p>
                     </div>
                 </div>
             </section>
