@@ -2093,9 +2093,9 @@ feature:          C---D---</pre>
                 <div class="code-block" data-lang="ItemController.java"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="keyword">package</span> com.singleinput.controller;
 <span class="keyword">import</span> com.singleinput.dto.ItemDTO;
 <span class="keyword">import</span> com.singleinput.service.ItemService;
-<span class="comment">// @Valid: Activa la validacion de anotaciones (@NotBlank, @Size) en el DTO</span>
+<span class="comment">// @Valid: Activa validacion de anotaciones (@NotBlank, @Size) en el DTO</span>
 <span class="keyword">import</span> jakarta.validation.Valid;
-<span class="comment">// ResponseEntity: Permite controlar el status code HTTP (200, 201, 204, 404...)</span>
+<span class="comment">// ResponseEntity: Controla el status code HTTP (200, 201, 204, 404...)</span>
 <span class="keyword">import</span> org.springframework.http.ResponseEntity;
 <span class="keyword">import</span> org.springframework.http.HttpStatus;
 <span class="comment">// Anotaciones de Spring MVC para mapear URLs a metodos Java</span>
@@ -2103,86 +2103,68 @@ feature:          C---D---</pre>
 <span class="keyword">import</span> java.util.List;
 
 <span class="comment">// @RestController: Combina @Controller + @ResponseBody</span>
-<span class="comment">//   @Controller = "esta clase maneja peticiones HTTP"</span>
-<span class="comment">//   @ResponseBody = "retorna JSON directamente (no una vista HTML)"</span>
-<span class="comment">// Sin esta anotacion, Spring no sabe que esta clase es un endpoint</span>
+<span class="comment">//   Maneja peticiones HTTP y retorna JSON directamente</span>
 <span class="annotation">@RestController</span>
-<span class="comment">// @RequestMapping: Define el prefijo de URL para TODOS los metodos</span>
-<span class="comment">// Todos los endpoints de este controller empiezan con /api/items</span>
+<span class="comment">// @RequestMapping: Define el prefijo de URL base para todos los metodos</span>
+<span class="comment">//   /api/items es la raiz de todos los endpoints del CRUD</span>
 <span class="annotation">@RequestMapping</span>(<span class="string">"/api/items"</span>)
 <span class="keyword">public class</span> <span class="type">ItemController</span> {
-    <span class="comment">// Dependencia del Service. Se inyecta por constructor (mejor practica)</span>
-    <span class="comment">// El Controller NUNCA habla directamente con el Repository</span>
+    <span class="comment">// Inyeccion de dependencias por constructor (mejor practica)</span>
     <span class="keyword">private final</span> <span class="type">ItemService</span> service;
-    <span class="comment">// Constructor: Spring inyecta automaticamente el bean ItemService</span>
     <span class="keyword">public</span> <span class="type">ItemController</span>(<span class="type">ItemService</span> service) { <span class="keyword">this</span>.service = service; }
 
     <span class="comment">// ═══════════════════════════════════════════════════════</span>
-    <span class="comment">// ENDPOINT: GET /api/items/listar</span>
-    <span class="comment">// Retorna todos los items</span>
+    <span class="comment">// GET /api/items/listar - Obtiene todos los items</span>
     <span class="comment">// ═══════════════════════════════════════════════════════</span>
-    <span class="comment">// @GetMapping: Mapea peticiones HTTP GET a este metodo</span>
-    <span class="comment">// "/listar": Path especifico para listar todos los items</span>
+    <span class="comment">// @GetMapping("/listar"): HTTP GET a /api/items/listar</span>
+    <span class="comment">// ResponseEntity.ok() = HTTP 200 + lista de items en JSON</span>
     <span class="annotation">@GetMapping</span>(<span class="string">"/listar"</span>)
-    <span class="comment">// ResponseEntity: Envoltorio que incluye body + status code + headers</span>
-    <span class="comment">// ResponseEntity.ok() = HTTP 200 + body con la lista de items</span>
     <span class="keyword">public</span> <span class="type">ResponseEntity</span>&lt;<span class="type">List</span>&lt;<span class="type">ItemDTO</span>&gt;&gt; findAll() {
         <span class="keyword">return</span> ResponseEntity.ok(service.findAll());
     }
 
     <span class="comment">// ═══════════════════════════════════════════════════════</span>
-    <span class="comment">// ENDPOINT: GET /api/items/mostrar/{id}</span>
-    <span class="comment">// Retorna un item especifico por su ID</span>
+    <span class="comment">// GET /api/items/mostrar/{id} - Busca un item por su ID</span>
     <span class="comment">// ═══════════════════════════════════════════════════════</span>
-    <span class="comment">// @GetMapping("/mostrar/{id}"): Se combina con @RequestMapping</span>
-    <span class="comment">//   URL completa: GET /api/items/mostrar/5 (donde 5 es el {id})</span>
+    <span class="comment">// @PathVariable: Extrae {id} de la URL y lo pasa como parametro</span>
     <span class="annotation">@GetMapping</span>(<span class="string">"/mostrar/{id}"</span>)
-    <span class="comment">// @PathVariable: Extrae el valor de la URL</span>
-    <span class="comment">//   En /api/items/mostrar/5, @PathVariable Long id = 5</span>
     <span class="keyword">public</span> <span class="type">ResponseEntity</span>&lt;<span class="type">ItemDTO</span>&gt; findById(<span class="annotation">@PathVariable</span> <span class="type">Long</span> id) {
         <span class="keyword">return</span> ResponseEntity.ok(service.findById(id));
     }
 
     <span class="comment">// ═══════════════════════════════════════════════════════</span>
-    <span class="comment">// ENDPOINT: GET /api/items/buscar?texto=Hola</span>
-    <span class="comment">// Busca items que contengan el texto indicado</span>
+    <span class="comment">// GET /api/items/buscar?texto=Hola - Busca items por texto</span>
     <span class="comment">// ═══════════════════════════════════════════════════════</span>
+    <span class="comment">// @RequestParam: Extrae ?texto=Hola de la query string</span>
     <span class="annotation">@GetMapping</span>(<span class="string">"/buscar"</span>)
-    <span class="comment">// @RequestParam: Extrae un parametro de la query string</span>
-    <span class="comment">//   En /api/items/buscar?texto=Hola, @RequestParam String texto = "Hola"</span>
     <span class="keyword">public</span> <span class="type">ResponseEntity</span>&lt;<span class="type">List</span>&lt;<span class="type">ItemDTO</span>&gt;&gt; search(<span class="annotation">@RequestParam</span> <span class="type">String</span> texto) {
         <span class="keyword">return</span> ResponseEntity.ok(service.search(texto));
     }
 
     <span class="comment">// ═══════════════════════════════════════════════════════</span>
-    <span class="comment">// ENDPOINT: POST /api/items/crear</span>
-    <span class="comment">// Crea un nuevo item</span>
+    <span class="comment">// POST /api/items/crear - Crea un nuevo item</span>
     <span class="comment">// ═══════════════════════════════════════════════════════</span>
+    <span class="comment">// @Valid: Valida el DTO segun las reglas (@NotBlank, @Size)</span>
+    <span class="comment">// @RequestBody: Convierte el JSON del body a objeto Java</span>
     <span class="annotation">@PostMapping</span>(<span class="string">"/crear"</span>)
-    <span class="comment">// @Valid: Activa validacion del DTO (@NotBlank, @Size)</span>
-    <span class="comment">//   Si el JSON no cumple las reglas, Spring retorna 400 automaticamente</span>
-    <span class="comment">// @RequestBody: Convierte el JSON del body HTTP a objeto Java (ItemDTO)</span>
-    <span class="comment">//   {"texto": "Hola"} se convierte en ItemDTO con texto="Hola"</span>
     <span class="keyword">public</span> <span class="type">ResponseEntity</span>&lt;<span class="type">ItemDTO</span>&gt; create(<span class="annotation">@Valid</span> <span class="annotation">@RequestBody</span> <span class="type">ItemDTO</span> dto) {
+        <span class="comment">// ResponseEntity.status(HttpStatus.CREATED) = HTTP 201</span>
         <span class="keyword">return</span> ResponseEntity.status(HttpStatus.CREATED).body(service.create(dto));
     }
 
     <span class="comment">// ═══════════════════════════════════════════════════════</span>
-    <span class="comment">// ENDPOINT: PUT /api/items/modificar/{id}</span>
-    <span class="comment">// Actualiza un item existente</span>
+    <span class="comment">// PUT /api/items/modificar/{id} - Actualiza un item existente</span>
     <span class="comment">// ═══════════════════════════════════════════════════════</span>
+    <span class="comment">// Combina @PathVariable (ID de la URL) con @RequestBody (JSON)</span>
     <span class="annotation">@PutMapping</span>(<span class="string">"/modificar/{id}"</span>)
-    <span class="comment">// Combina @PathVariable (de la URL) con @RequestBody (del JSON)</span>
     <span class="keyword">public</span> <span class="type">ResponseEntity</span>&lt;<span class="type">ItemDTO</span>&gt; update(<span class="annotation">@PathVariable</span> <span class="type">Long</span> id, <span class="annotation">@Valid</span> <span class="annotation">@RequestBody</span> <span class="type">ItemDTO</span> dto) {
         <span class="keyword">return</span> ResponseEntity.ok(service.update(id, dto));
     }
 
     <span class="comment">// ═══════════════════════════════════════════════════════</span>
-    <span class="comment">// ENDPOINT: DELETE /api/items/eliminar/{id}</span>
-    <span class="comment">// Elimina un item por su ID</span>
+    <span class="comment">// DELETE /api/items/eliminar/{id} - Elimina un item por su ID</span>
     <span class="comment">// ═══════════════════════════════════════════════════════</span>
     <span class="annotation">@DeleteMapping</span>(<span class="string">"/eliminar/{id}"</span>)
-    <span class="comment">// Retorna Void porque no hay body en la respuesta</span>
     <span class="keyword">public</span> <span class="type">ResponseEntity</span>&lt;<span class="type">Void</span>&gt; delete(<span class="annotation">@PathVariable</span> <span class="type">Long</span> id) {
         service.delete(id);
         <span class="comment">// .noContent() = HTTP 204 (eliminacion exitosa, sin contenido)</span>
@@ -3811,21 +3793,36 @@ input[type="text"]:focus { border-color: #38bdf8; }
                 </div>
 
                 <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">frontend/app.js</code>:</p>
-                <div class="code-block" data-lang="app.js"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="keyword">const</span> API = <span class="string">'http://localhost:8080/api/items'</span>;
+                <div class="code-block" data-lang="app.js"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment">// ═══════════════════════════════════════════════════════</span>
+<span class="comment">// CONFIGURACION: URL base de la API</span>
+<span class="comment">// Gateway en puerto 8080 redirige al Item Service</span>
+<span class="comment">// ═══════════════════════════════════════════════════════</span>
+<span class="keyword">const</span> API = <span class="string">'http://localhost:8080/api/items'</span>;
 
+<span class="comment">// ═══════════════════════════════════════════════════════</span>
+<span class="comment">// ELEMENTOS DEL DOM: Referencias a los elementos HTML</span>
+<span class="comment">// ═══════════════════════════════════════════════════════</span>
 <span class="keyword">const</span> input = document.getElementById(<span class="string">'itemInput'</span>);
 <span class="keyword">const</span> hiddenId = document.getElementById(<span class="string">'itemId'</span>);
 <span class="keyword">const</span> list = document.getElementById(<span class="string">'itemList'</span>);
 <span class="keyword">const</span> message = document.getElementById(<span class="string">'message'</span>);
 
+<span class="comment">// Referencias a los botones del CRUD</span>
 <span class="keyword">const</span> btnCreate = document.getElementById(<span class="string">'btnCreate'</span>);
 <span class="keyword">const</span> btnUpdate = document.getElementById(<span class="string">'btnUpdate'</span>);
 <span class="keyword">const</span> btnDelete = document.getElementById(<span class="string">'btnDelete'</span>);
 <span class="keyword">const</span> btnSearch = document.getElementById(<span class="string">'btnSearch'</span>);
 
-<span class="keyword">let</span> messageTimer = <span class="number">null</span>;
-<span class="keyword">let</span> originalText = <span class="string">''</span>;
+<span class="comment">// Variables de estado</span>
+<span class="keyword">let</span> messageTimer = <span class="number">null</span>;    <span class="comment">// Timer para ocultar mensajes automaticamente</span>
+<span class="keyword">let</span> originalText = <span class="string">''</span>;       <span class="comment">// Texto original al seleccionar un item</span>
 
+<span class="comment">// ═══════════════════════════════════════════════════════</span>
+<span class="comment">// updateButtons: Habilita/deshabilita segun el estado</span>
+<span class="comment">//   - Crear y Buscar siempre habilitados</span>
+<span class="comment">//   - Actualizar solo si hay texto + item seleccionado</span>
+<span class="comment">//   - Eliminar solo si hay texto</span>
+<span class="comment">// ═══════════════════════════════════════════════════════</span>
 <span class="keyword">function</span> updateButtons() {
     <span class="keyword">const</span> texto = input.value.trim();
     <span class="keyword">const</span> id = hiddenId.value;
@@ -3835,8 +3832,14 @@ input[type="text"]:focus { border-color: #38bdf8; }
     btnDelete.disabled = !texto;
 }
 
+<span class="comment">// Escuchar cambios en el input para actualizar botones</span>
 input.addEventListener(<span class="string">'input'</span>, updateButtons);
 
+<span class="comment">// ═══════════════════════════════════════════════════════</span>
+<span class="comment">// showMessage: Muestra mensajes temporales al usuario</span>
+<span class="comment">//   text: texto a mostrar | type: success, error, warning</span>
+<span class="comment">//   Se oculta automaticamente tras 2 segundos</span>
+<span class="comment">// ═══════════════════════════════════════════════════════</span>
 <span class="keyword">function</span> showMessage(text, type) {
     <span class="keyword">if</span> (messageTimer) clearTimeout(messageTimer);
     message.textContent = text;
@@ -3846,6 +3849,11 @@ input.addEventListener(<span class="string">'input'</span>, updateButtons);
     }, <span class="number">2000</span>);
 }
 
+<span class="comment">// ═══════════════════════════════════════════════════════</span>
+<span class="comment">// handleResponse: Procesa respuestas HTTP del backend</span>
+<span class="comment">//   Si ok → retorna JSON (o null si 204)</span>
+<span class="comment">//   Si error → extrae mensaje del backend y lo muestra</span>
+<span class="comment">// ═══════════════════════════════════════════════════════</span>
 <span class="keyword">async</span> <span class="keyword">function</span> handleResponse(res) {
     <span class="keyword">if</span> (res.ok) {
         <span class="keyword">if</span> (res.status !== <span class="number">204</span>) <span class="keyword">return</span> <span class="keyword">await</span> res.json();
@@ -3854,6 +3862,7 @@ input.addEventListener(<span class="string">'input'</span>, updateButtons);
     <span class="keyword">let</span> errorMsg = <span class="string">'Error del servidor'</span>;
     <span class="keyword">try</span> {
         <span class="keyword">const</span> err = <span class="keyword">await</span> res.json();
+        <span class="comment">// El backend puede devolver errores en formato {messages: {campo: "error"}}</span>
         <span class="keyword">if</span> (err.messages) {
             <span class="keyword">const</span> firstKey = Object.keys(err.messages)[<span class="number">0</span>];
             errorMsg = err.messages[firstKey];
@@ -3865,17 +3874,25 @@ input.addEventListener(<span class="string">'input'</span>, updateButtons);
     <span class="keyword">throw</span> <span class="keyword">new</span> Error(errorMsg);
 }
 
+<span class="comment">// ═══════════════════════════════════════════════════════</span>
+<span class="comment">// EVENT LISTENERS: Asignar funciones a los botones</span>
+<span class="comment">// ═══════════════════════════════════════════════════════</span>
 document.getElementById(<span class="string">'btnCreate'</span>).addEventListener(<span class="string">'click'</span>, createItem);
 document.getElementById(<span class="string">'btnUpdate'</span>).addEventListener(<span class="string">'click'</span>, updateItem);
 document.getElementById(<span class="string">'btnDelete'</span>).addEventListener(<span class="string">'click'</span>, deleteItem);
 document.getElementById(<span class="string">'btnSearch'</span>).addEventListener(<span class="string">'click'</span>, searchAndShow);
 
+<span class="comment">// ═══════════════════════════════════════════════════════</span>
+<span class="comment">// createItem: POST /api/items/crear</span>
+<span class="comment">// Valida que no exista duplicado antes de crear</span>
+<span class="comment">// ═══════════════════════════════════════════════════════</span>
 <span class="keyword">async</span> <span class="keyword">function</span> createItem() {
     list.innerHTML = <span class="string">''</span>;
     list.style.display = <span class="string">'none'</span>;
     <span class="keyword">const</span> texto = input.value.trim();
     <span class="keyword">if</span> (!texto) { showMessage(<span class="string">'Escribe un texto para crear'</span>, <span class="string">'error'</span>); <span class="keyword">return</span>; }
     <span class="keyword">try</span> {
+        <span class="comment">// Verificar si ya existe un item con el mismo texto</span>
         <span class="keyword">const</span> check = <span class="keyword">await</span> fetch(`${API}/buscar?texto=${encodeURIComponent(texto)}`);
         <span class="keyword">const</span> existentes = <span class="keyword">await</span> check.json();
         <span class="keyword">if</span> (existentes.some(item =&gt; item.texto.toLowerCase() === texto.toLowerCase())) {
@@ -3884,6 +3901,7 @@ document.getElementById(<span class="string">'btnSearch'</span>).addEventListene
             updateButtons();
             <span class="keyword">return</span>;
         }
+        <span class="comment">// Enviar POST al endpoint /crear</span>
         <span class="keyword">const</span> res = <span class="keyword">await</span> fetch(`${API}/crear`, {
             method: <span class="string">'POST'</span>,
             headers: { <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span> },
@@ -3896,6 +3914,10 @@ document.getElementById(<span class="string">'btnSearch'</span>).addEventListene
     } <span class="keyword">catch</span> (e) {}
 }
 
+<span class="comment">// ═══════════════════════════════════════════════════════</span>
+<span class="comment">// updateItem: PUT /api/items/modificar/{id}</span>
+<span class="comment">// Requiere seleccionar un item de la lista primero</span>
+<span class="comment">// ═══════════════════════════════════════════════════════</span>
 <span class="keyword">async</span> <span class="keyword">function</span> updateItem() {
     list.innerHTML = <span class="string">''</span>;
     list.style.display = <span class="string">'none'</span>;
@@ -3906,6 +3928,7 @@ document.getElementById(<span class="string">'btnSearch'</span>).addEventListene
     <span class="keyword">if</span> (!texto) { showMessage(<span class="string">'Escribe un texto para actualizar'</span>, <span class="string">'error'</span>); <span class="keyword">return</span>; }
     <span class="keyword">if</span> (texto === originalText) { showMessage(<span class="string">'El texto es igual al actual, modifícalo'</span>, <span class="string">'error'</span>); <span class="keyword">return</span>; }
     <span class="keyword">try</span> {
+        <span class="comment">// Verificar que el nuevo texto no exista en otro item</span>
         <span class="keyword">const</span> check = <span class="keyword">await</span> fetch(`${API}/buscar?texto=${encodeURIComponent(texto)}`);
         <span class="keyword">if</span> (check.ok) {
             <span class="keyword">const</span> existentes = <span class="keyword">await</span> check.json();
@@ -3914,6 +3937,7 @@ document.getElementById(<span class="string">'btnSearch'</span>).addEventListene
                 <span class="keyword">return</span>;
             }
         }
+        <span class="comment">// Enviar PUT al endpoint /modificar/{id}</span>
         <span class="keyword">const</span> res = <span class="keyword">await</span> fetch(`${API}/modificar/${id}`, {
             method: <span class="string">'PUT'</span>,
             headers: { <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span> },
@@ -3928,12 +3952,17 @@ document.getElementById(<span class="string">'btnSearch'</span>).addEventListene
     } <span class="keyword">catch</span> (e) {}
 }
 
+<span class="comment">// ═══════════════════════════════════════════════════════</span>
+<span class="comment">// deleteItem: DELETE /api/items/eliminar/{id}</span>
+<span class="comment">// Elimina por ID si hay item seleccionado, o busca por texto</span>
+<span class="comment">// ═══════════════════════════════════════════════════════</span>
 <span class="keyword">async</span> <span class="keyword">function</span> deleteItem() {
     <span class="keyword">const</span> id = hiddenId.value;
     <span class="keyword">const</span> texto = input.value.trim();
     <span class="keyword">if</span> (!texto) { showMessage(<span class="string">'Escribe un texto para eliminar'</span>, <span class="string">'error'</span>); <span class="keyword">return</span>; }
     <span class="keyword">try</span> {
         <span class="keyword">if</span> (id) {
+            <span class="comment">// Si hay un item seleccionado de la lista, eliminar directamente</span>
             <span class="keyword">if</span> (!confirm(<span class="string">`&iquest;Confirmas eliminar &quot;${texto}&quot;?`</span>)) {
                 showMessage(<span class="string">'Eliminaci&oacute;n cancelada'</span>, <span class="string">'warning'</span>);
                 <span class="keyword">return</span>;
@@ -3948,6 +3977,7 @@ document.getElementById(<span class="string">'btnSearch'</span>).addEventListene
             updateButtons();
             <span class="keyword">return</span>;
         }
+        <span class="comment">// Sin ID: buscar el texto en la API y eliminar el primero que coincida</span>
         <span class="keyword">const</span> res = <span class="keyword">await</span> fetch(`${API}/buscar?texto=${encodeURIComponent(texto)}`);
         <span class="keyword">const</span> resultados = <span class="keyword">await</span> res.json();
         <span class="keyword">const</span> item = resultados.find(it =&gt; it.texto.toLowerCase() === texto.toLowerCase());
@@ -3978,9 +4008,14 @@ document.getElementById(<span class="string">'btnSearch'</span>).addEventListene
     } <span class="keyword">catch</span> (e) {}
 }
 
+<span class="comment">// ═══════════════════════════════════════════════════════</span>
+<span class="comment">// searchAndShow: GET /api/items/buscar?texto= o /listar</span>
+<span class="comment">// Busca items o lista todos si el input esta vacio</span>
+<span class="comment">// ═══════════════════════════════════════════════════════</span>
 <span class="keyword">async</span> <span class="keyword">function</span> searchAndShow() {
     <span class="keyword">const</span> texto = input.value.trim();
     <span class="keyword">try</span> {
+        <span class="comment">// Si hay texto, buscar; si no, listar todos</span>
         <span class="keyword">const</span> url = texto ? `${API}/buscar?texto=${encodeURIComponent(texto)}` : `${API}/listar`;
         <span class="keyword">const</span> res = <span class="keyword">await</span> fetch(url);
         <span class="keyword">const</span> data = <span class="keyword">await</span> handleResponse(res);
@@ -3996,6 +4031,10 @@ document.getElementById(<span class="string">'btnSearch'</span>).addEventListene
     } <span class="keyword">catch</span> (e) {}
 }
 
+<span class="comment">// ═══════════════════════════════════════════════════════</span>
+<span class="comment">// render: Dibuja la lista de items en el DOM</span>
+<span class="comment">// Cada item es un <li> clickeable que lo selecciona</span>
+<span class="comment">// ═══════════════════════════════════════════════════════</span>
 <span class="keyword">function</span> render(items) {
     list.innerHTML = <span class="string">''</span>;
     list.style.display = <span class="string">'block'</span>;
@@ -4008,6 +4047,7 @@ document.getElementById(<span class="string">'btnSearch'</span>).addEventListene
         idSpan.textContent = <span class="string">'#'</span> + item.id;
         li.appendChild(span);
         li.appendChild(idSpan);
+        <span class="comment">// Al hacer clic, cargar el item en el input para editar/eliminar</span>
         li.addEventListener(<span class="string">'click'</span>, () =&gt; {
             document.querySelectorAll(<span class="string">'#itemList li'</span>).forEach(el =&gt; el.classList.remove(<span class="string">'selected'</span>));
             li.classList.add(<span class="string">'selected'</span>);
@@ -4020,6 +4060,10 @@ document.getElementById(<span class="string">'btnSearch'</span>).addEventListene
     });
 }
 
+<span class="comment">// ═══════════════════════════════════════════════════════</span>
+<span class="comment">// checkDbConnection: Verifica que el backend responda</span>
+<span class="comment">// Muestra un error en pantalla si no hay conexion</span>
+<span class="comment">// ═══════════════════════════════════════════════════════</span>
 <span class="keyword">async</span> <span class="keyword">function</span> checkDbConnection() {
     <span class="keyword">try</span> {
         <span class="keyword">const</span> res = <span class="keyword">await</span> fetch(`${API}/listar`, { method: <span class="string">'GET'</span>, signal: AbortSignal.timeout(<span class="number">5000</span>) });
@@ -4030,6 +4074,9 @@ document.getElementById(<span class="string">'btnSearch'</span>).addEventListene
     }
 }
 
+<span class="comment">// ═══════════════════════════════════════════════════════</span>
+<span class="comment">// INICIALIZACION: Estado inicial y verificacion de BD</span>
+<span class="comment">// ═══════════════════════════════════════════════════════</span>
 updateButtons();
 checkDbConnection();</code></div>
             </section>
