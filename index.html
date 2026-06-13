@@ -237,6 +237,7 @@
             <a href="#m6-que-es" class="nav-link pl-8 text-xs">6.1 ¿Qué es un API Gateway?</a>
             <a href="#m6-pom" class="nav-link pl-8 text-xs">6.2 pom.xml del Gateway</a>
             <a href="#m6-config" class="nav-link pl-8 text-xs">6.3 Configuracion del Gateway</a>
+            <a href="#m6-arrancar" class="nav-link pl-8 text-xs">6.4 Arrancar el API Gateway</a>
             <div class="border-t border-dark-100 my-4"></div>
             <a href="#modulo7" class="nav-link">Modulo 7 - Frontend</a>
             <a href="#m7-html" class="nav-link pl-8 text-xs">7.1 index.html</a>
@@ -310,6 +311,7 @@
             <option value="#m6-que-es">-- 6.1 ¿Qué es un API Gateway?</option>
             <option value="#m6-pom">-- 6.2 pom.xml del Gateway</option>
             <option value="#m6-config">-- 6.3 Configuracion del Gateway</option>
+            <option value="#m6-arrancar">-- 6.4 Arrancar el API Gateway</option>
             <option value="#modulo7">Modulo 7 - Frontend</option>
             <option value="#m7-html">-- 7.1 index.html</option>
             <option value="#m7-css">-- 7.2 style.css</option>
@@ -1042,52 +1044,120 @@
                     <span class="text-accent">0.4</span> Estructura de Archivos del Proyecto
                 </h3>
                 <p class="text-slate-300 leading-relaxed mb-4">Esta es la estructura <strong class="text-neon-green">FINAL</strong> del proyecto al completar el libro. Cada archivo tiene un propósito específico que iremos construyendo módulo a módulo. Compárala con la estructura <strong class="text-accent">BASE</strong> que veremos en la <a href="#m1-estructura" class="text-accent hover:underline">Sección 1.4</a> (lo que genera Initializr): desde esa base minimalista partiremos hasta llegar a esta arquitectura completa.</p>
-                <div class="code-block" data-lang="Estructura"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code>estudio-docker-microserv/
-|
-+-- docker-compose.yml          # Orquesta los 5 servicios (postgres, item-service, api-gateway, jenkins, frontend)
-+-- Jenkinsfile                 # Pipeline de CI/CD para Jenkins (build, test, package, deploy)
-+-- .env                        # Variables de entorno (credenciales). NO se sube a Git.
-+-- .gitignore                  # Archivos que Git ignora
-+-- .dockerignore               # Archivos que Docker ignora al construir imagenes
-|
-+-- api-gateway/                # API Gateway (Spring Cloud Gateway)
-|   +-- Dockerfile              # Receta para construir la imagen del Gateway
-|   +-- pom.xml                 # Dependencias: spring-cloud-starter-gateway
-|   +-- src/main/
-|       +-- java/com/gateway/
-|       |   +-- ApiGatewayApplication.java  # Punto de entrada del Gateway
-|       +-- resources/
-|           +-- application.yml # Rutas y configuracion CORS
-|
-+-- item-service/               # Microservicio principal (Spring Boot)
-|   +-- Dockerfile              # Receta para construir la imagen del Item Service
-|   +-- pom.xml                 # Dependencias: JPA, PostgreSQL, Validation, DevTools
-|   +-- src/main/
-|       +-- java/com/singleinput/
-|       |   +-- ItemServiceApplication.java   # Punto de entrada
-|       |   +-- domain/Item.java              # CAPA 1: Entity (mapea tabla "items")
-|       |   +-- dto/ItemDTO.java              # Data Transfer Object (validacion)
-|       |   +-- persistence/ItemRepository.java  # CAPA 2: JpaRepository
-|       |   +-- service/ItemService.java         # CAPA 3: Interface
-|       |   +-- service/ItemServiceImpl.java     # CAPA 3: Implementacion
-|       |   +-- controller/ItemController.java   # CAPA 4: @RestController
-|       |   +-- exception/ItemNotFoundException.java
-|       |   +-- exception/GlobalExceptionHandler.java  # @RestControllerAdvice
-|       +-- resources/application.yml  # Configuracion: BD, puertos, logging
-|
-+-- jenkins/                    # Jenkins CI/CD Server (contenedor)
-|   +-- Dockerfile              # Imagen personalizada: Jenkins LTS + JDK 21 + Docker CLI
-|
-+-- frontend/                   # Frontend estatico (Vanilla JS)
-|   +-- index.html              # Un input + 4 botones
-|   +-- style.css               # Modo oscuro, responsive
-|   +-- app.js                  # Fetch API, async/await, XSS-safe
-|   +-- Dockerfile              # (Opcional) Nginx Alpine para servir el frontend
-|   +-- nginx.conf              # (Opcional) Configuracion de Nginx + reverse proxy
-|
-+-- .github/
-    +-- workflows/
-        +-- ci.yml              # Pipeline CI/CD (GitHub Actions)</code></div>
+                <p class="text-slate-300 leading-relaxed mb-4 mt-8">A continuación se presentan <strong class="text-white">dos variantes</strong> de la estructura final. Elige la que corresponde a tu flujo de trabajo:</p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <div class="border-2 border-neon-green/40 rounded-xl p-4 bg-neon-green/5">
+                        <p class="text-neon-green font-bold text-sm mb-3 flex items-center gap-2">
+                            <span>&#10004;</span> ESTRUCTURA BÁSICA (Flujo Principal)
+                        </p>
+                        <p class="text-xs text-slate-400 mb-3">Solo API Gateway + Item Service. Sin Jenkins, sin Nginx, sin GitHub Actions. El frontend se sirve con Live Server.</p>
+                        <pre class="text-xs font-mono text-slate-300 leading-relaxed overflow-x-auto">
+<span class="text-slate-500">estudio-docker-microserv/</span>
+<span class="text-slate-500">|</span>
++-- <span class="text-accent">docker-compose.yml</span>          # Orquesta 3 servicios: postgres, item-service, api-gateway
++-- <span class="text-slate-400">.env</span>                        # Variables de entorno (credenciales). NO se sube a Git.
++-- <span class="text-slate-400">.gitignore</span>                  # Archivos que Git ignora
++-- <span class="text-slate-400">.dockerignore</span>               # Archivos que Docker ignora al construir imagenes
+<span class="text-slate-500">|</span>
++-- <span class="text-neon-purple">api-gateway/</span>                # API Gateway (Spring Cloud Gateway)
+|   +-- <span class="text-slate-400">Dockerfile</span>              # Receta para construir la imagen del Gateway
+|   +-- <span class="text-slate-400">pom.xml</span>                 # Dependencias: spring-cloud-starter-gateway
+|   +-- <span class="text-slate-400">src/main/</span>
+|       +-- <span class="text-slate-400">java/com/gateway/</span>
+|       |   +-- <span class="text-slate-400">ApiGatewayApplication.java</span>  # Punto de entrada del Gateway
+|       +-- <span class="text-slate-400">resources/</span>
+|           +-- <span class="text-slate-400">application.yml</span> # Rutas y configuracion CORS
+<span class="text-slate-500">|</span>
++-- <span class="text-accent">item-service/</span>               # Microservicio principal (Spring Boot)
+|   +-- <span class="text-slate-400">Dockerfile</span>              # Receta para construir la imagen del Item Service
+|   +-- <span class="text-slate-400">pom.xml</span>                 # Dependencias: JPA, PostgreSQL, Validation, DevTools
+|   +-- <span class="text-slate-400">src/main/</span>
+|       +-- <span class="text-slate-400">java/com/singleinput/</span>
+|       |   +-- <span class="text-slate-400">ItemServiceApplication.java</span>   # Punto de entrada
+|       |   +-- <span class="text-slate-400">domain/Item.java</span>              # CAPA 1: Entity
+|       |   +-- <span class="text-slate-400">dto/ItemDTO.java</span>              # Data Transfer Object
+|       |   +-- <span class="text-slate-400">persistence/ItemRepository.java</span>  # CAPA 2: JpaRepository
+|       |   +-- <span class="text-slate-400">service/ItemService.java</span>         # CAPA 3: Interface
+|       |   +-- <span class="text-slate-400">service/ItemServiceImpl.java</span>     # CAPA 3: Implementacion
+|       |   +-- <span class="text-slate-400">controller/ItemController.java</span>   # CAPA 4: @RestController
+|       |   +-- <span class="text-slate-400">exception/ItemNotFoundException.java</span>
+|       |   +-- <span class="text-slate-400">exception/GlobalExceptionHandler.java</span>
+|       +-- <span class="text-slate-400">resources/application.yml</span>
+<span class="text-slate-500">|</span>
++-- <span class="text-accent">frontend/</span>                   # Frontend estatico (Vanilla JS)
+    +-- <span class="text-slate-400">index.html</span>              # Un input + 4 botones
+    +-- <span class="text-slate-400">style.css</span>               # Modo oscuro, responsive
+    +-- <span class="text-slate-400">app.js</span>                  # Fetch API, async/await, XSS-safe
+</pre>
+                        <p class="text-neon-green text-xs mt-2">&#10003; 3 contenedores Docker | Frontend con Live Server</p>
+                    </div>
+
+                    <div class="border-2 border-red-500/40 rounded-xl p-4 bg-red-500/5">
+                        <p class="text-red-400 font-bold text-sm mb-3 flex items-center gap-2">
+                            <span>&#9881;</span> ESTRUCTURA AVANZADA (Opcional - Módulo 10)
+                        </p>
+                        <p class="text-xs text-slate-400 mb-3">Incluye Jenkins, frontend contenerizado con Nginx y GitHub Actions para CI/CD completo.</p>
+                        <pre class="text-xs font-mono text-slate-300 leading-relaxed overflow-x-auto">
+<span class="text-slate-500">estudio-docker-microserv/</span>
+<span class="text-slate-500">|</span>
++-- <span class="text-accent">docker-compose.yml</span>          # Orquesta los 5 servicios (postgres, item-service, api-gateway, jenkins, frontend)
++-- <span class="text-red-400">Jenkinsfile</span>                 # Pipeline de CI/CD para Jenkins (build, test, package, deploy)
++-- <span class="text-slate-400">.env</span>
++-- <span class="text-slate-400">.gitignore</span>
++-- <span class="text-slate-400">.dockerignore</span>
+<span class="text-slate-500">|</span>
++-- <span class="text-neon-purple">api-gateway/</span>                # (igual que en estructura básica)
+|   +-- <span class="text-slate-400">Dockerfile</span>
+|   +-- <span class="text-slate-400">pom.xml</span>
+|   +-- <span class="text-slate-400">src/main/</span>
+|       +-- <span class="text-slate-400">java/com/gateway/</span>
+|       |   +-- <span class="text-slate-400">ApiGatewayApplication.java</span>
+|       +-- <span class="text-slate-400">resources/</span>
+|           +-- <span class="text-slate-400">application.yml</span>
+<span class="text-slate-500">|</span>
++-- <span class="text-accent">item-service/</span>               # (igual que en estructura básica)
+|   +-- <span class="text-slate-400">Dockerfile</span>
+|   +-- <span class="text-slate-400">pom.xml</span>
+|   +-- <span class="text-slate-400">src/main/</span>
+|       +-- <span class="text-slate-400">java/com/singleinput/</span>
+|       |   +-- <span class="text-slate-400">ItemServiceApplication.java</span>
+|       |   +-- <span class="text-slate-400">domain/Item.java</span>
+|       |   +-- <span class="text-slate-400">dto/ItemDTO.java</span>
+|       |   +-- <span class="text-slate-400">persistence/ItemRepository.java</span>
+|       |   +-- <span class="text-slate-400">service/ItemService.java</span>
+|       |   +-- <span class="text-slate-400">service/ItemServiceImpl.java</span>
+|       |   +-- <span class="text-slate-400">controller/ItemController.java</span>
+|       |   +-- <span class="text-slate-400">exception/ItemNotFoundException.java</span>
+|       |   +-- <span class="text-slate-400">exception/GlobalExceptionHandler.java</span>
+|       +-- <span class="text-slate-400">resources/application.yml</span>
+<span class="text-slate-500">|</span>
++-- <span class="text-red-400">jenkins/</span>                    # Jenkins CI/CD Server (contenedor)
+|   +-- <span class="text-slate-400">Dockerfile</span>              # Imagen personalizada: Jenkins LTS + JDK 21 + Docker CLI
+<span class="text-slate-500">|</span>
++-- <span class="text-accent">frontend/</span>                   # Frontend en contenedor Nginx
+|   +-- <span class="text-slate-400">index.html</span>
+|   +-- <span class="text-slate-400">style.css</span>
+|   +-- <span class="text-slate-400">app.js</span>
+|   +-- <span class="text-teal-400">Dockerfile</span>              # Nginx Alpine para servir el frontend
+|   +-- <span class="text-teal-400">nginx.conf</span>              # Reverse proxy hacia el Gateway
+<span class="text-slate-500">|</span>
++-- <span class="text-slate-400">.github/</span>
+    +-- <span class="text-slate-400">workflows/</span>
+        +-- <span class="text-red-400">ci.yml</span>              # Pipeline CI/CD (GitHub Actions)
+</pre>
+                        <p class="text-red-400 text-xs mt-2">&#9881; 5 contenedores Docker | Jenkins CI/CD | GitHub Actions</p>
+                    </div>
+                </div>
+
+                <div class="alert-box alert-analysis">
+                    <div class="alert-title"><span class="alert-icon">&#128300;</span> ¿Cuál elegir?</div>
+                    <div class="alert-body">
+                        <p class="mb-2"><strong class="text-neon-green">Estructura Básica:</strong> Es la que usarás durante todo el libro. 3 contenedores (PostgreSQL, Item Service, API Gateway) y el frontend con Live Server. Simple, rápida y perfecta para aprender.</p>
+                        <p class="mb-2"><strong class="text-red-400">Estructura Avanzada:</strong> Agrega Jenkins, Nginx y GitHub Actions. Para producción o cuando quieras aprender CI/CD en el Módulo 10.</p>
+                        <p class="text-xs text-slate-400 mt-2">Ambas estructuras comparten api-gateway/ e item-service/. La diferencia está en los servicios extra de CI/CD y contenerización del frontend.</p>
+                    </div>
+                </div>
             </section>
         </section>
 
@@ -2997,10 +3067,18 @@ POSTGRES_DB=crud_db</code>
                     </div>
                 </div>
 
-                <div class="alert-box alert-console">
-                    <div class="alert-title"><span class="alert-icon">&#128187;</span> CONSOLA - Comandos de Volumenes</div>
+                <div class="alert-box alert-analysis" style="border-left-color: #facc15;">
+                    <div class="alert-title"><span class="alert-icon">&#128214;</span> REFERENCIA - Comandos de Volumenes (NO EJECUTAR AÚN)</div>
                     <div class="alert-body">
-                        <div class="code-block mt-3" data-lang="bash">
+                        <div class="alert-box alert-warning mb-4">
+                            <div class="alert-title"><span class="alert-icon">&#9888;&#65039;</span> Importante: No ejecutes estos comandos todavía</div>
+                            <div class="alert-body">
+                                <p>Este bloque es <strong class="text-white">SOLO DE REFERENCIA</strong> para que conozcas los comandos de gestión de volúmenes. <strong class="text-neon-red">No los ejecutes ahora</strong> porque los Dockerfiles del Item Service y API Gateway aún no existen (los crearemos en la <a href="#m5-dockerfile" class="text-accent hover:underline">Sección 5.1</a>).</p>
+                                <p class="mt-2">Ejecutar <code>docker compose up -d</code> ahora fallaría porque Docker necesita los Dockerfiles para construir las imágenes, y todavía no los hemos creado.</p>
+                                <p class="mt-2"><strong class="text-neon-green">¿Cuándo ejecutarlos?</strong> Después de completar la <a href="#m5-dockerfile" class="text-accent hover:underline">Sección 5.1</a> (Dockerfiles) llegarás a la <a href="#m5-compose-update" class="text-accent hover:underline">Sección 5.2</a>, donde ejecutaremos <code>docker compose build</code> y <code>docker compose up -d</code> paso a paso. En ese momento podrás regresar a este bloque para probar los comandos de volúmenes.</p>
+                            </div>
+                        </div>
+                        <div class="code-block mt-0" data-lang="bash">
                             <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
                             <code><span class="comment"># Levantar todo (crea volumenes si no existen)</span>
 <span class="tag">docker</span> compose up -d
@@ -3174,6 +3252,59 @@ POSTGRES_DB=crud_db</code>
                 <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
                     <span class="text-accent">5.2</span> Construir y Arrancar Todo
                 </h3>
+
+                <div class="alert-box alert-console" style="border-left-color: #4ade80;">
+                    <div class="alert-title"><span class="alert-icon">&#128640;</span> LISTA DE VERIFICACIÓN - Antes de ejecutar los comandos</div>
+                    <div class="alert-body">
+                        <p class="mb-2">Este es el <strong class="text-white">momento de arrancar los contenedores por primera vez</strong>. Antes de ejecutar los comandos de abajo, verifica que estos archivos existen en tu proyecto:</p>
+                        <table class="mt-2 mb-2">
+                            <thead>
+                                <tr><th>Archivo</th><th>¿Existe?</th><th>Creado en</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>docker-compose.yml</code></td>
+                                    <td class="text-neon-green">✅</td>
+                                    <td><a href="#m4-compose" class="text-accent hover:underline">Sección 4.2</a></td>
+                                </tr>
+                                <tr>
+                                    <td><code>.env</code></td>
+                                    <td class="text-neon-green">✅</td>
+                                    <td><a href="#m4-compose" class="text-accent hover:underline">Sección 4.2</a></td>
+                                </tr>
+                                <tr>
+                                    <td><code>item-service/Dockerfile</code></td>
+                                    <td class="text-neon-green">✅</td>
+                                    <td><a href="#m5-dockerfile" class="text-accent hover:underline">Sección 5.1</a></td>
+                                </tr>
+                                <tr>
+                                    <td><code>api-gateway/Dockerfile</code></td>
+                                    <td class="text-neon-green">✅</td>
+                                    <td><a href="#m5-dockerfile" class="text-accent hover:underline">Sección 5.1</a></td>
+                                </tr>
+                                <tr>
+                                    <td><code>item-service/pom.xml</code></td>
+                                    <td class="text-neon-green">✅</td>
+                                    <td><a href="#m3-pom" class="text-accent hover:underline">Sección 3.1</a></td>
+                                </tr>
+                                <tr>
+                                    <td><code>item-service/src/</code> (código Java)</td>
+                                    <td class="text-neon-green">✅</td>
+                                    <td><a href="#modulo3" class="text-accent hover:underline">Módulo 3</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="alert-box alert-warning mt-2">
+                            <div class="alert-title"><span class="alert-icon">&#9888;&#65039;</span> Importante: El API Gateway se completa en el Módulo 6</div>
+                            <div class="alert-body">
+                                <p>El <code>docker-compose.yml</code> que creaste en la Sección 4.2 ya define el servicio <code>api-gateway</code>, pero sus archivos fuente (<code>pom.xml</code> y <code>src/</code>) los crearemos en el <a href="#modulo6" class="text-accent hover:underline">Módulo 6</a>.</p>
+                                <p class="mt-2"><strong class="text-neon-green">Por ahora:</strong> Construye y arranca solo <code>item-service</code> (que ya tiene todos sus archivos). El comando de abajo ya está ajustado para construir solo este servicio. Luego, en el Módulo 6, completarás el API Gateway y lo pondrás en marcha.</p>
+                            </div>
+                        </div>
+                        <p class="mt-2"><strong class="text-neon-green">¿Todo listo?</strong> Ejecuta los comandos de abajo en orden.</p>
+                    </div>
+                </div>
+
                 <div class="alert-box alert-console">
                     <div class="alert-title"><span class="alert-icon">&#128187;</span> CONSOLA - Construir y Arrancar</div>
                     <div class="alert-body">
@@ -3182,9 +3313,11 @@ POSTGRES_DB=crud_db</code>
                             <code><span class="comment"># ═══════════════════════════════════════════════════════════════</span>
 <span class="comment"># PASO 1: Construir las imagenes Docker</span>
 <span class="comment"># ═══════════════════════════════════════════════════════════════</span>
-<span class="comment"># docker compose build:</span>
-<span class="comment">#   Lee docker-compose.yml y para cada servicio con "build:",</span>
-<span class="comment">#   ejecuta las instrucciones del Dockerfile para crear la imagen.</span>
+<span class="comment"># docker compose build item-service:</span>
+<span class="comment">#   Construye SOLO el servicio item-service (el Gateway lo</span>
+<span class="comment">#   configuraremos en el Modulo 6).</span>
+<span class="comment">#   Lee docker-compose.yml y para item-service ejecuta</span>
+<span class="comment">#   las instrucciones del Dockerfile para crear la imagen.</span>
 <span class="comment">#</span>
 <span class="comment"># Qué hace Docker internamente:</span>
 <span class="comment">#   1. Descarga la imagen base (maven:3.9-eclipse-temurin-21-alpine)</span>
@@ -3198,14 +3331,17 @@ POSTGRES_DB=crud_db</code>
 <span class="comment">#</span>
 <span class="comment"># Primera vez: 5-10 minutos (descarga imagen base + dependencias Maven)</span>
 <span class="comment"># Siguientes veces: 5-30 segundos (si no cambiaste pom.xml)</span>
-<span class="tag">docker</span> compose build
+<span class="tag">docker</span> compose build item-service
 
 <span class="comment"># ═══════════════════════════════════════════════════════════════</span>
-<span class="comment"># PASO 2: Arrancar los 3 servicios</span>
+<span class="comment"># PASO 2: Arrancar los servicios (postgres + item-service)</span>
 <span class="comment"># ═══════════════════════════════════════════════════════════════</span>
-<span class="comment"># docker compose up -d:</span>
-<span class="comment">#   "up" = crear y arrancar los contenedores definidos en docker-compose.yml</span>
+<span class="comment"># docker compose up -d postgres item-service:</span>
+<span class="comment">#   "up" = crear y arrancar los contenedores</span>
 <span class="comment">#   "-d" = detached mode (segundo plano, no bloquea tu terminal)</span>
+<span class="comment">#   "postgres item-service" = solo arrancamos estos 2 servicios.</span>
+<span class="comment">#   El api-gateway no se arranca aun porque su codigo fuente</span>
+<span class="comment">#   (pom.xml, src/) se crea en el Modulo 6.</span>
 <span class="comment">#</span>
 <span class="comment"># Qué hace Docker internamente:</span>
 <span class="comment">#   1. Crea la red "crud-network" (si no existe)</span>
@@ -3213,11 +3349,9 @@ POSTGRES_DB=crud_db</code>
 <span class="comment">#   3. Arranca PostgreSQL primero (no tiene depends_on)</span>
 <span class="comment">#   4. Espera a que PostgreSQL pase el healthcheck (puede tardar 10-30s)</span>
 <span class="comment">#   5. Arranca item-service (porque depends_on: postgres: service_healthy)</span>
-<span class="comment">#   6. Arranca api-gateway (porque depends_on: item-service)</span>
-<span class="comment">#   7. Los 3 contenedores quedan corriendo en segundo plano</span>
 <span class="comment">#</span>
-<span class="comment"># ORDEN DE ARRANQUE: postgres -> item-service -> api-gateway</span>
-<span class="tag">docker</span> compose up -d
+<span class="comment"># ORDEN DE ARRANQUE: postgres -> item-service</span>
+<span class="tag">docker</span> compose up -d postgres item-service
 
 <span class="comment"># ═══════════════════════════════════════════════════════════════</span>
 <span class="comment"># PASO 3: Verificar que todo esta corriendo</span>
@@ -3225,14 +3359,14 @@ POSTGRES_DB=crud_db</code>
 <span class="comment"># docker compose ps:</span>
 <span class="comment">#   Muestra el estado de cada contenedor definido en docker-compose.yml</span>
 <span class="comment">#   Busca estas columnas:</span>
-<span class="comment">#     NAME          STATUS              PORTS</span>
-<span class="comment">#     crud-postgres Up (healthy)        0.0.0.0:5432->5432/tcp</span>
-<span class="comment">#     crud-item-..  Up                  0.0.0.0:8081->8081/tcp</span>
-<span class="comment">#     crud-api-..   Up                  0.0.0.0:8080->8080/tcp</span>
+<span class="comment">#     NAME              STATUS              PORTS</span>
+<span class="comment">#     crud-postgres     Up (healthy)        0.0.0.0:5432->5432/tcp</span>
+<span class="comment">#     crud-item-service Up                  0.0.0.0:8081->8081/tcp</span>
 <span class="comment">#</span>
 <span class="comment"># Si ves "Up" en STATUS, todo esta bien.</span>
 <span class="comment"># Si ves "Restarting", algo esta fallando (revisa los logs).</span>
 <span class="comment"># Si ves "Exit", el contenedor termino (normal si ya no lo necesitas).</span>
+<span class="comment"># Si NO ves crud-api-gateway: es normal, lo arrancaremos en el Modulo 6.</span>
 <span class="tag">docker</span> compose ps
 
 <span class="comment"># ═══════════════════════════════════════════════════════════════</span>
@@ -3256,18 +3390,10 @@ POSTGRES_DB=crud_db</code>
 <span class="comment"># Espera: "Started ItemServiceApplication in X.XXX seconds"</span>
 
 <span class="comment"># ═══════════════════════════════════════════════════════════════</span>
-<span class="comment"># Ver los logs del API Gateway</span>
+<span class="comment"># Ver logs de TODOS los servicios</span>
 <span class="comment"># ═══════════════════════════════════════════════════════════════</span>
-<span class="tag">docker</span> compose logs -f api-gateway
-<span class="comment"># Espera: "Started ApiGatewayApplication in X.XXX seconds"</span>
-
-<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
-<span class="comment"># Ver logs de TODOS los servicios simultaneamente</span>
-<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
-<span class="comment"># Cada linea tiene un prefijo con el nombre del servicio:</span>
-<span class="comment">#   crud-postgres    | 2024-01-01 ... database system is ready</span>
-<span class="comment">#   crud-item-..     | 2024-01-01 ... Started ItemServiceApplication</span>
-<span class="comment">#   crud-api-..      | 2024-01-01 ... Started ApiGatewayApplication</span>
+<span class="comment"># Solo veras postgres y item-service. api-gateway no aparece</span>
+<span class="comment"># porque su contenedor aun no existe (lo crearemos en Modulo 6).</span>
 <span class="tag">docker</span> compose logs -f</code>
                         </div>
                         <div class="alert-box alert-warning mt-4">
@@ -3292,6 +3418,15 @@ POSTGRES_DB=crud_db</code>
                                 </table>
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                <div class="alert-box alert-console" style="border-left-color: #4ade80;">
+                    <div class="alert-title"><span class="alert-icon">&#9989;</span> CONTENEDORES EN EJECUCIÓN - No los detengas</div>
+                    <div class="alert-body">
+                        <p>En este punto deberías tener <strong class="text-white">2 contenedores ejecutándose</strong>: PostgreSQL y Item Service. El API Gateway lo arrancaremos en el <a href="#modulo6" class="text-accent hover:underline">Módulo 6</a>.</p>
+                        <p class="mt-2"><strong class="text-neon-green">Importante:</strong> Deja estos contenedores corriendo mientras avanzas por los siguientes módulos. Si los detienes con <code>docker compose down</code>, luego tendrás que esperar el arranque de PostgreSQL y la recarga de Spring Boot (30-60 segundos).</p>
+                        <p class="mt-2">Si cierras tu computadora o reinicias antes del Módulo 6, ejecuta <code>docker compose up -d postgres item-service</code> para levantarlos de nuevo (el API Gateway aún no está listo, se agrega en el <a href="#modulo6" class="text-accent hover:underline">Módulo 6</a>).</p>
                     </div>
                 </div>
             </section>
@@ -3414,7 +3549,8 @@ node_modules/</code>
                 </div>
 
                 <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">api-gateway/pom.xml</code>:</p>
-                <div class="code-block" data-lang="api-gateway/pom.xml"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment">&lt;!-- Declaracion XML estandar --&gt;</span>
+                <div class="code-block" data-lang="api-gateway/pom.xml">
+                    <button class="copy-btn" onclick="copyCode(this)">Copiar</button><code>
 <span class="tag">&lt;?xml</span> <span class="attr">version</span>=<span class="value">"1.0"</span> <span class="attr">encoding</span>=<span class="value">"UTF-8"</span><span class="tag">?&gt;</span>
 <span class="comment">&lt;!-- Elemento raiz con namespace y schema location de Maven --&gt;</span>
 <span class="tag">&lt;project</span> <span class="attr">xmlns</span>=<span class="value">"http://maven.apache.org/POM/4.0.0"</span>
@@ -3564,7 +3700,103 @@ node_modules/</code>
     <span class="keyword">public static void</span> main(<span class="type">String</span>[] args) {
         SpringApplication.run(<span class="type">ApiGatewayApplication</span>.class, args);
     }
-}</code></div>
+        }</code></div>
+            </section>
+
+            <section id="m6-arrancar" class="mb-16">
+                <h3 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                    <span class="text-accent">6.4</span> Arrancar el API Gateway
+                </h3>
+                <p class="text-slate-300 leading-relaxed mb-4">Ahora que el API Gateway tiene todos sus archivos (<code>pom.xml</code>, <code>application.yml</code>, <code>ApiGatewayApplication.java</code>), podemos construir su imagen Docker y arrancar su contenedor.</p>
+
+                <div class="alert-box alert-console" style="border-left-color: #4ade80;">
+                    <div class="alert-title"><span class="alert-icon">&#128640;</span> LISTA DE VERIFICACIÓN - Antes de arrancar el Gateway</div>
+                    <div class="alert-body">
+                        <p class="mb-2">Verifica que tienes todo lo necesario:</p>
+                        <table class="mt-2 mb-2">
+                            <thead>
+                                <tr><th>Archivo/Requisito</th><th>¿Listo?</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>api-gateway/pom.xml</code></td>
+                                    <td class="text-neon-green">✅</td>
+                                </tr>
+                                <tr>
+                                    <td><code>api-gateway/src/main/resources/application.yml</code></td>
+                                    <td class="text-neon-green">✅</td>
+                                </tr>
+                                <tr>
+                                    <td><code>api-gateway/src/main/java/com/gateway/ApiGatewayApplication.java</code></td>
+                                    <td class="text-neon-green">✅</td>
+                                </tr>
+                                <tr>
+                                    <td>PostgreSQL e Item Service ejecutándose</td>
+                                    <td class="text-neon-green">✅</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p class="mt-2"><strong class="text-neon-green">¿Todo listo?</strong> Ejecuta los comandos de abajo.</p>
+                    </div>
+                </div>
+
+                <div class="alert-box alert-console">
+                    <div class="alert-title"><span class="alert-icon">&#128187;</span> CONSOLA - Construir y Arrancar el API Gateway</div>
+                    <div class="alert-body">
+                        <div class="code-block mt-3" data-lang="bash">
+                            <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                            <code><span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+<span class="comment"># PASO 1: Construir la imagen del API Gateway</span>
+<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+<span class="comment"># Construye SOLO api-gateway (item-service y postgres ya estan listos)</span>
+<span class="tag">docker</span> compose build api-gateway
+
+<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+<span class="comment"># PASO 2: Arrancar el API Gateway</span>
+<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+<span class="comment"># Arranca solo api-gateway. Los demas servicios ya estan corriendo.</span>
+<span class="comment"># Docker Compose conecta el nuevo contenedor a la misma red</span>
+<span class="comment"># y redirige automaticamente el trafico a traves del Gateway.</span>
+<span class="tag">docker</span> compose up -d api-gateway
+
+<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+<span class="comment"># PASO 3: Verificar que los 3 servicios estan corriendo</span>
+<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+<span class="comment"># Ahora deberias ver 3 contenedores "Up":</span>
+<span class="comment">#   crud-postgres      Up (healthy)</span>
+<span class="comment">#   crud-item-service  Up</span>
+<span class="comment">#   crud-api-gateway   Up</span>
+<span class="tag">docker</span> compose ps
+
+<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+<span class="comment"># PASO 4: Ver logs del Gateway</span>
+<span class="comment"># ═══════════════════════════════════════════════════════════════</span>
+<span class="comment"># Busca: "Started ApiGatewayApplication in X.XXX seconds"</span>
+<span class="comment"># Busca: "Netty started on port(s): 8080"</span>
+<span class="tag">docker</span> compose logs -f api-gateway</code>
+                        </div>
+                        <div class="alert-box alert-warning mt-4">
+                            <div class="alert-title"><span class="alert-icon">&#9888;&#65039;</span> Primer build del Gateway es lento</div>
+                            <div class="alert-body">
+                                <p>Al igual que con el Item Service, la primera vez que construyes el API Gateway, Maven descargará todas sus dependencias (Spring Cloud Gateway, WebFlux, etc.). Esto tarda 3-5 minutos. Las siguientes veces será cuestión de segundos.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert-box alert-console" style="border-left-color: #4ade80;">
+                    <div class="alert-title"><span class="alert-icon">&#9989;</span> API GATEWAY EN EJECUCIÓN</div>
+                    <div class="alert-body">
+                        <p>Ahora tienes los <strong class="text-white">3 contenedores ejecutándose</strong>:</p>
+                        <ul class="list-disc list-inside ml-4 space-y-1 mt-2">
+                            <li>PostgreSQL (puerto 5432) - Base de datos</li>
+                            <li>Item Service (puerto 8081 interno) - Microservicio CRUD</li>
+                            <li><strong class="text-accent">API Gateway (puerto 8080)</strong> - Punto de entrada</li>
+                        </ul>
+                        <p class="mt-2">El API Gateway ya está recibiendo peticiones en <code>http://localhost:8080/api/items/**</code> y reenviándolas al Item Service. Puedes probar los endpoints directamente desde tu navegador o Postman.</p>
+                        <p class="mt-2">A partir de ahora, <strong class="text-white">mantén estos 3 contenedores corriendo</strong> mientras trabajas en los Módulos 7 (Frontend), 8 (Postman) y 9 (JWT Opcional).</p>
+                    </div>
+                </div>
             </section>
         </section>
 
@@ -4375,6 +4607,37 @@ Headers: Authorization: Bearer eyJhbGciOiJIUzI1NiJ9...</code></div>
                 </div>
 
                 <h4 class="text-xl font-bold text-white mb-4 mt-8">Paso 3: Construir y Arrancar Jenkins</h4>
+
+                <div class="alert-box alert-console" style="border-left-color: #4ade80;">
+                    <div class="alert-title"><span class="alert-icon">&#128640;</span> LISTA DE VERIFICACIÓN - Antes de construir Jenkins</div>
+                    <div class="alert-body">
+                        <p class="mb-2">Verifica que tienes todo lo necesario antes de ejecutar los comandos:</p>
+                        <table class="mt-2 mb-2">
+                            <thead>
+                                <tr><th>Archivo/Requisito</th><th>¿Listo?</th><th>Creado en</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>jenkins/Dockerfile</code></td>
+                                    <td class="text-neon-green">✅</td>
+                                    <td><a href="#m10-jenkins" class="text-accent hover:underline">Paso 2 (arriba)</a></td>
+                                </tr>
+                                <tr>
+                                    <td><code>docker-compose.yml</code> con servicio <code>jenkins</code></td>
+                                    <td class="text-neon-green">✅</td>
+                                    <td><a href="#m10-jenkins" class="text-accent hover:underline">Paso 1 (arriba)</a></td>
+                                </tr>
+                                <tr>
+                                    <td>PostgreSQL e Item Service ejecutándose</td>
+                                    <td class="text-neon-green">✅</td>
+                                    <td><a href="#m5-compose-update" class="text-accent hover:underline">Sección 5.2</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p class="mt-2"><strong class="text-neon-green">¿Todo listo?</strong> Ejecuta los comandos de abajo en orden.</p>
+                    </div>
+                </div>
+
                 <div class="alert-box alert-console">
                     <div class="alert-title"><span class="alert-icon">&#128187;</span> CONSOLA - Construir imagen de Jenkins</div>
                     <div class="alert-body">
@@ -5137,6 +5400,47 @@ H/5 * * * *</code>
                 </div>
 
                 <h4 class="text-xl font-bold text-white mb-4 mt-8">Paso 5: Construir y Arrancar el Frontend</h4>
+
+                <div class="alert-box alert-console" style="border-left-color: #4ade80;">
+                    <div class="alert-title"><span class="alert-icon">&#128640;</span> LISTA DE VERIFICACIÓN - Antes de construir el Frontend</div>
+                    <div class="alert-body">
+                        <p class="mb-2">Verifica que tienes todo lo necesario antes de ejecutar los comandos:</p>
+                        <table class="mt-2 mb-2">
+                            <thead>
+                                <tr><th>Archivo/Requisito</th><th>¿Listo?</th><th>Creado en</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>frontend/Dockerfile</code></td>
+                                    <td class="text-neon-green">✅</td>
+                                    <td><a href="#m10-frontend-container" class="text-accent hover:underline">Paso 2 (arriba)</a></td>
+                                </tr>
+                                <tr>
+                                    <td><code>frontend/nginx.conf</code></td>
+                                    <td class="text-neon-green">✅</td>
+                                    <td><a href="#m10-frontend-container" class="text-accent hover:underline">Paso 3 (arriba)</a></td>
+                                </tr>
+                                <tr>
+                                    <td><code>frontend/index.html</code>, <code>style.css</code>, <code>app.js</code></td>
+                                    <td class="text-neon-green">✅</td>
+                                    <td><a href="#modulo7" class="text-accent hover:underline">Módulo 7</a></td>
+                                </tr>
+                                <tr>
+                                    <td><code>docker-compose.yml</code> con servicio <code>frontend</code></td>
+                                    <td class="text-neon-green">✅</td>
+                                    <td><a href="#m10-frontend-container" class="text-accent hover:underline">Paso 4 (arriba)</a></td>
+                                </tr>
+                                <tr>
+                                    <td>API Gateway ejecutándose</td>
+                                    <td class="text-neon-green">✅</td>
+                                    <td><a href="#modulo6" class="text-accent hover:underline">Módulo 6</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p class="mt-2"><strong class="text-neon-green">¿Todo listo?</strong> Ejecuta los comandos de abajo en orden.</p>
+                    </div>
+                </div>
+
                 <div class="alert-box alert-console">
                     <div class="alert-title"><span class="alert-icon">&#128187;</span> CONSOLA - Construir imagen del Frontend</div>
                     <div class="alert-body">
@@ -5328,6 +5632,87 @@ H/5 * * * *</code>
                     <tr><td><code>Fetch API</code></td><td>Interfaz JavaScript moderna para hacer peticiones HTTP.</td></tr>
                     <tr><td><code>XSS</code></td><td>Cross-Site Scripting - ataque que inyecta scripts maliciosos en paginas web.</td></tr>
                 </table>
+
+                <h3 class="text-2xl font-bold text-white mb-6 mt-12 flex items-center gap-3"><span class="text-accent">12.3</span> Hoja de Ruta: ¿Qué comando ejecutar y cuándo?</h3>
+                <p class="text-slate-300 leading-relaxed mb-4">Esta tabla resume <strong class="text-white">todos los comandos Docker obligatorios</strong> del libro y el momento exacto en que debes ejecutarlos. Úsala como referencia rápida mientras avanzas.</p>
+                <div class="overflow-x-auto rounded-xl border border-dark-100">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="rounded-tl-xl">#</th>
+                                <th>Al llegar a...</th>
+                                <th>Comando</th>
+                                <th>¿Por qué?</th>
+                                <th class="rounded-tr-xl">Duración estimada</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-center font-bold text-neon-green">1</td>
+                                <td><a href="#m5-compose-update" class="text-accent hover:underline">Módulo 5.2</a></td>
+                                <td><code>docker compose build item-service</code></td>
+                                <td>Construye la imagen del Item Service (primera vez). Solo item-service porque el API Gateway se completa en el Módulo 6.</td>
+                                <td>5-10 min</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center font-bold text-neon-green">2</td>
+                                <td><a href="#m5-compose-update" class="text-accent hover:underline">Módulo 5.2</a></td>
+                                <td><code>docker compose up -d postgres item-service</code></td>
+                                <td>Arranca PostgreSQL e Item Service. API Gateway no se arranca (se completa en Módulo 6).</td>
+                                <td>30-60s</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center font-bold text-neon-green">3</td>
+                                <td><a href="#m5-compose-update" class="text-accent hover:underline">Módulo 5.2</a></td>
+                                <td><code>docker compose ps</code></td>
+                                <td>Verifica que los contenedores estén "Up" (solo postgres e item-service por ahora).</td>
+                                <td>2s</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center font-bold text-neon-yellow">4</td>
+                                <td><a href="#m6-arrancar" class="text-accent hover:underline">Módulo 6.4</a></td>
+                                <td><code>docker compose build api-gateway</code></td>
+                                <td>Construye la imagen del API Gateway (después de crear su pom.xml y código en el Módulo 6).</td>
+                                <td>5-10 min</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center font-bold text-neon-yellow">5</td>
+                                <td><a href="#m6-arrancar" class="text-accent hover:underline">Módulo 6.4</a></td>
+                                <td><code>docker compose up -d api-gateway</code></td>
+                                <td>Arranca solo el API Gateway. PostgreSQL e Item Service ya están corriendo desde el Módulo 5.2.</td>
+                                <td>10-30s</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center font-bold text-accent">6</td>
+                                <td><a href="#m10-jenkins" class="text-accent hover:underline">Módulo 10.4</a> (opcional)</td>
+                                <td><code>docker compose build jenkins<br>docker compose up -d</code></td>
+                                <td>Construye y arranca Jenkins para CI/CD.</td>
+                                <td>3-5 min</td>
+                            </tr>
+                            <tr>
+                                <td class="text-center font-bold text-accent">7</td>
+                                <td><a href="#m10-frontend-container" class="text-accent hover:underline">Módulo 10.5</a> (opcional)</td>
+                                <td><code>docker compose build frontend<br>docker compose up -d</code></td>
+                                <td>Construye y arranca el frontend con Nginx en contenedor.</td>
+                                <td>10-20s</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="alert-box alert-warning mt-4">
+                    <div class="alert-title"><span class="alert-icon">&#9888;&#65039;</span> Notas importantes</div>
+                    <div class="alert-body">
+                        <ul class="list-disc list-inside space-y-2 ml-4">
+                            <li><strong class="text-neon-green">Comandos 1-5 son obligatorios</strong> para que el proyecto funcione. Los comandos 6-7 son opcionales (Módulo 10).</li>
+                            <li>Después del comando 2, los contenedores de PostgreSQL e Item Service deben <strong class="text-white">quedar ejecutándose</strong> mientras avanzas por el Módulo 6 (luego de completar el Módulo 6.4 se agrega el API Gateway).</li>
+                            <li>Si apagas tu computadora entre el Módulo 5.2 y el Módulo 6.4: ejecuta <code>docker compose up -d postgres item-service</code>.</li>
+                            <li>Si apagas tu computadora después del Módulo 6.4 (cuando los 3 servicios están listos): ejecuta <code>docker compose up -d</code> para levantar todo.</li>
+                            <li>Para detener los contenedores al terminar la sesión: <code>docker compose down</code> (conserva datos).</li>
+                            <li>Para empezar de cero (borrar todo, incluyendo BD): <code>docker compose down -v</code>.</li>
+                            <li>Si en cualquier momento ves logs de error, revisa el <a href="#modulo11" class="text-accent hover:underline">Módulo 11: Troubleshooting</a>.</li>
+                        </ul>
+                    </div>
+                </div>
             </section>
         </section>
 
