@@ -1676,131 +1676,74 @@ feature:          C---D---</pre>
                 </div>
 
                 <p class="text-slate-300 leading-relaxed mb-4">Crea <code class="text-accent">item-service/pom.xml</code>:</p>
-                <div class="code-block" data-lang="item-service/pom.xml"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment">&lt;!-- Declaracion XML: version y codificacion de caracteres --&gt;</span>
-<span class="tag">&lt;?xml</span> <span class="attr">version</span>=<span class="value">"1.0"</span> <span class="attr">encoding</span>=<span class="value">"UTF-8"</span><span class="tag">?&gt;</span>
-
-<span class="comment">&lt;!-- Elemento raiz del POM. Define el namespace XML estandar de Maven --&gt;</span>
-<span class="tag">&lt;project</span> <span class="attr">xmlns</span>=<span class="value">"http://maven.apache.org/POM/4.0.0"</span><span class="tag">&gt;</span>
-
-    <span class="comment">&lt;!-- Version del modelo POM (siempre 4.0.0 para Maven 2/3) --&gt;</span>
+                <div class="code-block" data-lang="item-service/pom.xml"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="tag">&lt;?xml</span> <span class="attr">version</span>=<span class="value">"1.0"</span> <span class="attr">encoding</span>=<span class="value">"UTF-8"</span><span class="tag">?&gt;</span>
+<span class="tag">&lt;project</span> <span class="attr">xmlns</span>=<span class="value">"http://apache.org"</span>
+         <span class="attr">xmlns:xsi</span>=<span class="value">"http://w3.org"</span>
+         <span class="attr">xsi:schemaLocation</span>=<span class="value">"http://apache.org https://apache.org"</span><span class="tag">&gt;</span>
     <span class="tag">&lt;modelVersion&gt;</span>4.0.0<span class="tag">&lt;/modelVersion&gt;</span>
-
-    <span class="comment">&lt;!-- ═══════════════════════════════════════════════════════════ --&gt;</span>
-    <span class="comment">&lt;!-- PARENT: Hereda configuracion de Spring Boot                --&gt;</span>
-    <span class="comment">&lt;!-- Spring Boot "starter-parent" incluye:                      --&gt;</span>
-    <span class="comment">&lt;!--   - Versiones compatibles de todas las dependencias        --&gt;</span>
-    <span class="comment">&lt;!--   - Configuracion de plugins de compilacion                --&gt;</span>
-    <span class="comment">&lt;!--   - Valores por defecto sensatos                           --&gt;</span>
-    <span class="comment">&lt;!-- Sin esto, tendrias que definir CADA version manualmente    --&gt;</span>
-    <span class="comment">&lt;!-- ═══════════════════════════════════════════════════════════ --&gt;</span>
-    <span class="tag">&lt;parent&gt;</span>
-        <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
-        <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-parent<span class="tag">&lt;/artifactId&gt;</span>
+	<span class="tag">&lt;parent&gt;</span>
+		<span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
+		<span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-parent<span class="tag">&lt;/artifactId&gt;</span>
         <span class="tag">&lt;version&gt;</span>3.4.5<span class="tag">&lt;/version&gt;</span>
-    <span class="tag">&lt;/parent&gt;</span>
-
-    <span class="comment">&lt;!-- ═══════════════════════════════════════════════════════════ --&gt;</span>
-    <span class="comment">&lt;!-- COORDENADAS DEL PROYECTO (identificacion unica)           --&gt;</span>
-    <span class="comment">&lt;!-- Estas 3 etiquetas forman el "DNI" del proyecto en Maven    --&gt;</span>
-    <span class="comment">&lt;!-- ═══════════════════════════════════════════════════════════ --&gt;</span>
-
-    <span class="comment">&lt;!-- groupId: Organizacion o paquete base (como un "apellido") --&gt;</span>
-    <span class="tag">&lt;groupId&gt;</span>com.singleinput<span class="tag">&lt;/groupId&gt;</span>
-
-    <span class="comment">&lt;!-- artifactId: Nombre del proyecto (como un "nombre") --&gt;</span>
-    <span class="tag">&lt;artifactId&gt;</span>item-service<span class="tag">&lt;/artifactId&gt;</span>
-
-    <span class="comment">&lt;!-- version: Version actual. SNAPSHOT = en desarrollo --&gt;</span>
-    <span class="tag">&lt;version&gt;</span>0.0.1-SNAPSHOT<span class="tag">&lt;/version&gt;</span>
-
-    <span class="comment">&lt;!-- ═══════════════════════════════════════════════════════════ --&gt;</span>
-    <span class="comment">&lt;!-- PROPERTIES: Variables de configuracion reutilizables      --&gt;</span>
-    <span class="comment">&lt;!-- Aqui defines valores que se usan en todo el POM            --&gt;</span>
-    <span class="comment">&lt;!-- ═══════════════════════════════════════════════════════════ --&gt;</span>
-    <span class="tag">&lt;properties&gt;</span>
-        <span class="comment">&lt;!-- Version de Java que usara el compilador --&gt;</span>
-        <span class="tag">&lt;java.version&gt;</span>21<span class="tag">&lt;/java.version&gt;</span>
-    <span class="tag">&lt;/properties&gt;</span>
-
-    <span class="comment">&lt;!-- ═══════════════════════════════════════════════════════════ --&gt;</span>
-    <span class="comment">&lt;!-- DEPENDENCIES: Librerias externas que el proyecto necesita --&gt;</span>
-    <span class="comment">&lt;!-- Maven las descarga automaticamente de Maven Central        --&gt;</span>
-    <span class="comment">&lt;!-- Cada dependency tiene groupId + artifactId + version       --&gt;</span>
-    <span class="comment">&lt;!-- (la version se hereda del parent si no se especifica)      --&gt;</span>
-    <span class="comment">&lt;!-- ═══════════════════════════════════════════════════════════ --&gt;</span>
-    <span class="tag">&lt;dependencies&gt;</span>
-
-        <span class="comment">&lt;!-- WEB: Incluye Spring MVC, Tomcat embebido, Jackson JSON --&gt;</span>
-        <span class="comment">&lt;!-- Es lo minimo para crear endpoints REST (@RestController) --&gt;</span>
-        <span class="tag">&lt;dependency&gt;</span>
-            <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
-            <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-web<span class="tag">&lt;/artifactId&gt;</span>
-        <span class="tag">&lt;/dependency&gt;</span>
-
-        <span class="comment">&lt;!-- JPA: Hibernate + Spring Data JPA para acceso a BD --&gt;</span>
-        <span class="comment">&lt;!-- Permite mapear clases Java a tablas con @Entity --&gt;</span>
-        <span class="tag">&lt;dependency&gt;</span>
-            <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
-            <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-data-jpa<span class="tag">&lt;/artifactId&gt;</span>
-        <span class="tag">&lt;/dependency&gt;</span>
-
-        <span class="comment">&lt;!-- VALIDATION: @NotBlank, @Size, @Email, etc. --&gt;</span>
-        <span class="comment">&lt;!-- Valida datos de entrada automaticamente con @Valid --&gt;</span>
-        <span class="tag">&lt;dependency&gt;</span>
-            <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
-            <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-validation<span class="tag">&lt;/artifactId&gt;</span>
-        <span class="tag">&lt;/dependency&gt;</span>
-
-        <span class="comment">&lt;!-- POSTGRESQL: Driver JDBC para conectar con PostgreSQL --&gt;</span>
-        <span class="comment">&lt;!-- scope=runtime: solo se necesita al ejecutar, no al compilar --&gt;</span>
-        <span class="tag">&lt;dependency&gt;</span>
-            <span class="tag">&lt;groupId&gt;</span>org.postgresql<span class="tag">&lt;/groupId&gt;</span>
-            <span class="tag">&lt;artifactId&gt;</span>postgresql<span class="tag">&lt;/artifactId&gt;</span>
-            <span class="tag">&lt;scope&gt;</span>runtime<span class="tag">&lt;/scope&gt;</span>
-        <span class="tag">&lt;/dependency&gt;</span>
-
-        <span class="comment">&lt;!-- DEVTOOLS: Recarga automatica al cambiar codigo --&gt;</span>
-        <span class="comment">&lt;!-- optional=true: no se incluye en el JAR de produccion --&gt;</span>
-        <span class="tag">&lt;dependency&gt;</span>
-            <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
-            <span class="tag">&lt;artifactId&gt;</span>spring-boot-devtools<span class="tag">&lt;/artifactId&gt;</span>
-            <span class="tag">&lt;scope&gt;</span>runtime<span class="tag">&lt;/scope&gt;</span>
-            <span class="tag">&lt;optional&gt;</span>true<span class="tag">&lt;/optional&gt;</span>
-        <span class="tag">&lt;/dependency&gt;</span>
-
-        <span class="comment">&lt;!-- LOMBOK: Genera getters, setters, constructors automaticamente --&gt;</span>
-        <span class="comment">&lt;!-- Con @Data no necesitas escribir 50 lineas de boilerplate --&gt;</span>
-        <span class="tag">&lt;dependency&gt;</span>
-            <span class="tag">&lt;groupId&gt;</span>org.projectlombok<span class="tag">&lt;/groupId&gt;</span>
-            <span class="tag">&lt;artifactId&gt;</span>lombok<span class="tag">&lt;/artifactId&gt;</span>
-            <span class="tag">&lt;optional&gt;</span>true<span class="tag">&lt;/optional&gt;</span>
-        <span class="tag">&lt;/dependency&gt;</span>
-
-        <span class="comment">&lt;!-- TEST: JUnit 5, Mockito, AssertJ para pruebas unitarias --&gt;</span>
-        <span class="comment">&lt;!-- scope=test: solo disponible en src/test, no en produccion --&gt;</span>
-        <span class="tag">&lt;dependency&gt;</span>
-            <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
-            <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-test<span class="tag">&lt;/artifactId&gt;</span>
-            <span class="tag">&lt;scope&gt;</span>test<span class="tag">&lt;/scope&gt;</span>
-        <span class="tag">&lt;/dependency&gt;</span>
-
-    <span class="tag">&lt;/dependencies&gt;</span>
-
-    <span class="comment">&lt;!-- ═══════════════════════════════════════════════════════════ --&gt;</span>
-    <span class="comment">&lt;!-- BUILD: Configuracion de como compilar y empaquetar        --&gt;</span>
-    <span class="comment">&lt;!-- ═══════════════════════════════════════════════════════════ --&gt;</span>
-    <span class="tag">&lt;build&gt;</span>
-        <span class="tag">&lt;plugins&gt;</span>
-            <span class="comment">&lt;!-- SPRING BOOT MAVEN PLUGIN:                         --&gt;</span>
-            <span class="comment">&lt;!-- Permite ejecutar "mvn spring-boot:run"             --&gt;</span>
-            <span class="comment">&lt;!-- Crea un JAR ejecutable con "mvn package"           --&gt;</span>
-            <span class="comment">&lt;!-- Incluye TODAS las dependencias dentro del JAR      --&gt;</span>
-            <span class="tag">&lt;plugin&gt;</span>
-                <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
-                <span class="tag">&lt;artifactId&gt;</span>spring-boot-maven-plugin<span class="tag">&lt;/artifactId&gt;</span>
-            <span class="tag">&lt;/plugin&gt;</span>
-        <span class="tag">&lt;/plugins&gt;</span>
-    <span class="tag">&lt;/build&gt;</span>
+		<span class="tag">&lt;relativePath/&gt;</span>
+	<span class="tag">&lt;/parent&gt;</span>
+	<span class="tag">&lt;groupId&gt;</span>com.singleinput<span class="tag">&lt;/groupId&gt;</span>
+	<span class="tag">&lt;artifactId&gt;</span>item-service<span class="tag">&lt;/artifactId&gt;</span>
+	<span class="tag">&lt;version&gt;</span>0.0.1-SNAPSHOT<span class="tag">&lt;/version&gt;</span>
+	<span class="tag">&lt;properties&gt;</span>
+		<span class="tag">&lt;java.version&gt;</span>21<span class="tag">&lt;/java.version&gt;</span>
+	<span class="tag">&lt;/properties&gt;</span>
+	<span class="tag">&lt;dependencies&gt;</span>
+		<span class="tag">&lt;dependency&gt;</span>
+			<span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
+			<span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-data-jpa<span class="tag">&lt;/artifactId&gt;</span>
+		<span class="tag">&lt;/dependency&gt;</span>
+		<span class="tag">&lt;dependency&gt;</span>
+			<span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
+			<span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-web<span class="tag">&lt;/artifactId&gt;</span>
+		<span class="tag">&lt;/dependency&gt;</span>
+		<span class="tag">&lt;dependency&gt;</span>
+			<span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
+			<span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-validation<span class="tag">&lt;/artifactId&gt;</span>
+		<span class="tag">&lt;/dependency&gt;</span>
+		<span class="tag">&lt;dependency&gt;</span>
+			<span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
+			<span class="tag">&lt;artifactId&gt;</span>spring-boot-devtools<span class="tag">&lt;/artifactId&gt;</span>
+			<span class="tag">&lt;scope&gt;</span>runtime<span class="tag">&lt;/scope&gt;</span>
+			<span class="tag">&lt;optional&gt;</span>true<span class="tag">&lt;/optional&gt;</span>
+		<span class="tag">&lt;/dependency&gt;</span>
+		<span class="tag">&lt;dependency&gt;</span>
+			<span class="tag">&lt;groupId&gt;</span>org.postgresql<span class="tag">&lt;/groupId&gt;</span>
+			<span class="tag">&lt;artifactId&gt;</span>postgresql<span class="tag">&lt;/artifactId&gt;</span>
+			<span class="tag">&lt;scope&gt;</span>runtime<span class="tag">&lt;/scope&gt;</span>
+		<span class="tag">&lt;/dependency&gt;</span>
+		<span class="tag">&lt;dependency&gt;</span>
+			<span class="tag">&lt;groupId&gt;</span>org.projectlombok<span class="tag">&lt;/groupId&gt;</span>
+			<span class="tag">&lt;artifactId&gt;</span>lombok<span class="tag">&lt;/artifactId&gt;</span>
+			<span class="tag">&lt;optional&gt;</span>true<span class="tag">&lt;/optional&gt;</span>
+		<span class="tag">&lt;/dependency&gt;</span>
+		<span class="tag">&lt;dependency&gt;</span>
+			<span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
+			<span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-test<span class="tag">&lt;/artifactId&gt;</span>
+			<span class="tag">&lt;scope&gt;</span>test<span class="tag">&lt;/scope&gt;</span>
+		<span class="tag">&lt;/dependency&gt;</span>
+	<span class="tag">&lt;/dependencies&gt;</span>
+	<span class="tag">&lt;build&gt;</span>
+		<span class="tag">&lt;plugins&gt;</span>
+			<span class="tag">&lt;plugin&gt;</span>
+				<span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
+				<span class="tag">&lt;artifactId&gt;</span>spring-boot-maven-plugin<span class="tag">&lt;/artifactId&gt;</span>
+				<span class="tag">&lt;configuration&gt;</span>
+					<span class="tag">&lt;excludes&gt;</span>
+						<span class="tag">&lt;exclude&gt;</span>
+							<span class="tag">&lt;groupId&gt;</span>org.projectlombok<span class="tag">&lt;/groupId&gt;</span>
+							<span class="tag">&lt;artifactId&gt;</span>lombok<span class="tag">&lt;/artifactId&gt;</span>
+						<span class="tag">&lt;/exclude&gt;</span>
+					<span class="tag">&lt;/excludes&gt;</span>
+				<span class="tag">&lt;/configuration&gt;</span>
+			<span class="tag">&lt;/plugin&gt;</span>
+		<span class="tag">&lt;/plugins&gt;</span>
+	<span class="tag">&lt;/build&gt;</span>
 <span class="tag">&lt;/project&gt;</span></code></div>
             </section>
 
@@ -3379,45 +3322,28 @@ node_modules/</code>
                 <div class="code-block" data-lang="api-gateway/pom.xml">
                     <button class="copy-btn" onclick="copyCode(this)">Copiar</button><code>
 <span class="tag">&lt;?xml</span> <span class="attr">version</span>=<span class="value">"1.0"</span> <span class="attr">encoding</span>=<span class="value">"UTF-8"</span><span class="tag">?&gt;</span>
-<span class="comment">&lt;!-- Elemento raiz con namespace y schema location de Maven --&gt;</span>
-<span class="tag">&lt;project</span> <span class="attr">xmlns</span>=<span class="value">"http://maven.apache.org/POM/4.0.0"</span>
-         <span class="attr">xmlns:xsi</span>=<span class="value">"http://www.w3.org/2001/XMLSchema-instance"</span>
-         <span class="attr">xsi:schemaLocation</span>=<span class="value">"http://maven.apache.org/POM/4.0.0
-         https://maven.apache.org/xsd/maven-4.0.0.xsd"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;project</span> <span class="attr">xmlns</span>=<span class="value">"http://apache.org"</span>
+         <span class="attr">xmlns:xsi</span>=<span class="value">"http://w3.org"</span>
+         <span class="attr">xsi:schemaLocation</span>=<span class="value">"http://apache.org https://apache.org"</span><span class="tag">&gt;</span>
     <span class="tag">&lt;modelVersion&gt;</span>4.0.0<span class="tag">&lt;/modelVersion&gt;</span>
-
-    <span class="comment">&lt;!-- HERENCIA: Mismo parent que Item Service (Spring Boot 3.4.5) --&gt;</span>
     <span class="tag">&lt;parent&gt;</span>
         <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
         <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-parent<span class="tag">&lt;/artifactId&gt;</span>
         <span class="tag">&lt;version&gt;</span>3.4.5<span class="tag">&lt;/version&gt;</span>
     <span class="tag">&lt;/parent&gt;</span>
-
-    <span class="comment">&lt;!-- COORDENADAS: Identificacion unica del Gateway --&gt;</span>
-    <span class="comment">&lt;!-- groupId diferente: com.gateway (no com.singleinput) --&gt;</span>
     <span class="tag">&lt;groupId&gt;</span>com.gateway<span class="tag">&lt;/groupId&gt;</span>
     <span class="tag">&lt;artifactId&gt;</span>api-gateway<span class="tag">&lt;/artifactId&gt;</span>
     <span class="tag">&lt;version&gt;</span>0.0.1-SNAPSHOT<span class="tag">&lt;/version&gt;</span>
-
-    <span class="comment">&lt;!-- PROPERTIES: Versiones de Java y Spring Cloud --&gt;</span>
     <span class="tag">&lt;properties&gt;</span>
         <span class="tag">&lt;java.version&gt;</span>21<span class="tag">&lt;/java.version&gt;</span>
-        <span class="comment">&lt;!-- Spring Cloud version: BOM que gestiona versiones de todos los starters --&gt;</span>
         <span class="tag">&lt;spring-cloud.version&gt;</span>2024.0.3<span class="tag">&lt;/spring-cloud.version&gt;</span>
     <span class="tag">&lt;/properties&gt;</span>
-
-    <span class="comment">&lt;!-- DEPENDENCIAS: Solo necesita Spring Cloud Gateway --&gt;</span>
-    <span class="comment">&lt;!-- NO necesita spring-boot-starter-web (usa WebFlux reactivo) --&gt;</span>
     <span class="tag">&lt;dependencies&gt;</span>
         <span class="tag">&lt;dependency&gt;</span>
             <span class="tag">&lt;groupId&gt;</span>org.springframework.cloud<span class="tag">&lt;/groupId&gt;</span>
             <span class="tag">&lt;artifactId&gt;</span>spring-cloud-starter-gateway<span class="tag">&lt;/artifactId&gt;</span>
         <span class="tag">&lt;/dependency&gt;</span>
     <span class="tag">&lt;/dependencies&gt;</span>
-
-    <span class="comment">&lt;!-- DEPENDENCY MANAGEMENT: Importa el BOM de Spring Cloud --&gt;</span>
-    <span class="comment">&lt;!-- Un BOM (Bill of Materials) es una "lista de versiones compatibles" --&gt;</span>
-    <span class="comment">&lt;!-- Garantiza que todas las librerias de Spring Cloud funcionen juntas --&gt;</span>
     <span class="tag">&lt;dependencyManagement&gt;</span>
         <span class="tag">&lt;dependencies&gt;</span>
             <span class="tag">&lt;dependency&gt;</span>
@@ -3425,13 +3351,10 @@ node_modules/</code>
                 <span class="tag">&lt;artifactId&gt;</span>spring-cloud-dependencies<span class="tag">&lt;/artifactId&gt;</span>
                 <span class="tag">&lt;version&gt;</span>${spring-cloud.version}<span class="tag">&lt;/version&gt;</span>
                 <span class="tag">&lt;type&gt;</span>pom<span class="tag">&lt;/type&gt;</span>
-                <span class="comment">&lt;!-- scope=import: importa las versiones del BOM --&gt;</span>
                 <span class="tag">&lt;scope&gt;</span>import<span class="tag">&lt;/scope&gt;</span>
             <span class="tag">&lt;/dependency&gt;</span>
         <span class="tag">&lt;/dependencies&gt;</span>
     <span class="tag">&lt;/dependencyManagement&gt;</span>
-
-    <span class="comment">&lt;!-- BUILD: Mismo plugin que Item Service (crear JAR ejecutable) --&gt;</span>
     <span class="tag">&lt;build&gt;</span>
         <span class="tag">&lt;plugins&gt;</span>
             <span class="tag">&lt;plugin&gt;</span>
@@ -3492,24 +3415,16 @@ node_modules/</code>
       <span class="comment"># ═══════════════════════════════════════════════════════</span>
       <span class="property">globalcors</span>:
         <span class="property">corsConfigurations</span>:
-          <span class="comment"># '[/**]' = aplicar estas reglas a TODAS las rutas del Gateway</span>
           <span class="string">'[/**]'</span>:
-            <span class="comment"># allowedOrigins: Desde que URLs se aceptan peticiones</span>
-            <span class="comment"># Permitimos ambos flujos de trabajo:</span>
-            <span class="comment"># - http://localhost:5500 = Live Server (flujo básico - desarrollo)</span>
-            <span class="comment"># - http://localhost:3000 = Nginx (flujo avanzado - producción)</span>
-            <span class="property">allowedOrigins</span>:
-              - <span class="string">"http://localhost:5500"</span>
-              - <span class="string">"http://localhost:3000"</span>
-            <span class="comment"># allowedMethods: Que verbos HTTP se permiten</span>
+            <span class="property">allowedOriginPatterns</span>:
+              - <span class="string">"http://localhost:*"</span>
+              - <span class="string">"http://127.0.0.1:*"</span>
             <span class="property">allowedMethods</span>:
               - <span class="string">GET</span>
               - <span class="string">POST</span>
               - <span class="string">PUT</span>
               - <span class="string">DELETE</span>
               - <span class="string">OPTIONS</span>
-            <span class="comment"># allowedHeaders: Que headers se permiten ("*" = todos)</span>
-            <span class="comment"># Necesario para Content-Type: application/json, Authorization, etc.</span>
             <span class="property">allowedHeaders</span>: <span class="string">"*"</span></code></div>
                 <p class="text-slate-300 leading-relaxed mb-4 mt-6"><code class="text-accent">api-gateway/src/main/java/com/gateway/ApiGatewayApplication.java</code>:</p>
                 <div class="code-block" data-lang="ApiGatewayApplication.java"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="keyword">package</span> com.gateway;
@@ -3749,6 +3664,7 @@ node_modules/</code>
             <span class="tag">&lt;button</span> <span class="attr">id</span>=<span class="value">"btnDelete"</span> <span class="attr">class</span>=<span class="value">"btn btn-delete"</span><span class="tag">&gt;</span>Eliminar<span class="tag">&lt;/button&gt;</span>
             <span class="tag">&lt;button</span> <span class="attr">id</span>=<span class="value">"btnSearch"</span> <span class="attr">class</span>=<span class="value">"btn btn-search"</span><span class="tag">&gt;</span>Buscar<span class="tag">&lt;/button&gt;</span>
         <span class="tag">&lt;/div&gt;</span>
+        <span class="tag">&lt;div</span> <span class="attr">id</span>=<span class="value">"message"</span> <span class="attr">class</span>=<span class="value">"message"</span><span class="tag">&gt;&lt;/div&gt;</span>
         <span class="tag">&lt;ul</span> <span class="attr">id</span>=<span class="value">"itemList"</span><span class="tag">&gt;&lt;/ul&gt;</span>
     <span class="tag">&lt;/div&gt;</span>
     <span class="tag">&lt;script</span> <span class="attr">src</span>=<span class="value">"app.js"</span><span class="tag">&gt;&lt;/script&gt;</span>
@@ -3809,11 +3725,25 @@ input[type="text"]:focus { border-color: #38bdf8; }
     font-size: 0.9rem;
 }
 .btn:hover { opacity: 0.85; }
+.btn:disabled { opacity: 0.35; cursor: not-allowed; }
 .btn-create { background: #4ade80; color: #0a0f1a; }
 .btn-update { background: #facc15; color: #0a0f1a; }
 .btn-delete { background: #f87171; color: #0a0f1a; }
 .btn-search { background: #38bdf8; color: #0a0f1a; }
-#itemList { list-style: none; }
+.message {
+    padding: 10px 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+.message.visible { opacity: 1; }
+.message.success { background: #064e3b; color: #6ee7b7; border: 1px solid #065f46; }
+.message.error { background: #450a0a; color: #fca5a5; border: 1px solid #7f1d1d; }
+.message.warning { background: #451a03; color: #fdba74; border: 1px solid #7c2d12; }
+#itemList { list-style: none; display: none; }
 #itemList li {
     background: #1e293b;
     padding: 12px 16px;
@@ -3826,6 +3756,7 @@ input[type="text"]:focus { border-color: #38bdf8; }
     transition: background 0.2s;
 }
 #itemList li:hover { background: #334155; }
+#itemList li.selected { background: #1e3a5f; border: 1px solid #38bdf8; }
 #itemList li .item-id { color: #64748b; font-size: 0.8rem; }</code></div>
             </section>
             <section id="m7-js" class="mb-16">
@@ -3874,164 +3805,216 @@ input[type="text"]:focus { border-color: #38bdf8; }
                 </div>
 
                 <p class="text-slate-300 leading-relaxed mb-4"><code class="text-accent">frontend/app.js</code>:</p>
-                <div class="code-block" data-lang="app.js"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment">// ═══════════════════════════════════════════════════════════</span>
-<span class="comment">// CONFIGURACIÓN DE LA API</span>
-<span class="comment">// ═══════════════════════════════════════════════════════════</span>
+                <div class="code-block" data-lang="app.js"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="keyword">const</span> API = <span class="string">'http://localhost:8080/api/items'</span>;
 
-<span class="comment">// FLUJO BÁSICO (Live Server - puerto 5500):</span>
-<span class="comment">// URL completa al API Gateway. Todas las peticiones van al puerto 8080</span>
-<span class="comment">// NUNCA al Item Service directamente (8081). El Gateway es la unica puerta.</span>
-<span class="keyword">const</span> API = <span class="string">'http://localhost:8080/api/items'</span>;
+<span class="keyword">const</span> input = document.getElementById(<span class="string">'itemInput'</span>);
+<span class="keyword">const</span> hiddenId = document.getElementById(<span class="string">'itemId'</span>);
+<span class="keyword">const</span> list = document.getElementById(<span class="string">'itemList'</span>);
+<span class="keyword">const</span> message = document.getElementById(<span class="string">'message'</span>);
 
-<span class="comment">// FLUJO AVANZADO (Nginx - puerto 3000) - Opcional:</span>
-<span class="comment">// Si usas Nginx (Modulo 10.5), cambia la linea anterior por:</span>
-<span class="comment">// const API = '/api/items';</span>
-<span class="comment">// Nginx actua como reverse proxy y redirige /api/* al Gateway automaticamente</span>
+<span class="keyword">const</span> btnCreate = document.getElementById(<span class="string">'btnCreate'</span>);
+<span class="keyword">const</span> btnUpdate = document.getElementById(<span class="string">'btnUpdate'</span>);
+<span class="keyword">const</span> btnDelete = document.getElementById(<span class="string">'btnDelete'</span>);
+<span class="keyword">const</span> btnSearch = document.getElementById(<span class="string">'btnSearch'</span>);
 
-<span class="comment">// ═══════════════════════════════════════════════════════════</span>
-<span class="comment">// REFERENCIAS AL DOM</span>
-<span class="comment">// ═══════════════════════════════════════════════════════════</span>
+<span class="keyword">let</span> messageTimer = <span class="number">null</span>;
+<span class="keyword">let</span> originalText = <span class="string">''</span>;
 
-<span class="comment">// Obtener referencias a los elementos del DOM (HTML)</span>
-<span class="comment">// document.getElementById() busca un elemento por su atributo "id"</span>
-<span class="keyword">const</span> input = document.getElementById(<span class="string">'itemInput'</span>);     <span class="comment">// Input de texto visible</span>
-<span class="keyword">const</span> hiddenId = document.getElementById(<span class="string">'itemId'</span>);     <span class="comment">// Input oculto (guarda el ID del item seleccionado)</span>
-<span class="keyword">const</span> list = document.getElementById(<span class="string">'itemList'</span>);       <span class="comment">// Lista &lt;ul&gt; donde se renderizan los items</span>
-
-<span class="comment">// ═══════════════════════════════════════════════════════════</span>
-<span class="comment">// EVENT LISTENERS: Conectar botones con funciones</span>
-<span class="comment">// addEventListener("click", funcion) = "cuando hagan clic, ejecuta esta funcion"</span>
-<span class="comment">// ═══════════════════════════════════════════════════════════</span>
-document.getElementById('btnCreate').addEventListener('click', createItem);
-document.getElementById('btnUpdate').addEventListener('click', updateItem);
-document.getElementById('btnDelete').addEventListener('click', deleteItem);
-document.getElementById('btnSearch').addEventListener('click', searchItems);
-
-<span class="comment">// ═══════════════════════════════════════════════════════════</span>
-<span class="comment">// FUNCIONES ASINCRONAS (async/await)</span>
-<span class="comment">// "async" = esta funcion hace operaciones que tardan (llamadas HTTP)</span>
-<span class="comment">// "await" = esperar a que la operacion termine antes de continuar</span>
-<span class="comment">// Sin async/await, tendriamos que usar callbacks o Promises .then()</span>
-<span class="comment">// ═══════════════════════════════════════════════════════════</span>
-
-<span class="comment">// Cargar todos los items desde la API y renderizarlos en la lista</span>
-async function loadAll() {
-    <span class="comment">// fetch() hace una peticion HTTP GET a la URL del API</span>
-    <span class="comment">// GET /api/items retorna un array JSON de todos los items</span>
-    const res = await fetch(API);
-    <span class="comment">// .json() convierte la respuesta JSON a un objeto/array de JavaScript</span>
-    const data = await res.json();
-    <span class="comment">// Pasar los datos a la funcion render() para mostrarlos en pantalla</span>
-    render(data);
+<span class="keyword">function</span> updateButtons() {
+    <span class="keyword">const</span> texto = input.value.trim();
+    <span class="keyword">const</span> id = hiddenId.value;
+    btnCreate.disabled = <span class="number">false</span>;
+    btnSearch.disabled = <span class="number">false</span>;
+    btnUpdate.disabled = !(texto && id);
+    btnDelete.disabled = !texto;
 }
 
-<span class="comment">// CREAR un nuevo item</span>
-async function createItem() {
-    <span class="comment">// Obtener el texto del input y eliminar espacios al inicio/final</span>
-    const texto = input.value.trim();
-    <span class="comment">// Si el input esta vacio, no hacer nada (validacion basica)</span>
-    if (!texto) return;
-    <span class="comment">// fetch con method: 'POST' = peticion HTTP POST (crear)</span>
-    await fetch(API, {
-        method: 'POST',
-        <span class="comment">// headers: metadatos de la peticion</span>
-        <span class="comment">// 'Content-Type: application/json' le dice al servidor: "te envio JSON"</span>
-        headers: { 'Content-Type': 'application/json' },
-        <span class="comment">// body: el contenido de la peticion</span>
-        <span class="comment">// JSON.stringify() convierte un objeto JS a string JSON</span>
-        <span class="comment">// { texto } es shorthand para { texto: texto }</span>
-        body: JSON.stringify({ texto })
-    });
-    <span class="comment">// Limpiar el input despues de crear</span>
-    input.value = '';
-    <span class="comment">// Recargar la lista para mostrar el nuevo item</span>
-    loadAll();
+input.addEventListener(<span class="string">'input'</span>, updateButtons);
+
+<span class="keyword">function</span> showMessage(text, type) {
+    <span class="keyword">if</span> (messageTimer) clearTimeout(messageTimer);
+    message.textContent = text;
+    message.className = <span class="string">'message visible '</span> + type;
+    messageTimer = setTimeout(() =&gt; {
+        message.className = <span class="string">'message'</span>;
+    }, <span class="number">2000</span>);
 }
 
-<span class="comment">// ACTUALIZAR un item existente</span>
-async function updateItem() {
-    <span class="comment">// Obtener el ID del input oculto (se llena al hacer clic en un item de la lista)</span>
-    const id = hiddenId.value;
-    const texto = input.value.trim();
-    <span class="comment">// Si no hay ID seleccionado o el texto esta vacio, no hacer nada</span>
-    if (!id || !texto) return;
-    <span class="comment">// PUT = actualizar. La URL incluye el ID del item a actualizar</span>
-    await fetch(`${API}/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ texto })
-    });
-    <span class="comment">// Limpiar inputs despues de actualizar</span>
-    input.value = '';
-    hiddenId.value = '';
-    loadAll();
+<span class="keyword">async</span> <span class="keyword">function</span> handleResponse(res) {
+    <span class="keyword">if</span> (res.ok) {
+        <span class="keyword">if</span> (res.status !== <span class="number">204</span>) <span class="keyword">return</span> <span class="keyword">await</span> res.json();
+        <span class="keyword">return</span> <span class="number">null</span>;
+    }
+    <span class="keyword">let</span> errorMsg = <span class="string">'Error del servidor'</span>;
+    <span class="keyword">try</span> {
+        <span class="keyword">const</span> err = <span class="keyword">await</span> res.json();
+        <span class="keyword">if</span> (err.messages) {
+            <span class="keyword">const</span> firstKey = Object.keys(err.messages)[<span class="number">0</span>];
+            errorMsg = err.messages[firstKey];
+        } <span class="keyword">else</span> <span class="keyword">if</span> (err.message) {
+            errorMsg = err.message;
+        }
+    } <span class="keyword">catch</span> (e) {}
+    showMessage(errorMsg, <span class="string">'error'</span>);
+    <span class="keyword">throw</span> <span class="keyword">new</span> Error(errorMsg);
 }
 
-<span class="comment">// ELIMINAR un item</span>
-async function deleteItem() {
-    const id = hiddenId.value;
-    <span class="comment">// Si no hay item seleccionado, no hacer nada</span>
-    if (!id) return;
-    <span class="comment">// DELETE = eliminar. Solo necesita la URL con el ID (no body)</span>
-    await fetch(`${API}/${id}`, { method: 'DELETE' });
-    input.value = '';
-    hiddenId.value = '';
-    loadAll();
+document.getElementById(<span class="string">'btnCreate'</span>).addEventListener(<span class="string">'click'</span>, createItem);
+document.getElementById(<span class="string">'btnUpdate'</span>).addEventListener(<span class="string">'click'</span>, updateItem);
+document.getElementById(<span class="string">'btnDelete'</span>).addEventListener(<span class="string">'click'</span>, deleteItem);
+document.getElementById(<span class="string">'btnSearch'</span>).addEventListener(<span class="string">'click'</span>, searchAndShow);
+
+<span class="keyword">async</span> <span class="keyword">function</span> createItem() {
+    list.innerHTML = <span class="string">''</span>;
+    list.style.display = <span class="string">'none'</span>;
+    <span class="keyword">const</span> texto = input.value.trim();
+    <span class="keyword">if</span> (!texto) { showMessage(<span class="string">'Escribe un texto para crear'</span>, <span class="string">'error'</span>); <span class="keyword">return</span>; }
+    <span class="keyword">try</span> {
+        <span class="keyword">const</span> check = <span class="keyword">await</span> fetch(`${API}/search?texto=${encodeURIComponent(texto)}`);
+        <span class="keyword">const</span> existentes = <span class="keyword">await</span> check.json();
+        <span class="keyword">if</span> (existentes.some(item =&gt; item.texto.toLowerCase() === texto.toLowerCase())) {
+            showMessage(<span class="string">`El texto &quot;${texto}&quot; ya existe`</span>, <span class="string">'error'</span>);
+            input.value = <span class="string">''</span>;
+            updateButtons();
+            <span class="keyword">return</span>;
+        }
+        <span class="keyword">const</span> res = <span class="keyword">await</span> fetch(API, {
+            method: <span class="string">'POST'</span>,
+            headers: { <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span> },
+            body: JSON.stringify({ texto })
+        });
+        <span class="keyword">await</span> handleResponse(res);
+        input.value = <span class="string">''</span>;
+        updateButtons();
+        showMessage(<span class="string">`Texto &quot;${texto}&quot; creado correctamente`</span>, <span class="string">'success'</span>);
+    } <span class="keyword">catch</span> (e) {}
 }
 
-<span class="comment">// BUSCAR items por texto parcial</span>
-async function searchItems() {
-    const texto = input.value.trim();
-    <span class="comment">// Si el input esta vacio, mostrar todos los items (resetear busqueda)</span>
-    if (!texto) { loadAll(); return; }
-    <span class="comment">// GET con query parameter: /api/items/search?texto=valor</span>
-    const res = await fetch(`${API}/search?texto=${encodeURIComponent(texto)}`);
-    const data = await res.json();
-    render(data);
+<span class="keyword">async</span> <span class="keyword">function</span> updateItem() {
+    list.innerHTML = <span class="string">''</span>;
+    list.style.display = <span class="string">'none'</span>;
+    <span class="keyword">const</span> id = hiddenId.value;
+    <span class="keyword">const</span> texto = input.value.trim();
+    <span class="keyword">if</span> (texto && !id) { showMessage(<span class="string">'Debe seleccionar un item desde buscar'</span>, <span class="string">'error'</span>); <span class="keyword">return</span>; }
+    <span class="keyword">if</span> (!id) { showMessage(<span class="string">'Selecciona un item de la lista para actualizar'</span>, <span class="string">'error'</span>); <span class="keyword">return</span>; }
+    <span class="keyword">if</span> (!texto) { showMessage(<span class="string">'Escribe un texto para actualizar'</span>, <span class="string">'error'</span>); <span class="keyword">return</span>; }
+    <span class="keyword">if</span> (texto === originalText) { showMessage(<span class="string">'El texto es igual al actual, modifícalo'</span>, <span class="string">'error'</span>); <span class="keyword">return</span>; }
+    <span class="keyword">try</span> {
+        <span class="keyword">const</span> check = <span class="keyword">await</span> fetch(`${API}/search?texto=${encodeURIComponent(texto)}`);
+        <span class="keyword">if</span> (check.ok) {
+            <span class="keyword">const</span> existentes = <span class="keyword">await</span> check.json();
+            <span class="keyword">if</span> (existentes.some(item =&gt; item.texto.toLowerCase() === texto.toLowerCase() && item.id != id)) {
+                showMessage(<span class="string">`El texto &quot;${texto}&quot; ya existe en otro item`</span>, <span class="string">'error'</span>);
+                <span class="keyword">return</span>;
+            }
+        }
+        <span class="keyword">const</span> res = <span class="keyword">await</span> fetch(`${API}/${id}`, {
+            method: <span class="string">'PUT'</span>,
+            headers: { <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span> },
+            body: JSON.stringify({ texto })
+        });
+        <span class="keyword">await</span> handleResponse(res);
+        input.value = <span class="string">''</span>;
+        hiddenId.value = <span class="string">''</span>;
+        showMessage(<span class="string">`Texto &quot;${originalText}&quot; cambio a &quot;${texto}&quot;`</span>, <span class="string">'success'</span>);
+        originalText = <span class="string">''</span>;
+        updateButtons();
+    } <span class="keyword">catch</span> (e) {}
 }
 
-<span class="comment">// ═══════════════════════════════════════════════════════════</span>
-<span class="comment">// RENDER: Convertir datos (array JSON) a elementos HTML visibles</span>
-<span class="comment">// ═══════════════════════════════════════════════════════════</span>
-function render(items) {
-    <span class="comment">// Limpiar la lista actual (eliminar todos los &lt;li&gt; anteriores)</span>
-    list.innerHTML = '';
-    <span class="comment">// Iterar sobre cada item del array</span>
+<span class="keyword">async</span> <span class="keyword">function</span> deleteItem() {
+    <span class="keyword">const</span> id = hiddenId.value;
+    <span class="keyword">const</span> texto = input.value.trim();
+    <span class="keyword">if</span> (!texto) { showMessage(<span class="string">'Escribe un texto para eliminar'</span>, <span class="string">'error'</span>); <span class="keyword">return</span>; }
+    <span class="keyword">try</span> {
+        <span class="keyword">if</span> (id) {
+            <span class="keyword">if</span> (!confirm(<span class="string">`&iquest;Confirmas eliminar &quot;${texto}&quot;?`</span>)) {
+                showMessage(<span class="string">'Eliminaci&oacute;n cancelada'</span>, <span class="string">'warning'</span>);
+                <span class="keyword">return</span>;
+            }
+            <span class="keyword">await</span> fetch(`${API}/${id}`, { method: <span class="string">'DELETE'</span> });
+            list.innerHTML = <span class="string">''</span>;
+            list.style.display = <span class="string">'none'</span>;
+            showMessage(<span class="string">`Texto &quot;${texto}&quot; eliminado correctamente`</span>, <span class="string">'success'</span>);
+            input.value = <span class="string">''</span>;
+            hiddenId.value = <span class="string">''</span>;
+            originalText = <span class="string">''</span>;
+            updateButtons();
+            <span class="keyword">return</span>;
+        }
+        <span class="keyword">const</span> res = <span class="keyword">await</span> fetch(`${API}/search?texto=${encodeURIComponent(texto)}`);
+        <span class="keyword">const</span> resultados = <span class="keyword">await</span> res.json();
+        <span class="keyword">const</span> item = resultados.find(it =&gt; it.texto.toLowerCase() === texto.toLowerCase());
+        <span class="keyword">if</span> (!item) {
+            showMessage(<span class="string">`El texto &quot;${texto}&quot; no existe. Use el bot&oacute;n Buscar para seleccionar un item`</span>, <span class="string">'error'</span>);
+            input.value = <span class="string">''</span>;
+            hiddenId.value = <span class="string">''</span>;
+            originalText = <span class="string">''</span>;
+            updateButtons();
+            <span class="keyword">return</span>;
+        }
+        <span class="keyword">if</span> (!confirm(<span class="string">`&iquest;Confirmas eliminar &quot;${texto}&quot;?`</span>)) {
+            input.value = <span class="string">''</span>;
+            hiddenId.value = <span class="string">''</span>;
+            originalText = <span class="string">''</span>;
+            showMessage(<span class="string">'Eliminaci&oacute;n cancelada'</span>, <span class="string">'warning'</span>);
+            updateButtons();
+            <span class="keyword">return</span>;
+        }
+        <span class="keyword">await</span> fetch(`${API}/${item.id}`, { method: <span class="string">'DELETE'</span> });
+        list.innerHTML = <span class="string">''</span>;
+        list.style.display = <span class="string">'none'</span>;
+        showMessage(<span class="string">`Texto &quot;${texto}&quot; eliminado correctamente`</span>, <span class="string">'success'</span>);
+        input.value = <span class="string">''</span>;
+        hiddenId.value = <span class="string">''</span>;
+        originalText = <span class="string">''</span>;
+        updateButtons();
+    } <span class="keyword">catch</span> (e) {}
+}
+
+<span class="keyword">async</span> <span class="keyword">function</span> searchAndShow() {
+    <span class="keyword">const</span> texto = input.value.trim();
+    <span class="keyword">try</span> {
+        <span class="keyword">const</span> url = texto ? `${API}/search?texto=${encodeURIComponent(texto)}` : API;
+        <span class="keyword">const</span> res = <span class="keyword">await</span> fetch(url);
+        <span class="keyword">const</span> data = <span class="keyword">await</span> handleResponse(res);
+        <span class="keyword">if</span> (data.length === <span class="number">0</span>) {
+            <span class="keyword">const</span> msg = texto ? <span class="string">`No se encontraron items con &quot;${texto}&quot;`</span> : <span class="string">'No hay items registrados'</span>;
+            showMessage(msg, <span class="string">'warning'</span>);
+            list.style.display = <span class="string">'none'</span>;
+        } <span class="keyword">else</span> {
+            showMessage(<span class="string">`Se encontraron ${data.length} resultado(s)`</span>, <span class="string">'success'</span>);
+            render(data);
+        }
+        updateButtons();
+    } <span class="keyword">catch</span> (e) {}
+}
+
+<span class="keyword">function</span> render(items) {
+    list.innerHTML = <span class="string">''</span>;
+    list.style.display = <span class="string">'block'</span>;
     items.forEach(item =&gt; {
-        <span class="comment">// Crear un elemento &lt;li&gt; (lista item) para cada item</span>
-        const li = document.createElement('li');
-
-        <span class="comment">// Crear un &lt;span&gt; con el texto del item</span>
-        const span = document.createElement('span');
-        <span class="comment">// textContent es SEGURO contra XSS (no interpreta HTML)</span>
-        <span class="comment">// NUNCA usar innerHTML con datos del usuario (vulnerable a XSS)</span>
+        <span class="keyword">const</span> li = document.createElement(<span class="string">'li'</span>);
+        <span class="keyword">const</span> span = document.createElement(<span class="string">'span'</span>);
         span.textContent = item.texto;
-
-        <span class="comment">// Crear un &lt;span&gt; con el ID del item (para referencia visual)</span>
-        const idSpan = document.createElement('span');
-        idSpan.className = 'item-id';
-        idSpan.textContent = '#' + item.id;
-
-        <span class="comment">// Agregar ambos spans al &lt;li&gt;</span>
+        <span class="keyword">const</span> idSpan = document.createElement(<span class="string">'span'</span>);
+        idSpan.className = <span class="string">'item-id'</span>;
+        idSpan.textContent = <span class="string">'#'</span> + item.id;
         li.appendChild(span);
         li.appendChild(idSpan);
-
-        <span class="comment">// Al hacer clic en un item de la lista:</span>
-        <span class="comment">// - Llenar el input con el texto del item</span>
-        <span class="comment">// - Llenar el input oculto con el ID del item</span>
-        <span class="comment">// Esto permite actualizar o eliminar el item seleccionado</span>
-        li.addEventListener('click', () =&gt; {
+        li.addEventListener(<span class="string">'click'</span>, () =&gt; {
+            document.querySelectorAll(<span class="string">'#itemList li'</span>).forEach(el =&gt; el.classList.remove(<span class="string">'selected'</span>));
+            li.classList.add(<span class="string">'selected'</span>);
             input.value = item.texto;
             hiddenId.value = item.id;
+            originalText = item.texto;
+            updateButtons();
         });
-
-        <span class="comment">// Agregar el &lt;li&gt; a la lista &lt;ul&gt;</span>
         list.appendChild(li);
     });
 }
 
-<span class="comment">// Cargar todos los items al abrir la pagina (ejecucion automatica)</span>
-loadAll();</code></div>
+updateButtons();</code></div>
             </section>
         </section>
 
