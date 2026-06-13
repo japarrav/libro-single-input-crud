@@ -4020,8 +4020,6 @@ document.getElementById(<span class="string">'btnSearch'</span>).addEventListene
     });
 }
 
-updateButtons();
-
 <span class="keyword">async</span> <span class="keyword">function</span> checkDbConnection() {
     <span class="keyword">try</span> {
         <span class="keyword">const</span> res = <span class="keyword">await</span> fetch(API, { method: <span class="string">'GET'</span>, signal: AbortSignal.timeout(<span class="number">5000</span>) });
@@ -4032,6 +4030,7 @@ updateButtons();
     }
 }
 
+updateButtons();
 checkDbConnection();</code></div>
             </section>
         </section>
