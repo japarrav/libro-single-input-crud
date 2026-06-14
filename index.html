@@ -4524,46 +4524,78 @@ Usar en requests:
                 </div>
 
                 <h4 class="text-xl font-bold text-white mb-4 mt-8">Paso 1: Obtener token via curl</h4>
-                <p class="text-slate-300 leading-relaxed mb-4">Primero, obten un token JWT haciendo login con las credenciales configuradas en <code class="text-accent">application.yml</code>:</p>
-                <div class="code-block" data-lang="bash"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment"># Login como admin → devuelve un JWT firmado con rol ADMIN</span>
+                <p class="text-slate-300 leading-relaxed mb-4">Abre una terminal (Linux, Mac o Windows con WSL). Vamos a usar <strong class="text-white">curl</strong>, un comando que sirve para hacer peticiones HTTP desde la terminal.</p>
+
+                <div class="alert-box alert-analysis mb-4">
+                    <div class="alert-title"><span class="alert-icon">&#9432;</span> Anatomia del comando curl</div>
+                    <div class="alert-body">
+                        <code class="text-accent">curl</code> = comando para hacer peticiones HTTP.<br>
+                        <code class="text-accent">-s</code> = "silent": no muestra barras de progreso, solo la respuesta.<br>
+                        <code class="text-accent">-X POST</code> = metodo HTTP POST.<br>
+                        <code class="text-accent">-H "Content-Type: application/json"</code> = agrega un header a la peticion.<br>
+                        <code class="text-accent">-d '{...}'</code> = el cuerpo de la peticion (data), en formato JSON.
+                    </div>
+                </div>
+
+                <p class="text-slate-300 leading-relaxed mb-3"><strong class="text-white">Pega este comando en la terminal:</strong></p>
+                <div class="code-block" data-lang="bash"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment"># Login como admin → el servidor responde con un JWT</span>
 curl -s -X POST http://localhost:8080/api/auth/login \
   -H <span class="string">"Content-Type: application/json"</span> \
   -d <span class="string">'{"username": "admin", "password": "admin123"}'</span></code></div>
-                <p class="text-slate-300 leading-relaxed mb-2">Respuesta esperada:</p>
+
+                <p class="text-slate-300 leading-relaxed mb-2"><strong class="text-white">Resultado esperado en la terminal:</strong></p>
                 <div class="code-block" data-lang="json"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code>{
   <span class="property">"token"</span>: <span class="string">"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTcxNzIwMDAwMCwiZXhwIjoxNzE3MjAzNjAwfQ.ejqFmZs4XpDJmC-A5aPNPxp0kJmt6X2LyQ5EM3tFn8U"</span>
 }</code></div>
 
+                <p class="text-slate-300 leading-relaxed mb-2">La terminal te devuelve un JSON con el token. Ese token largo es tu <strong class="text-accent">pase de acceso</strong>. Lo usaras en el siguiente paso.</p>
+
                 <h4 class="text-xl font-bold text-white mb-4 mt-8">Paso 2: Usar el token en peticiones protegidas</h4>
-                <p class="text-slate-300 leading-relaxed mb-4">Copia el token de la respuesta y usalo en el header <code class="text-accent">Authorization: Bearer &lt;token&gt;</code>:</p>
-                <div class="code-block" data-lang="bash"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment"># Guardar token en variable de entorno para facil reuso</span>
+                <p class="text-slate-300 leading-relaxed mb-4">Ahora copia el token que recibiste y usalo para pedir la lista de items. Primero guardalo en una variable para no tener que escribirlo cada vez:</p>
+
+                <div class="code-block" data-lang="bash"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment"># 1. Guarda el token en una variable (reemplaza con el tuyo real)</span>
 TOKEN=<span class="string">"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTcxNzIwMDAwMCwiZXhwIjoxNzE3MjAzNjAwfQ.ejqFmZs4XpDJmC-A5aPNPxp0kJmt6X2LyQ5EM3tFn8U"</span>
 
-<span class="comment"># Listar items (protegido)</span>
+<span class="comment"># 2. Pide la lista de items (protegido)</span>
+<span class="comment">#    El header "Authorization: Bearer $TOKEN" es lo que el Gateway revisa</span>
 curl -s http://localhost:8080/api/items/listar \
-  -H <span class="string">"Authorization: Bearer $TOKEN"</span>
+  -H <span class="string">"Authorization: Bearer $TOKEN"</span></code></div>
 
-<span class="comment"># Crear item (protegido)</span>
+                <p class="text-slate-300 leading-relaxed mb-2"><strong class="text-white">Resultado esperado:</strong> La lista de items guardados (o <code>[]</code> si no hay ninguno). Si ves los datos, el token funciono.</p>
+
+                <p class="text-slate-300 leading-relaxed mb-4">Tambien puedes crear un item nuevo usando el mismo token:</p>
+
+                <div class="code-block" data-lang="bash"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment"># Crear un item (protegido, necesita POST + JSON + token)</span>
 curl -s -X POST http://localhost:8080/api/items/crear \
   -H <span class="string">"Content-Type: application/json"</span> \
   -H <span class="string">"Authorization: Bearer $TOKEN"</span> \
   -d <span class="string">'{"nombre": "Item desde JWT"}'</span></code></div>
 
                 <h4 class="text-xl font-bold text-white mb-4 mt-8">Paso 3: Probar errores comunes</h4>
-                <div class="code-block" data-lang="bash"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment"># Error 1: Sin token → 401</span>
-curl -s -o /dev/null -w <span class="string">"%{http_code}"</span> http://localhost:8080/api/items/listar
-<span class="comment"># Respuesta: 401</span>
+                <p class="text-slate-300 leading-relaxed mb-4">Probemos que pasa cuando <strong class="text-white">no</strong> enviamos token, cuando enviamos uno invalido, y cuando las credenciales son incorrectas:</p>
 
-<span class="comment"># Error 2: Token invalido (Bearer vacio) → 401</span>
+                <div class="code-block" data-lang="bash"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment"># ──────────────────────────────────────────────────────────────</span>
+<span class="comment"># Error 1: Pedir listar SIN enviar token</span>
+<span class="comment"># ──────────────────────────────────────────────────────────────</span>
+<span class="comment">#   -o /dev/null  → descarta el cuerpo de la respuesta</span>
+<span class="comment">#   -w "%{http_code}"  → muestra SOLO el codigo HTTP (200, 401, etc.)</span>
+curl -s -o /dev/null -w <span class="string">"%{http_code}"</span> http://localhost:8080/api/items/listar
+<span class="comment"># ↑ Deberias ver: 401  (sin token → acceso denegado)</span>
+
+<span class="comment"># ──────────────────────────────────────────────────────────────</span>
+<span class="comment"># Error 2: Pedir listar CON token invalido</span>
+<span class="comment"># ──────────────────────────────────────────────────────────────</span>
 curl -s -o /dev/null -w <span class="string">"%{http_code}"</span> http://localhost:8080/api/items/listar \
   -H <span class="string">"Authorization: Bearer token-invalido"</span>
-<span class="comment"># Respuesta: 401</span>
+<span class="comment"># ↑ Deberias ver: 401  (token invalido → acceso denegado)</span>
 
-<span class="comment"># Error 3: Credenciales incorrectas → 401</span>
+<span class="comment"># ──────────────────────────────────────────────────────────────</span>
+<span class="comment"># Error 3: Hacer login con contrasena incorrecta</span>
+<span class="comment"># ──────────────────────────────────────────────────────────────</span>
 curl -s -X POST http://localhost:8080/api/auth/login \
   -H <span class="string">"Content-Type: application/json"</span> \
   -d <span class="string">'{"username": "admin", "password": "wrong"}'</span>
-<span class="comment"># Respuesta: {"error": "Credenciales invalidas"} (HTTP 401)</span></code></div>
+<span class="comment"># ↑ Deberias ver: {"error": "Credenciales invalidas"}  y el status es 401</span></code></div>
 
                 <h4 class="text-xl font-bold text-white mb-4 mt-8">Paso 4: Inspeccionar el token en jwt.io</h4>
                 <p class="text-slate-300 leading-relaxed mb-4">JWT es un estandar abierto. Puedes inspeccionar cualquier token pegandolo en <a href="https://jwt.io" class="text-accent underline" target="_blank">jwt.io</a>. El token tiene 3 partes separadas por puntos:</p>
@@ -4579,27 +4611,189 @@ curl -s -X POST http://localhost:8080/api/auth/login \
                 </div>
                 <p class="text-slate-300 leading-relaxed mb-4">Pega tu token en <code class="text-accent">jwt.io</code> y observa como se decodifica el payload. <strong class="text-white">Nota:</strong> jamas compartas tokens reales de produccion en jwt.io, ya que se envian a servidores externos.</p>
 
-                <h4 class="text-xl font-bold text-white mb-4 mt-8">Paso 5: Flujo completo en Postman</h4>
-                <ol class="list-decimal list-inside text-slate-300 space-y-3 mb-6">
-                    <li><strong class="text-white">Crear variable de entorno</strong> en Postman: <code class="text-accent">jwt_token</code> (vacia).</li>
-                    <li><strong class="text-white">Request de Login:</strong> <code class="text-accent">POST http://localhost:8080/api/auth/login</code>, Body JSON. En la pestana "Tests" agrega el script de abajo para guardar automaticamente el token.</li>
-                    <li><strong class="text-white">Request protegida:</strong> <code class="text-accent">GET http://localhost:8080/api/items/listar</code>, en la pestana "Authorization" selecciona "Bearer Token" y usa <code class="text-accent">{{jwt_token}}</code>.</li>
-                </ol>
-                <div class="code-block" data-lang="Postman Test Script"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment">// Script para pestana "Tests" del request de Login</span>
-<span class="comment">// Guarda automaticamente el token como variable de entorno</span>
+                <h4 class="text-xl font-bold text-white mb-4 mt-8">Flujo completo en Postman (generar y reutilizar token)</h4>
+
+                <p class="text-slate-300 leading-relaxed mb-4">Vamos a crear <strong class="text-white">2 requests</strong> en Postman. Con el primero inicias sesion y automaticamente se guarda el token. Con el segundo usas ese token para acceder a un recurso protegido.</p>
+
+                <div class="diagram-container mb-6">
+                    <pre class="text-xs sm:text-sm font-mono text-slate-300 leading-relaxed overflow-x-auto">
+<span class="text-neon-green font-bold">VISTA GENERAL DE LOS 2 REQUESTS:</span>
+
+<span class="text-white">[Request 1]  Auth - Login</span>           <span class="text-white">[Request 2]  Items - Listar</span>
+<span class="text-slate-400">  POST /api/auth/login</span>                 <span class="text-slate-400">  GET /api/items/listar</span>
+<span class="text-slate-400">  Body: {"username":"admin"...}</span>        <span class="text-slate-400">  Auth: Bearer {{jwt_token}}</span>
+<span class="text-slate-400">  Tests: guarda token automatico</span>       <span class="text-slate-400">  (usa el token del Request 1)</span>
+       <span class="text-slate-500">│</span>
+       <span class="text-slate-500">▼</span>
+<span class="text-slate-500">  Respuesta: { "token": "eyJ..." }</span>
+       <span class="text-slate-500">│</span>
+       <span class="text-slate-500">▼</span>
+<span class="text-neon-green">  Se guarda solo en {{jwt_token}}</span>  ──────────&gt;  <span class="text-accent">Lo usa {{jwt_token}}</span></pre>
+                </div>
+
+                <div class="alert-box alert-analysis mb-6">
+                    <div class="alert-title"><span class="alert-icon">&#9432;</span> ¿Por que 2 requests?</div>
+                    <div class="alert-body">
+                        <strong>Request 1 (Login):</strong> Envia tus credenciales al servidor. El servidor responde con un token JWT. Un script en la pestaña "Tests" guarda ese token en la variable <code>jwt_token</code>.<br><br>
+                        <strong>Request 2 (Listar):</strong> Pide la lista de items. En la pestaña "Authorization" le decimos que envie el token que guardamos. Si el token es valido, el servidor responde con los datos. Si no, responde 401.
+                    </div>
+                </div>
+
+                <h5 class="text-lg font-bold text-white mb-3 mt-6">Paso 1: Crear el entorno y la variable jwt_token</h5>
+
+                <p class="text-slate-300 leading-relaxed mb-4">Primero necesitamos un lugar donde guardar el token. En Postman, las <strong class="text-white">variables de entorno</strong> son como cajitas donde puedes guardar valores y usarlos en todos tus requests.</p>
+
+                <div class="diagram-container mb-4">
+                    <pre class="text-xs sm:text-sm font-mono text-slate-300 leading-relaxed overflow-x-auto">
+<span class="text-slate-500">┌─────────────────────────────────────────────────────────────────┐</span>
+<span class="text-slate-500">│</span>  <span class="text-accent font-bold">DONDE HACER CLIC EN POSTMAN</span>                                  <span class="text-slate-500">│</span>
+<span class="text-slate-500">├─────────────────────────────────────────────────────────────────┤</span>
+<span class="text-slate-500">│</span>                                                                 <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">1. Arriba a la derecha, haz clic en el icono del</span>              <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>     <span class="text-white">👁️ (ojo)</span>                                                   <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>                                                                 <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">2. Se abre un panel. Haz clic en</span> <span class="text-white">"Add"</span>                       <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>                                                                 <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">3. Escribe el nombre del entorno:</span>                              <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>     <span class="text-white">"Single Input CRUD Local"</span>                                  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>                                                                 <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">4. Agrega esta variable (dejala vacia):</span>                        <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>     <span class="text-white">Variable: jwt_token</span>                                          <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>     <span class="text-white">Valor:    (dejalo en blanco)</span>                                 <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>                                                                 <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">5. Si no la creaste en el Modulo 8, agrega tambien:</span>           <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>     <span class="text-white">Variable: baseUrl</span>                                             <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>     <span class="text-white">Valor:    http://localhost:8080/api</span>                           <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>                                                                 <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">6. Haz clic en</span> <span class="text-white">"Save"</span>                                      <span class="text-slate-500">│</span>
+<span class="text-slate-500">└─────────────────────────────────────────────────────────────────┘</span></pre>
+                </div>
+
+                <h5 class="text-lg font-bold text-white mb-3 mt-6">Paso 2: Crear el request de Login (genera el token)</h5>
+
+                <p class="text-slate-300 leading-relaxed mb-4">Crea un nuevo request en Postman. En la barra superior veras estas pestañas: <strong class="text-white">Params</strong> · <strong class="text-white">Authorization</strong> · <strong class="text-white">Headers</strong> · <strong class="text-white">Body</strong> · <strong class="text-white">Tests</strong>. Vas a usar casi todas:</p>
+
+                <div class="diagram-container mb-4">
+                    <pre class="text-xs sm:text-sm font-mono text-slate-300 leading-relaxed overflow-x-auto">
+<span class="text-accent font-bold">PESTAÑA "Headers":</span>
+<span class="text-slate-500">┌───────────────────────────────────────────────────────────────┐</span>
+<span class="text-slate-500">│</span>  <span class="text-white">Key</span>              <span class="text-white">Value</span>                     <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  ───────────────────────────────────────────────────────────── <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  Content-Type     application/json         <span class="text-slate-500">│</span>
+<span class="text-slate-500">└───────────────────────────────────────────────────────────────┘</span>
+
+<span class="text-accent font-bold">PESTAÑA "Body":</span>
+<span class="text-slate-500">┌───────────────────────────────────────────────────────────────┐</span>
+<span class="text-slate-500">│</span>  Selecciona: <span class="text-white">○ raw</span>  y luego <span class="text-white">○ JSON</span>                  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  Pega este texto en el editor:                              <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-neon-green">{                                              </span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-neon-green">    "username": "admin",                                  </span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-neon-green">    "password": "admin123"                              </span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-neon-green">}                                              </span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">└───────────────────────────────────────────────────────────────┘</span>
+
+<span class="text-accent font-bold">PESTAÑA "Tests":</span>
+<span class="text-slate-500">┌───────────────────────────────────────────────────────────────┐</span>
+<span class="text-slate-500">│</span>  Pega el script de abajo. Este codigo se ejecuta             <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  automaticamente <span class="text-white">DESPUES</span> de enviar el request.             <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>                                                              <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-neon-green">if (pm.response.code === 200) {                          </span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-neon-green">    var jsonData = pm.response.json();                   </span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-neon-green">    pm.environment.set("jwt_token", jsonData.token);    </span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-neon-green">  } else {                                              </span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-neon-green">    pm.environment.unset("jwt_token");                  </span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-neon-green">  }                                                    </span>  <span class="text-slate-500">│</span>
+<span class="text-slate-500">└───────────────────────────────────────────────────────────────┘</span></pre>
+                </div>
+
+                <table class="table-auto border-collapse border border-slate-600 text-slate-300 w-full max-w-2xl mb-4">
+                    <tr class="bg-slate-700"><th class="border border-slate-600 px-4 py-2 text-left">Campo</th><th class="border border-slate-600 px-4 py-2 text-left">Valor</th><th class="border border-slate-600 px-4 py-2 text-left">Donde va en Postman</th></tr>
+                    <tr><td class="border border-slate-600 px-4 py-2"><strong>Method</strong></td><td class="border border-slate-600 px-4 py-2"><code class="text-accent">POST</code></td><td class="border border-slate-600 px-4 py-2">Junto a la barra de URL</td></tr>
+                    <tr><td class="border border-slate-600 px-4 py-2"><strong>URL</strong></td><td class="border border-slate-600 px-4 py-2"><code class="text-accent">http://localhost:8080/api/auth/login</code></td><td class="border border-slate-600 px-4 py-2">Barra de direcciones</td></tr>
+                    <tr><td class="border border-slate-600 px-4 py-2"><strong>Headers</strong></td><td class="border border-slate-600 px-4 py-2"><code class="text-accent">Content-Type: application/json</code></td><td class="border border-slate-600 px-4 py-2">Pestaña "Headers"</td></tr>
+                    <tr><td class="border border-slate-600 px-4 py-2"><strong>Body</strong></td><td class="border border-slate-600 px-4 py-2"><code class="text-accent">{"username":"admin","password":"admin123"}</code></td><td class="border border-slate-600 px-4 py-2">Pestaña "Body" → raw → JSON</td></tr>
+                    <tr><td class="border border-slate-600 px-4 py-2"><strong>Tests script</strong></td><td class="border border-slate-600 px-4 py-2">Pega el siguiente codigo</td><td class="border border-slate-600 px-4 py-2">Pestaña "Tests"</td></tr>
+                </table>
+
+                <p class="text-slate-300 leading-relaxed mb-2"><strong class="text-white">Codigo para la pestaña "Tests":</strong></p>
+                <div class="code-block" data-lang="Postman Test Script"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code><span class="comment">// Este script se ejecuta SOLO despues de enviar el request.</span>
+<span class="comment">// Si el servidor responde 200, extrae el token y lo guarda</span>
+<span class="comment">// en la variable jwt_token para usarlo en otros requests.</span>
+
 <span class="keyword">if</span> (pm.response.code === 200) {
     <span class="keyword">var</span> jsonData = pm.response.json();
     pm.environment.set(<span class="string">"jwt_token"</span>, jsonData.token);
-    console.log(<span class="string">"Token guardado:"</span>, jsonData.token);
+    console.log(<span class="string">"Token guardado:"</span>, jsonData.token.substring(0, 30) + <span class="string">"..."</span>);
 } <span class="keyword">else</span> {
-    console.log(<span class="string">"Login fallo:"</span>, pm.response.code);
+    console.log(<span class="string">"Login fallo - Status:"</span>, pm.response.code);
+    pm.environment.unset(<span class="string">"jwt_token"</span>);
 }</code></div>
+
+                <p class="text-slate-300 leading-relaxed mb-2"><strong class="text-white">Resultado esperado al hacer clic en "Send":</strong></p>
+                <div class="code-block" data-lang="json"><button class="copy-btn" onclick="copyCode(this)">Copiar</button><code>Status: <span class="text-neon-green">200 OK</span>
+Body:
+{
+  <span class="property">"token"</span>: <span class="string">"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTcxNzIwMDAwMCwiZXhwIjoxNzE3MjAzNjAwfQ.ejqFmZs4XpDJmC-A5aPNPxp0kJmt6X2LyQ5EM3tFn8U"</span>
+}</code></div>
+
+                <p class="text-slate-300 leading-relaxed mb-4">Si ves el <code class="text-accent">200 OK</code> y el token, haz clic en el icono del <strong class="text-white">ojo</strong> y verifica que la variable <code class="text-accent">jwt_token</code> se haya llenado con ese token largo.</p>
+
+                <h5 class="text-lg font-bold text-white mb-3 mt-6">Paso 3: Crear el request protegido (usa el token)</h5>
+
+                <p class="text-slate-300 leading-relaxed mb-4">Crea otro request. Este usara el token que guardamos en el paso anterior:</p>
+
+                <div class="diagram-container mb-4">
+                    <pre class="text-xs sm:text-sm font-mono text-slate-300 leading-relaxed overflow-x-auto">
+<span class="text-accent font-bold">PESTAÑA "Authorization":</span>
+<span class="text-slate-500">┌───────────────────────────────────────────────────────────────┐</span>
+<span class="text-slate-500">│</span>  <span class="text-white">Tipo:</span>                                                        <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-white">○ Bearer Token</span>    ←──  Selecciona esta opcion                <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>                                                              <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-white">Token:</span>                                                       <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-neon-green">{{jwt_token}}</span>     ←──  Escribe exactamente asi         <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>                                                              <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">Postman reemplazara {{jwt_token}} por el valor</span>             <span class="text-slate-500">│</span>
+<span class="text-slate-500">│</span>  <span class="text-slate-400">real del token que guardamos en el Paso 2.</span>                <span class="text-slate-500">│</span>
+<span class="text-slate-500">└───────────────────────────────────────────────────────────────┘</span></pre>
+                </div>
+
+                <table class="table-auto border-collapse border border-slate-600 text-slate-300 w-full max-w-2xl mb-4">
+                    <tr class="bg-slate-700"><th class="border border-slate-600 px-4 py-2 text-left">Campo</th><th class="border border-slate-600 px-4 py-2 text-left">Valor</th><th class="border border-slate-600 px-4 py-2 text-left">Donde va en Postman</th></tr>
+                    <tr><td class="border border-slate-600 px-4 py-2"><strong>Method</strong></td><td class="border border-slate-600 px-4 py-2"><code class="text-accent">GET</code></td><td class="border border-slate-600 px-4 py-2">Junto a la barra de URL</td></tr>
+                    <tr><td class="border border-slate-600 px-4 py-2"><strong>URL</strong></td><td class="border border-slate-600 px-4 py-2"><code class="text-accent">{{baseUrl}}/items/listar</code></td><td class="border border-slate-600 px-4 py-2">Barra de direcciones</td></tr>
+                    <tr><td class="border border-slate-600 px-4 py-2"><strong>Authorization</strong></td><td class="border border-slate-600 px-4 py-2">Tipo: <code class="text-accent">Bearer Token</code>, Token: <code class="text-accent">{{jwt_token}}</code></td><td class="border border-slate-600 px-4 py-2">Pestaña "Authorization"</td></tr>
+                </table>
+
+                <h5 class="text-lg font-bold text-white mb-3 mt-6">Paso 4: Probar el flujo completo</h5>
+                <ol class="list-decimal list-inside text-slate-300 space-y-3 mb-4">
+                    <li><strong class="text-white">Primero, envia "Auth - Login".</strong> Deberias ver <code class="text-neon-green">200 OK</code>. Revisa que la variable <code class="text-accent">jwt_token</code> se haya llenado (icono del ojo → "Environment quick look").</li>
+                    <li><strong class="text-white">Luego, envia "Items - Listar".</strong> Deberias ver <code class="text-neon-green">200 OK</code> con la lista de items. Si ves esto, la autenticacion funciona.</li>
+                    <li><strong class="text-white">Prueba que pasa si NO hay token:</strong> Borra el valor de <code class="text-accent">jwt_token</code> (dejalo vacio) y envia "Items - Listar" de nuevo. Deberias ver <code class="text-red-400">401 Unauthorized</code>. Esto confirma que el filtro JWT esta protegiendo los endpoints.</li>
+                </ol>
+
+                <div class="alert-box alert-warning mb-6">
+                    <div class="alert-title"><span class="alert-icon">&#9888;</span> ¿Por que 401 cuando borro el token?</div>
+                    <div class="alert-body">
+                        Porque el <strong class="text-white">JwtAuthFilter</strong> que configuramos en el Paso 5 de la seccion 9.2 intercepta TODAS las peticiones. Si no encuentra el header <code>Authorization: Bearer &lt;token&gt;</code>, responde inmediatamente con 401 antes de que la peticion llegue al microservicio. Es la capa de seguridad del Gateway.
+                    </div>
+                </div>
+
+                <h5 class="text-lg font-bold text-white mb-3 mt-6">Paso 5: (Opcional) Generar token desde jwt.io sin servidor</h5>
+                <p class="text-slate-300 leading-relaxed mb-4">Si el servidor no esta corriendo pero quieres probar los requests protegidos, puedes generar un token falso desde <a href="https://jwt.io" class="text-accent underline" target="_blank">jwt.io</a>:</p>
+                <ol class="list-decimal list-inside text-slate-300 space-y-2 mb-4">
+                    <li>Abre <a href="https://jwt.io" class="text-accent underline" target="_blank">jwt.io</a> en tu navegador.</li>
+                    <li>En la seccion "Payload" (derecha), pega: <code class="text-accent">{"sub":"admin","role":"ADMIN","iat":1717200000,"exp":1999999999}</code></li>
+                    <li>En la seccion "Verify Signature" (abajo), pega la clave secreta del <code class="text-accent">application.yml</code>: <code class="text-accent">mi-clave-secreta-muy-larga-para-jwt-que-debe-tener-al-menos-256-bits</code></li>
+                    <li>El token de la izquierda se actualizara automaticamente. Copialo.</li>
+                    <li>En Postman, pega ese token en la variable <code class="text-accent">jwt_token</code>.</li>
+                    <li>Ahora puedes enviar "Items - Listar" y deberia funcionar aunque el servicio de login no este disponible.</li>
+                </ol>
 
                 <div class="alert-box alert-warning">
                     <div class="alert-title"><span class="alert-icon">&#9888;</span> Resumen y Buenas Practicas</div>
                     <div class="alert-body">
                         <p class="mb-2"><strong class="text-white">Lo que logramos:</strong> El Gateway ahora protege todos los endpoints de los microservicios. Sin un JWT valido, el filtro rechaza la peticion con 401 antes de que llegue al microservicio.</p>
-                        <p class="mb-2"><strong class="text-white">Limites de este ejemplo:</strong> Usuarios hardcodeados en application.yml (en produccion se usa base de datos o LDAP), clave secreta en texto plano (en produccion se usa Vault o variables de entorno), sin refresh tokens (el token expira en 1 hora y el usuario debe hacer login de nuevo).</p>
+                        <p class="mb-2"><strong class="text-white">Limites de este ejemplo:</strong> Usuarios hardcodeados en AuthController.java (en produccion se usa base de datos o LDAP), clave secreta en texto plano (en produccion se usa Vault o variables de entorno), sin refresh tokens (el token expira en 1 hora y el usuario debe hacer login de nuevo).</p>
                         <p><strong class="text-white">Mejoras para produccion:</strong> Almacenar claves en <code class="text-accent">${JWT_SECRET}</code> (variable de entorno), agregar HTTPS para que el token no viaje en texto plano, usar refresh tokens rotativos, y agregar rate limiting en el endpoint de login para evitar ataques de fuerza bruta.</p>
                     </div>
                 </div>
